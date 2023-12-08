@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: web
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    ports:
+      - "8000:8000"
+    command: scripts/web/startup.sh -m -l
+    restart: on-failure
+    env_file:
+      - ./conf/.env
+    volumes:
+      - .:/code
+    networks:
+      - sirius_network
+
+  web_db:
+    container_name: web_db
+    image: library/postgres:13.2
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=main_db
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "main_db" ]
+      interval: 5s
+      retries: 5
+    volumes:
+      - ./scripts/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - sirius_network
+
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+    networks:
+      - sirius_network
+
+networks:
+  sirius_network:
+    external: True

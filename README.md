@@ -1,0 +1,1 @@
+alembic -c conf/alembic.ini init alembic
