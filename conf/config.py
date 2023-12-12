@@ -6,5 +6,7 @@ class Settings(BaseSettings):
     BIND_PORT: int
     DB_URL: str
 
+    JWT_SECRET_SALT: str
+
 
 settings = Settings()

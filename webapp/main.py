@@ -22,6 +22,7 @@ def setup_middleware(app: FastAPI) -> None:
 def setup_routers(app: FastAPI) -> None:
     app.include_router(auth_router)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # await setup_redis()
