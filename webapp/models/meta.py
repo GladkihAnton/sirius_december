@@ -13,7 +13,7 @@ NAMING_CONVENTION = {
 }
 
 
-DEFAULT_SCHEMA = 'layer_api'
+DEFAULT_SCHEMA = 'sirius'
 
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
 Base = declarative_base(metadata=metadata)

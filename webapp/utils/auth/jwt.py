@@ -1,15 +1,20 @@
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Annotated, Any, Dict
+from typing import Annotated, cast
 
 from fastapi import Header, HTTPException
 from jose import JWTError, jwt
 from starlette import status
+from typing_extensions import TypedDict
 
 from conf.config import settings
 
-JwtTokenT = Dict[str, Any]
+
+class JwtTokenT(TypedDict):
+    uid: str
+    exp: datetime
+    user: int
 
 
 @dataclass
@@ -28,7 +33,7 @@ class JwtAuth:
         _, token = authorization.split()
 
         try:
-            return jwt.decode(token, self.secret)
+            return cast(JwtTokenT, jwt.decode(token, self.secret))
         except JWTError:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
 
