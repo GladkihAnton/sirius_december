@@ -75,8 +75,8 @@ mypy = "1.5.1"
 pytest = "^7.1.2"
 pytest-env = "^0.6.2"
 pytest-cov = "3.0.0"
-types-python-jose = "3.3.4.8"
 pytest-asyncio = "0.20.3"
+types-python-jose = "3.3.4.8"
 psycopg2-binary = "^2.9.6"
 httpx = "0.25.2"
 
@@ -86,7 +86,9 @@ asyncio_mode = "auto"
 python_files = "tests.py test_*.py"
 python_functions = "test_*"
 testpaths = ["tests"]
-env = []
+env = [
+
+]
 
 [tool.coverage.run]
 omit = [
@@ -121,6 +123,7 @@ warn_untyped_fields = true
 
 [[tool.mypy.overrides]]
 module = [
+    "aiokafka.*",
     "aiocache.*",
     "aioredis.*",
     "aioretry.*",
