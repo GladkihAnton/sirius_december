@@ -11,7 +11,7 @@ from webapp.models import meta
 
 
 @pytest.fixture(scope='session')
-def app(_migrate_db: FixtureFunctionT) -> FastAPI:
+async def app(_migrate_db: FixtureFunctionT) -> FastAPI:
     return create_app()
 
 
