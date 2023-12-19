@@ -96,6 +96,51 @@ services:
     depends_on:
       - kafka
 
+  minio:
+    image: minio/minio
+    command: server --console-address ":9001" /data/
+    environment:
+      MINIO_ROOT_USER: MINIO_LOGIN
+      MINIO_ROOT_PASSWORD: MINIO_PASS
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - sirius_network
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus_config.yml"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - web
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    networks:
+      - sirius_network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    env_file: grafana/.env
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - web
+    networks:
+      - sirius_network
+
+volumes:
+  prom_data:
+
 networks:
   sirius_network:
     external: True
