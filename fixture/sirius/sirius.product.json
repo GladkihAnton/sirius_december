@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "restaurant_id": 1,
+    "name": "Shaurma Standart",
+    "price": 269.99
+  },
+  {
+    "id": 2,
+    "restaurant_id": 1,
+    "name": "Shaurma Big",
+    "price": 329.99
+  }
+]
