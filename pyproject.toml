@@ -83,7 +83,7 @@ psycopg2-binary = "^2.9.6"
 httpx = "0.25.2"
 
 [tool.pytest.ini_options]
-addopts = "--failed-first --exitfirst --showlocals" # --cov=."
+addopts = "--failed-first --exitfirst --showlocals --cov=."
 asyncio_mode = "auto"
 python_files = "tests.py test_*.py"
 python_functions = "test_*"

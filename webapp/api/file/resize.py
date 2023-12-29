@@ -28,6 +28,7 @@ async def resize(
             'task_id': task_id,
             'width': body.width,
             'height': body.height,
+            'user_id': access_token['user_id'],
         }
     )
 

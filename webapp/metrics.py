@@ -1,6 +1,7 @@
 import os
 
 import prometheus_client
+from aiokafka import AIOKafkaConsumer
 from prometheus_client import (
     CONTENT_TYPE_LATEST,
     REGISTRY,
@@ -33,6 +34,7 @@ DEFAULT_BUCKETS = (
     7.5,
     float('+inf'),
 )
+
 
 
 # TODO in middleware
