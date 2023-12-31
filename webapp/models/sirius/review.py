@@ -1,7 +1,6 @@
-import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DECIMAL, Date, ForeignKey, Integer, String
+from sqlalchemy import DECIMAL, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base

@@ -1,7 +1,7 @@
 from redis.asyncio import ConnectionPool, Redis
 
 from conf.config import settings
-from webapp.integrations.cache.redis import redis
+from webapp.integrations.cache import redis
 
 
 async def start_redis() -> None:

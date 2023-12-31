@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic_settings import BaseSettings
 
 
@@ -13,6 +11,7 @@ class Settings(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int
     REDIS_PASSWORD: str
+    REDIS_SIRIUS_CACHE_PREFIX: str
 
 
 settings = Settings()
