@@ -10,4 +10,4 @@ python scripts/load_data.py fixture/sirius/sirius.user.json fixture/sirius/siriu
  fixture/sirius/sirius.reservation.json fixture/sirius/sirius.activity.json
 
 
-exec uvicorn webapp.main:create_app --host=$BIND_IP --port=$BIND_PORT
+exec uvicorn webapp.on_startup.main:create_app --host=$BIND_IP --port=$BIND_PORT

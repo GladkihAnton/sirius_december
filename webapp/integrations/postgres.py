@@ -16,9 +16,9 @@ def create_engine() -> AsyncEngine:
     )
 
 
-def create_session(engine: AsyncEngine | None = None) -> async_sessionmaker[AsyncSession]:
+def create_session(db_engine: AsyncEngine | None = None) -> async_sessionmaker[AsyncSession]:
     return async_sessionmaker(
-        bind=engine or create_engine(),
+        bind=db_engine or create_engine(),
         class_=AsyncSession,
         autoflush=False,
         expire_on_commit=False,
