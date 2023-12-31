@@ -7,7 +7,7 @@ from typing import List
 
 from sqlalchemy import insert
 
-from webapp.db.postgres import async_session
+from webapp.integrations.postgres import async_session
 from webapp.models.meta import metadata
 
 parser = argparse.ArgumentParser()

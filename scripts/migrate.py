@@ -1,6 +1,6 @@
 import asyncio
 
-from webapp.db.postgres import engine
+from webapp.integrations.postgres import engine
 from webapp.models import meta
 
 

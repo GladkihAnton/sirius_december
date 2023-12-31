@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class UserLogin(BaseModel):
+class UserInfo(BaseModel):
     username: str
     password: str
 

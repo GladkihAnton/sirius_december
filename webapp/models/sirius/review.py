@@ -1,3 +1,4 @@
+import datetime
 from typing import TYPE_CHECKING
 
 from sqlalchemy import DECIMAL, Date, ForeignKey, Integer, String
@@ -22,7 +23,5 @@ class Review(Base):
     rating: Mapped[float] = mapped_column(DECIMAL(3, 2))
 
     comment: Mapped[str] = mapped_column(String)
-
-    posted: Mapped[str] = mapped_column(Date)
 
     tour: Mapped['Tour'] = relationship('Tour', back_populates='reviews')

@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import Date, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -14,6 +16,6 @@ class Reservation(Base):
 
     tour_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.tour.id'))
 
-    booking_date: Mapped[str] = mapped_column(Date)
+    booking_date: Mapped[datetime.date] = mapped_column(Date)
 
     booking_status: Mapped[str] = mapped_column(String)

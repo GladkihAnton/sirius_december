@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from webapp.api.crud.router import crud_router
 from webapp.api.login.router import auth_router
 
 
@@ -18,6 +19,7 @@ def setup_middleware(app: FastAPI) -> None:
 
 def setup_routers(app: FastAPI) -> None:
     app.include_router(auth_router)
+    app.include_router(crud_router)
 
 
 def create_app() -> FastAPI:

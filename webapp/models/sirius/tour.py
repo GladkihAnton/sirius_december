@@ -1,3 +1,4 @@
+import datetime
 from typing import TYPE_CHECKING, List
 
 from sqlalchemy import DECIMAL, Date, Integer, String
@@ -20,9 +21,9 @@ class Tour(Base):
 
     price: Mapped[float] = mapped_column(DECIMAL(10, 2))
 
-    start_date: Mapped[str] = mapped_column(Date)
+    start_date: Mapped[datetime.date] = mapped_column(Date)
 
-    end_date: Mapped[str] = mapped_column(Date)
+    end_date: Mapped[datetime.date] = mapped_column(Date)
 
     activity: Mapped[List['Activity']] = relationship('Activity', back_populates='tour')
 
