@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from webapp.api.crud.activity.router import activity_router
+from webapp.api.crud.reservation.router import reservation_router
 from webapp.api.crud.router import crud_router
 from webapp.api.login.router import auth_router
 from webapp.on_startup.redis import start_redis
@@ -23,6 +24,7 @@ def setup_routers(app: FastAPI) -> None:
     app.include_router(auth_router)
     app.include_router(crud_router)
     app.include_router(activity_router)
+    app.include_router(reservation_router)
 
 
 def create_app() -> FastAPI:

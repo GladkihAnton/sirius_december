@@ -12,8 +12,8 @@ from webapp.schema.info.activity import ActivityInfo
 
 @activity_router.post('/activity/create')
 async def create_activity(
-        body: ActivityInfo,
-        session: AsyncSession = Depends(get_session),
+    body: ActivityInfo,
+    session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     try:
         await activity_crud.create(session, body)
