@@ -1,6 +1,8 @@
+from typing import Dict, Any
+
 from webapp.api.crud.const import API_PREFIX
 
-URLS = {
+URLS: Dict[str, Any] = {
     'auth': {
         'login': '/auth/login',
         'info': '/auth/info',

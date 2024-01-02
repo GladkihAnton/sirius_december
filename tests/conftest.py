@@ -11,7 +11,7 @@ from webapp.on_startup.main import create_app
 
 
 @pytest.fixture(scope='session')
-async def app(_migrate_db: AsyncGenerator[None, None]) -> FastAPI:
+async def app(_migrate_db: None) -> FastAPI:
     return create_app()
 
 
