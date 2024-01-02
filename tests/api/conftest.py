@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pathlib import Path
 from typing import AsyncGenerator, List
 
@@ -41,10 +42,16 @@ async def db_session(app: FastAPI) -> AsyncGenerator[AsyncSession, None]:
 @pytest.fixture()
 async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> None:
     for fixture in fixtures:
-        model = metadata.tables[fixture.stem]
+        fixture_path = Path(fixture)
+        model = metadata.tables[fixture_path.stem]
 
-        with open(fixture, 'r') as file:
+        with open(fixture_path, 'r') as file:
             values = json.load(file)
+
+        for model_obj in values:
+            for key, val in model_obj.items():
+                if 'date' in key:
+                    model_obj[key] = datetime.strptime(val, '%d/%m/%y %H:%M:%S').date()
 
         await db_session.execute(insert(model).values(values))
         await db_session.commit()
