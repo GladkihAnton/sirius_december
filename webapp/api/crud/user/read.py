@@ -3,7 +3,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.user.router import user_router
 from webapp.api.crud.user.utils.get_user import get_user_model
 from webapp.crud.user import user_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
@@ -13,7 +13,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@crud_router.get('/user')
+@user_router.get('/user')
 async def get_user(
     user_id: int | None = None,
     session: AsyncSession = Depends(get_session),

@@ -4,14 +4,14 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.user.router import user_router
 from webapp.crud.user import user_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@crud_router.get('/user/update')
+@user_router.get('/user/update')
 async def update_user(
     body: UserInfo,
     user_id: int,

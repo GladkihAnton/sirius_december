@@ -4,13 +4,13 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.user.router import user_router
 from webapp.crud.user import user_crud
 from webapp.integrations.postgres import get_session
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@crud_router.get('/user/delete')
+@user_router.get('/user/delete')
 async def delete_user(
     user_id: int,
     session: AsyncSession = Depends(get_session),
