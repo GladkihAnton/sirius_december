@@ -64,10 +64,9 @@ async def access_token(
     client: AsyncClient,
     username: str,
     password: str,
-) -> str:
-    return (await client.post(URLS['auth']['login'], json={'username': username, 'password': password})).json()[
-        'access_token'
-    ]
+) -> str | None:
+    response = await client.post(URLS['auth']['login'], json={'username': username, 'password': password})
+    return response.json().get('access_token')
 
 
 @pytest.fixture()

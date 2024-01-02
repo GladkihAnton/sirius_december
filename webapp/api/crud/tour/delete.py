@@ -10,7 +10,7 @@ from webapp.integrations.postgres import get_session
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@tour_router.get('/delete/{tour_id}')
+@tour_router.post('/delete/{tour_id}')
 async def delete_tour(
     tour_id: int,
     session: AsyncSession = Depends(get_session),

@@ -11,7 +11,7 @@ from webapp.schema.info.review import ReviewInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@review_router.get('/update/{review_id}')
+@review_router.post('/update/{review_id}')
 async def get_users(
     body: ReviewInfo,
     review_id: int,
