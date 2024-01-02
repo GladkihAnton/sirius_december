@@ -3,8 +3,8 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from webapp.api.crud.activity.router import activity_router
 from webapp.api.crud.activity.utils.get_activity import get_activity_model
-from webapp.api.crud.router import crud_router
 from webapp.crud.activity import activity_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -13,11 +13,11 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@crud_router.get('/activity')
+@activity_router.get('/activity')
 async def get_activity(
-    activity_id: int | None = None,
-    session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+        activity_id: int | None = None,
+        session: AsyncSession = Depends(get_session),
+        access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if activity_id is None:
         serialized_activity = serialize_model(list(await activity_crud.get_all(session)))

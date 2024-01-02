@@ -4,16 +4,16 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.login.router import auth_router
+from webapp.api.crud.activity.router import activity_router
 from webapp.crud.activity import activity_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.activity import ActivityInfo
 
 
-@auth_router.post('/activity/create')
+@activity_router.post('/activity/create')
 async def create_activity(
-    body: ActivityInfo,
-    session: AsyncSession = Depends(get_session),
+        body: ActivityInfo,
+        session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     try:
         await activity_crud.create(session, body)

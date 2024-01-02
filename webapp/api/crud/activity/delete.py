@@ -4,17 +4,17 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.activity.router import activity_router
 from webapp.crud.activity import activity_crud
 from webapp.integrations.postgres import get_session
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@crud_router.get('/activity/delete')
+@activity_router.get('/activity/delete')
 async def delete_activity(
-    activity_id: int,
-    session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+        activity_id: int,
+        session: AsyncSession = Depends(get_session),
+        access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     try:
         await activity_crud.delete(session, activity_id)
