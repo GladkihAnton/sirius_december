@@ -3,8 +3,8 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from webapp.api.crud.reservation.router import reservation_router
 from webapp.api.crud.reservation.utils.get_activity import get_reservation_model
-from webapp.api.crud.router import crud_router
 from webapp.crud.reservation import reservation_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -13,7 +13,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@crud_router.get('/reservation')
+@reservation_router.get('/reservation')
 async def get_review(
     reservation_id: int | None = None,
     session: AsyncSession = Depends(get_session),

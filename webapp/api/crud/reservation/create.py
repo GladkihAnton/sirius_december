@@ -4,13 +4,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.login.router import auth_router
+from webapp.api.crud.reservation.router import reservation_router
 from webapp.crud.reservation import reservation_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.reservation import ReservationInfo
 
 
-@auth_router.post('/reservation/create')
+@reservation_router.post('/reservation/create')
 async def create_review(
     body: ReservationInfo,
     session: AsyncSession = Depends(get_session),

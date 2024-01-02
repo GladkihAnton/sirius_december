@@ -13,10 +13,10 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 @activity_router.get('/activity/update')
 async def get_activity(
-        body: ActivityInfo,
-        activity_id: int,
-        session: AsyncSession = Depends(get_session),
-        access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+    body: ActivityInfo,
+    activity_id: int,
+    session: AsyncSession = Depends(get_session),
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     try:
         await activity_crud.update(session, activity_id, body)

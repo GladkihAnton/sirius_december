@@ -4,14 +4,14 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.reservation.router import reservation_router
 from webapp.crud.reservation import reservation_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@crud_router.get('/reservation/update')
+@reservation_router.get('/reservation/update')
 async def get_users(
     body: ReservationInfo,
     reservation_id: int,
