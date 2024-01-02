@@ -40,7 +40,7 @@ class AsyncCRUDFactory:
         return updated_instance
 
     async def delete(self, session: AsyncSession, model_id: int) -> bool:
-        instance = await session.scalars(select(self.model).filter_by(id=model_id))
+        instance = await session.get(self.model, model_id)
         if instance:
             await session.delete(instance)
             await session.commit()
