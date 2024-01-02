@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from pydantic_settings import BaseSettings
 
 
@@ -12,6 +14,7 @@ class Settings(BaseSettings):
     REDIS_PORT: int
     REDIS_PASSWORD: str
     REDIS_SIRIUS_CACHE_PREFIX: str
+    FILE_EXPIRE_TIME: timedelta = timedelta(minutes=15)
 
 
 settings = Settings()

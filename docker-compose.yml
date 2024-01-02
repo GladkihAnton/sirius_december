@@ -39,14 +39,14 @@ services:
     networks:
       - sirius_network
 
-#  redis:
-#    container_name: redis
-#    image: redis:6.2.4
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - sirius_network
-#
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+    networks:
+      - sirius_network
+
 #  kafka:
 #    image: docker.redpanda.com/vectorized/redpanda:v22.2.2
 #    command:

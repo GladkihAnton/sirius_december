@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from webapp.api.crud.router import crud_router
 from webapp.api.login.router import auth_router
+from webapp.on_startup.redis import start_redis
 
 
 def setup_middleware(app: FastAPI) -> None:
@@ -24,7 +25,7 @@ def setup_routers(app: FastAPI) -> None:
 
 def create_app() -> FastAPI:
     app = FastAPI(docs_url='/swagger')
-
+    start_redis()
     setup_middleware(app)
     setup_routers(app)
 

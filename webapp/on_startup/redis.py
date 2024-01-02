@@ -4,7 +4,7 @@ from conf.config import settings
 from webapp.integrations.cache import redis
 
 
-async def start_redis() -> None:
+def start_redis() -> None:
     pool = ConnectionPool(
         host=settings.REDIS_HOST,
         port=settings.REDIS_PORT,
