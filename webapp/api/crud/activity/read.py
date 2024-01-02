@@ -15,9 +15,9 @@ from webapp.utils.crud.serializers import serialize_model
 
 @activity_router.get('/activity')
 async def get_activity(
-    activity_id: int | None = None,
-    session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+        activity_id: int | None = None,
+        session: AsyncSession = Depends(get_session),
+        access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if activity_id is None:
         serialized_activity = serialize_model(list(await activity_crud.get_all(session)))
