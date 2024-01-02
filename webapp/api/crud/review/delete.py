@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -11,14 +12,13 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 @crud_router.get('/review/delete')
 async def delete_review(
-    tour_id: int | None = None,
+    tour_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    review = await review_crud.get(session, tour_id)  # type: ignore
-    if review is None:
+    try:
+        await review_crud.delete(session, tour_id)
+    except NoResultFound:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    await review_crud.delete(session, tour_id)
 
     return ORJSONResponse(content={'message': 'Review removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

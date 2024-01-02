@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -17,10 +18,9 @@ async def get_users(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    tour = await tour_crud.get(session, tour_id)  # type: ignore
-    if tour is None:
+    try:
+        await tour_crud.update(session, tour_id, body)
+    except NoResultFound:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    await tour_crud.update(session, tour_id, body)
 
     return ORJSONResponse(content={'message': 'Tour removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.router import crud_router
+from webapp.api.crud.tour.utils.get_tour import get_tour_model
 from webapp.crud.tour import tour_crud
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.user import User
@@ -24,7 +25,7 @@ async def get_tour(
         serialized_tours = serialize_model(tours)
         return ORJSONResponse({'tours': serialized_tours})
 
-    tour = await tour_crud.get(session, tour_id)  # type: ignore
+    tour = await get_tour_model(session, tour_id)
     if tour is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

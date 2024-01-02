@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -17,10 +18,9 @@ async def update_user(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    user = await user_crud.get(session, user_id)  # type: ignore
-    if user is None:
+    try:
+        await user_crud.update(session, user_id, body)
+    except NoResultFound:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-
-    await user_crud.update(session, user_id, body)
 
     return ORJSONResponse(content={'message': 'User removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

@@ -5,9 +5,9 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from webapp.api.crud.reservation.utils.get_activity import get_reservation_model
 from webapp.api.crud.router import crud_router
 from webapp.crud.reservation import reservation_crud
-from webapp.crud.tour import tour_crud
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.reservation import Reservation
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
@@ -25,7 +25,7 @@ async def get_review(
         serialized_reservations = serialize_model(reservations)
         return ORJSONResponse({'reservations': serialized_reservations})
 
-    reservation = await tour_crud.get(session, reservation_id)  # type: ignore
+    reservation = await get_reservation_model(session, reservation_id)
     if reservation is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
