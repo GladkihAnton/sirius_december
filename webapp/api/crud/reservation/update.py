@@ -11,7 +11,7 @@ from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@reservation_router.get('/reservation/update')
+@reservation_router.get('/update/{reservation_id}')
 async def get_users(
     body: ReservationInfo,
     reservation_id: int,

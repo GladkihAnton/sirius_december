@@ -11,7 +11,7 @@ from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@user_router.get('/user/update')
+@user_router.get('/update/{user_id}')
 async def update_user(
     body: UserInfo,
     user_id: int,

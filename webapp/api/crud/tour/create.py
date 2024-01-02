@@ -10,7 +10,7 @@ from webapp.integrations.postgres import get_session
 from webapp.schema.info.tour import TourInfo
 
 
-@tour_router.post('/tour/create')
+@tour_router.post('/create')
 async def create_tour(
     body: TourInfo,
     session: AsyncSession = Depends(get_session),

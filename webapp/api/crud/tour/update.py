@@ -11,7 +11,7 @@ from webapp.schema.info.tour import TourInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@tour_router.get('/tour/update')
+@tour_router.get('/update')
 async def get_users(
     body: TourInfo,
     tour_id: int,

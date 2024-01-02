@@ -10,14 +10,14 @@ from webapp.integrations.postgres import get_session
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@review_router.get('/review/delete')
+@review_router.get('/delete/{review_id}')
 async def delete_review(
-    tour_id: int,
+    review_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     try:
-        await review_crud.delete(session, tour_id)
+        await review_crud.delete(session, review_id)
     except NoResultFound:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

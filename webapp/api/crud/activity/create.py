@@ -10,7 +10,7 @@ from webapp.integrations.postgres import get_session
 from webapp.schema.info.activity import ActivityInfo
 
 
-@activity_router.post('/activity/create')
+@activity_router.post('/create')
 async def create_activity(
     body: ActivityInfo,
     session: AsyncSession = Depends(get_session),

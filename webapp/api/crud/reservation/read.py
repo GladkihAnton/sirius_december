@@ -13,16 +13,21 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@reservation_router.get('/reservation')
-async def get_review(
-    reservation_id: int | None = None,
+@reservation_router.get('/')
+async def get_reservations(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if reservation_id is None:
-        serialized_reservations = serialize_model(list(await reservation_crud.get_all(session)))
-        return ORJSONResponse({'reservations': serialized_reservations})
+    serialized_reservations = serialize_model(list(await reservation_crud.get_all(session)))
+    return ORJSONResponse({'reservations': serialized_reservations})
 
+
+@reservation_router.get('/{reservation_id}')
+async def get_review(
+    reservation_id: int,
+    session: AsyncSession = Depends(get_session),
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+) -> ORJSONResponse:
     if cached := (await redis_get(Reservation.__name__, reservation_id)):
         return ORJSONResponse({'cached_reservation': cached})
 

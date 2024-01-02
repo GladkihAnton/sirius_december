@@ -10,7 +10,7 @@ from webapp.integrations.postgres import get_session
 from webapp.schema.info.review import ReviewInfo
 
 
-@review_router.post('/review/create')
+@review_router.post('/create')
 async def create_review(
     body: ReviewInfo,
     session: AsyncSession = Depends(get_session),

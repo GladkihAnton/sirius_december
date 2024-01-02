@@ -13,16 +13,21 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@tour_router.get('/tour')
-async def get_tour(
-    tour_id: int | None = None,
+@tour_router.get('/')
+async def get_tours(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if tour_id is None:
-        serialized_tours = serialize_model(list(await tour_crud.get_all(session)))
-        return ORJSONResponse({'tours': serialized_tours})
+    serialized_tours = serialize_model(list(await tour_crud.get_all(session)))
+    return ORJSONResponse({'tours': serialized_tours})
 
+
+@tour_router.get('/{tour_id}')
+async def get_tour(
+    tour_id: int,
+    session: AsyncSession = Depends(get_session),
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+) -> ORJSONResponse:
     if cached := (await redis_get(Tour.__name__, tour_id)):
         return ORJSONResponse({'cached_tour': cached})
 

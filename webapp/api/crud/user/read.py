@@ -13,16 +13,21 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@user_router.get('/user')
-async def get_user(
-    user_id: int | None = None,
+@user_router.get('/')
+async def get_users(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if user_id is None:
-        serialized_users = serialize_model(list(await user_crud.get_all(session)))
-        return ORJSONResponse({'users': serialized_users})
+    serialized_users = serialize_model(list(await user_crud.get_all(session)))
+    return ORJSONResponse({'users': serialized_users})
 
+
+@user_router.get('/{user_id}')
+async def get_user(
+    user_id: int,
+    session: AsyncSession = Depends(get_session),
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+) -> ORJSONResponse:
     if cached := (await redis_get(User.__name__, user_id)):
         return ORJSONResponse({'cached_user': cached})
 

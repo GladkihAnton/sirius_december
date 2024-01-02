@@ -13,16 +13,21 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 
 
-@activity_router.get('/activity')
-async def get_activity(
-    activity_id: int | None = None,
+@activity_router.get('/')
+async def get_activities(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if activity_id is None:
-        serialized_activity = serialize_model(list(await activity_crud.get_all(session)))
-        return ORJSONResponse({'activity': serialized_activity})
+    serialized_activity = serialize_model(list(await activity_crud.get_all(session)))
+    return ORJSONResponse({'activity': serialized_activity})
 
+
+@activity_router.get('/{activity_id}')
+async def get_activity(
+    activity_id: int,
+    session: AsyncSession = Depends(get_session),
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+) -> ORJSONResponse:
     if cached := (await redis_get(Activity.__name__, activity_id)):
         return ORJSONResponse({'cached_activity': cached})
 
