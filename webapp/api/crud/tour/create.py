@@ -4,13 +4,13 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.login.router import auth_router
+from webapp.api.crud.tour.router import tour_router
 from webapp.crud.tour import tour_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.tour import TourInfo
 
 
-@auth_router.post('/tour/create')
+@tour_router.post('/tour/create')
 async def create_tour(
     body: TourInfo,
     session: AsyncSession = Depends(get_session),
