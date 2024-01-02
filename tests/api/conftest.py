@@ -1,7 +1,6 @@
 import json
-import uuid
 from pathlib import Path
-from typing import AsyncGenerator, List, Dict
+from typing import AsyncGenerator, List
 
 import pytest
 from fastapi import FastAPI
@@ -11,9 +10,9 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tests.conf import URLS
 from tests.mocking.redis import TestRedisClient
+
 from webapp.integrations.cache.redis import get_redis
 from webapp.integrations.postgres import engine, get_session
-
 from webapp.models.meta import metadata
 
 
@@ -62,26 +61,25 @@ def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
 
 @pytest.fixture()
 async def access_token(
-        client: AsyncClient,
-        username: str,
-        password: str,
+    client: AsyncClient,
+    username: str,
+    password: str,
 ) -> str:
-    return (await client.post(
-        URLS['auth']['login'],
-        json={'username': username, 'password': password}
-    )).json()['access_token']
+    return (await client.post(URLS['auth']['login'], json={'username': username, 'password': password})).json()[
+        'access_token'
+    ]
 
 
 @pytest.fixture()
 async def _common_api_fixture(
-        _load_fixtures: None,
+    _load_fixtures: None,
 ) -> None:
     return
 
 
 @pytest.fixture()
 async def _common_api_with_redis_fixture(
-        _common_api_fixture: None,
-        _mock_redis: None,
+    _common_api_fixture: None,
+    _mock_redis: None,
 ) -> None:
     return
