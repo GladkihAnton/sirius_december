@@ -4,14 +4,14 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.crud.router import crud_router
+from webapp.api.crud.review.router import review_router
 from webapp.crud.review import review_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.review import ReviewInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@crud_router.get('/review/update')
+@review_router.get('/review/update')
 async def get_users(
     body: ReviewInfo,
     review_id: int,
