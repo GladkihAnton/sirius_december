@@ -37,7 +37,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture')
-async def test_update_user(
+async def test_update(
     client: AsyncClient,
     user_id: str,
     username: str,

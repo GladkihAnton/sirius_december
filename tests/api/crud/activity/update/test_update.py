@@ -42,7 +42,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture')
-async def test_get(
+async def test_update(
     client: AsyncClient,
     activity_id: str,
     body: Dict[str, Any],
