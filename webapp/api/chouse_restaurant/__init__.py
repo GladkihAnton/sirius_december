@@ -1,0 +1,1 @@
+from . import restaurants_list
