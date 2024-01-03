@@ -16,9 +16,8 @@ async def delete_tour(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await tour_crud.delete(session, tour_id)
-    except NoResultFound:
+
+    if not await tour_crud.delete(session, tour_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(content={'message': 'Tour removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

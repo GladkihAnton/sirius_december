@@ -31,6 +31,15 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.user.json',
             ],
         ),
+        (
+            '-1',
+            'test',
+            'qwerty',
+            status.HTTP_404_NOT_FOUND,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+            ],
+        ),
     ],
 )
 @pytest.mark.asyncio()

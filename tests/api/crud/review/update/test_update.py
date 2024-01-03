@@ -23,6 +23,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             [
                 FIXTURES_PATH / 'sirius.user.json',
                 FIXTURES_PATH / 'sirius.tour.json',
+                FIXTURES_PATH / 'sirius.review.json',
             ],
         ),
     ],

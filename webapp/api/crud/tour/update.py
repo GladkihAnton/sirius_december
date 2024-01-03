@@ -18,9 +18,8 @@ async def get_users(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await tour_crud.update(session, tour_id, body)
-    except NoResultFound:
+
+    if await tour_crud.update(session, tour_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(content={'message': 'Tour removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

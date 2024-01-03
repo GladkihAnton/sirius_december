@@ -18,9 +18,8 @@ async def update_user(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await user_crud.update(session, user_id, body)
-    except NoResultFound:
+
+    if await user_crud.update(session, user_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(content={'message': 'User removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)

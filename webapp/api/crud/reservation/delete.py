@@ -16,9 +16,8 @@ async def delete_review(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await reservation_crud.delete(session, reservation_id)
-    except NoResultFound:
+
+    if not await reservation_crud.delete(session, reservation_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(

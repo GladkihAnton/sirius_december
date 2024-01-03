@@ -11,13 +11,16 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('user_id', 'username', 'new_username', 'password', 'expected_status', 'fixtures'),
+    ('user_id', 'username', 'password', 'body', 'expected_status', 'fixtures'),
     [
         (
             '0',
             'test',
-            'new_user',
             'qwerty',
+            {
+                "username": "new_test",
+                "password": "new_passwd"
+            },
             status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -26,8 +29,11 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             '0',
             'test1',
-            'new_user',
             'qwerty',
+            {
+                "username": "new_test",
+                "password": "new_passwd"
+            },
             status.HTTP_403_FORBIDDEN,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -41,7 +47,7 @@ async def test_update(
     client: AsyncClient,
     user_id: str,
     username: str,
-    new_username: str,
+    body: str,
     password: str,
     expected_status: int,
     access_token: str,
@@ -49,7 +55,7 @@ async def test_update(
 ) -> None:
     response = await client.post(
         ''.join([URLS['crud']['user']['update'], user_id]),
-        json={'username': new_username, 'password': password},
+        json=body,
         headers={'Authorization': f'Bearer {access_token}'},
     )
 

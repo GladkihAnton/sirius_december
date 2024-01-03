@@ -18,9 +18,8 @@ async def get_users(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await reservation_crud.update(session, reservation_id, body)
-    except NoResultFound:
+
+    if await reservation_crud.update(session, reservation_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(

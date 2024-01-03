@@ -16,9 +16,8 @@ async def delete_activity(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    try:
-        await activity_crud.delete(session, activity_id)
-    except NoResultFound:
+
+    if not await activity_crud.delete(session, activity_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(content={'message': 'Activity removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
