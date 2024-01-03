@@ -17,7 +17,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test',
             'qwerty',
-            {'user_id': 1, 'tour_id': 1, 'booking_date': '2023-01-28', 'booking_status': 'confirmed'},
+            {'user_id': 0, 'tour_id': 0, 'booking_date': '2023-01-28', 'booking_status': 'confirmed'},
             status.HTTP_201_CREATED,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -27,7 +27,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test1',
             'qwerty',
-            {'user_id': 1, 'tour_id': 1, 'booking_date': '2023-01-28', 'booking_status': 'confirmed'},
+            {'user_id': 0, 'tour_id': 0, 'booking_date': '2023-01-28', 'booking_status': 'confirmed'},
             status.HTTP_403_FORBIDDEN,
             [
                 FIXTURES_PATH / 'sirius.user.json',

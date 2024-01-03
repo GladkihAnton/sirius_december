@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Dict, Any
 
 import pytest
 from httpx import AsyncClient
@@ -11,12 +12,13 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('tour_id', 'username', 'password', 'expected_status', 'fixtures'),
+    ('tour_id', 'username', 'password', 'body',  'expected_status', 'fixtures'),
     [
         (
-            '1',
+            '0',
             'test',
             'qwerty',
+            {'title': 'new', 'price': 10000.0, 'start_date': '2023-01-28', 'end_date': '2023-01-28'},
             status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -30,13 +32,14 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 async def test_update(
     client: AsyncClient,
     tour_id: str,
+    body: Dict[str, Any],
     expected_status: int,
     access_token: str,
     db_session: None,
 ) -> None:
     response = await client.post(
         ''.join([URLS['crud']['tour']['update'], tour_id]),
-        json={'title': 'new', 'price': 10000.0, 'start_date': '2023-01-28', 'end_date': '2023-01-28'},
+        json=body,
         headers={'Authorization': f'Bearer {access_token}'},
     )
     assert response.status_code == expected_status

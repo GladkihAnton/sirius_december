@@ -14,7 +14,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     ('user_id', 'username', 'new_username', 'password', 'expected_status', 'fixtures'),
     [
         (
-            '1',
+            '0',
             'test',
             'new_user',
             'qwerty',
@@ -24,7 +24,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '2',
+            '0',
             'test1',
             'new_user',
             'qwerty',

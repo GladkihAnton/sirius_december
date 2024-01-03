@@ -15,10 +15,10 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     ('activity_id', 'username', 'password', 'body', 'expected_status', 'fixtures'),
     [
         (
-            '1',
+            '0',
             'test',
             'qwerty',
-            {'tour_id': 1, 'title': 'zoo', 'place': 'Central zoo', 'type': 'film'},
+            {'tour_id': 0, 'title': 'zoo', 'place': 'Central zoo', 'type': 'film'},
             status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -27,7 +27,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '1',
+            '0',
             'test1',
             'qwerty',
             {'tour_id': 1, 'title': 'zoo', 'place': 'Central zoo', 'type': 'film'},

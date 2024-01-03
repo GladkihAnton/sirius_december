@@ -17,7 +17,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test',
             'qwerty',
-            {'user_id': 1, 'tour_id': 1, 'rating': 5.0, 'comment': 'Good work'},
+            {'user_id': 0, 'tour_id': 0, 'rating': 5.0, 'comment': 'Good work'},
             status.HTTP_201_CREATED,
             [
                 FIXTURES_PATH / 'sirius.user.json',

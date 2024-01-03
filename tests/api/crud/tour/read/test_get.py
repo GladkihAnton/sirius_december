@@ -14,7 +14,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     ('tour_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
-            '1',
+            '0',
             'test',
             'qwerty',
             status.HTTP_200_OK,
@@ -24,7 +24,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '1',
+            '0',
             'test1',
             'qwerty',
             status.HTTP_403_FORBIDDEN,

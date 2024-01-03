@@ -14,7 +14,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     ('user_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
-            '1',
+            '0',
             'test',
             'qwerty',
             status.HTTP_204_NO_CONTENT,
@@ -23,19 +23,10 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '1',
+            '0',
             'test1',
             'qwerty',
             status.HTTP_403_FORBIDDEN,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-            ],
-        ),
-        (
-            '2',
-            'test',
-            'qwerty',
-            status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',
             ],

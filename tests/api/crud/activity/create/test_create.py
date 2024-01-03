@@ -17,7 +17,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test',
             'qwerty',
-            {'tour_id': 1, 'title': 'zoo', 'place': 'Central zoo', 'type': 'excursion'},
+            {'tour_id': 0, 'title': 'zoo', 'place': 'Central zoo', 'type': 'excursion'},
             status.HTTP_201_CREATED,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -27,7 +27,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test1',
             'qwerty',
-            {'tour_id': 1, 'title': 'zoo', 'place': 'Central zoo', 'type': 'excursion'},
+            {'tour_id': 0, 'title': 'zoo', 'place': 'Central zoo', 'type': 'excursion'},
             status.HTTP_403_FORBIDDEN,
             [
                 FIXTURES_PATH / 'sirius.user.json',

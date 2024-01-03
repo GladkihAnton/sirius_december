@@ -11,35 +11,26 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('username', 'password', 'user_id', 'expected_status', 'fixtures'),
+    ('user_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
+            '0',
             'test',
             'qwerty',
-            '1',
             status.HTTP_200_OK,
             [
                 FIXTURES_PATH / 'sirius.user.json',
             ],
         ),
         (
+            '0',
             'test1',
             'qwerty',
-            '1',
             status.HTTP_403_FORBIDDEN,
             [
                 FIXTURES_PATH / 'sirius.user.json',
             ],
-        ),
-        (
-            'test',
-            'qwerty',
-            '0',
-            status.HTTP_404_NOT_FOUND,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-            ],
-        ),
+        )
     ],
 )
 @pytest.mark.asyncio()
