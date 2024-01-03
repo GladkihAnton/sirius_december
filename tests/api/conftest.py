@@ -51,7 +51,7 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> None
         for model_obj in values:
             for key, val in model_obj.items():
                 if 'date' in key:
-                    model_obj[key] = datetime.strptime(val, '%d/%m/%y %H:%M:%S').date()
+                    model_obj[key] = datetime.strptime(val, '%Y-%m-%d').date()
 
         await db_session.execute(insert(model).values(values))
         await db_session.commit()
