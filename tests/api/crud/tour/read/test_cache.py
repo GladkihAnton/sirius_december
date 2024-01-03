@@ -35,10 +35,7 @@ async def test_get_users(
     db_session: None,
 ) -> None:
     response = await client.get(
-        ''.join([URLS['crud']['tour']['read'], tour_id]),
-        headers={
-            'Authorization': f'Bearer {access_token}'
-        }
+        ''.join([URLS['crud']['tour']['read'], tour_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
     assert 'tour' in response.json()
     assert 'cached_tour' not in response.json()

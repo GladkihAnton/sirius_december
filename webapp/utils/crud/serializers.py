@@ -1,7 +1,9 @@
 from datetime import date
-from typing import Any, Dict, List
 from decimal import Decimal
+from typing import Any, Dict, List
+
 from sqlalchemy.orm import class_mapper
+
 from webapp.crud.utils.operations import ModelT
 
 

@@ -1,5 +1,3 @@
-import datetime
-
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.exc import IntegrityError

@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Any, Dict
 
 import pytest
 from httpx import AsyncClient
@@ -16,12 +17,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'test',
             'qwerty',
-            {
-                "user_id": 1,
-                "tour_id": 1,
-                "rating": 5.0,
-                "comment": "Good work"
-            },
+            {'user_id': 1, 'tour_id': 1, 'rating': 5.0, 'comment': 'Good work'},
             status.HTTP_201_CREATED,
             [
                 FIXTURES_PATH / 'sirius.user.json',
@@ -36,17 +32,13 @@ async def test_create(
     client: AsyncClient,
     username: str,
     password: str,
-    body: dict,
+    body: Dict[str, Any],
     expected_status: int,
     access_token: str,
     db_session: None,
 ) -> None:
     response = await client.post(
-        URLS['crud']['review']['create'],
-        json=body,
-        headers={
-            'Authorization': f'Bearer {access_token}'
-        }
+        URLS['crud']['review']['create'], json=body, headers={'Authorization': f'Bearer {access_token}'}
     )
 
     assert response.status_code == expected_status

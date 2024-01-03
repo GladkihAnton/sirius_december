@@ -49,10 +49,7 @@ async def test_delete(
     db_session: None,
 ) -> None:
     response = await client.post(
-        ''.join([URLS['crud']['review']['delete'], review_id]),
-        headers={
-            'Authorization': f'Bearer {access_token}'
-        }
+        ''.join([URLS['crud']['review']['delete'], review_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
 
     assert response.status_code == expected_status
