@@ -10,7 +10,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @reservation_router.post('/delete/{reservation_id}')
-async def delete_review(
+async def delete_reservation(
     reservation_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

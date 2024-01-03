@@ -23,7 +23,7 @@ async def get_reviews(
 
 
 @review_router.get('/{review_id}')
-async def get_review(
+async def get_cached_review(
     review_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

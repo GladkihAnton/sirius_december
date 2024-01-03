@@ -23,7 +23,7 @@ async def get_tours(
 
 
 @tour_router.get('/{tour_id}')
-async def get_tour(
+async def get_cached_tour(
     tour_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

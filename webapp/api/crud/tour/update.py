@@ -11,7 +11,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @tour_router.post('/update/{tour_id}')
-async def get_users(
+async def update_tour(
     body: TourInfo,
     tour_id: int,
     session: AsyncSession = Depends(get_session),

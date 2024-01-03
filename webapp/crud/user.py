@@ -2,13 +2,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from webapp.crud.utils.operations import AsyncCRUDFactory
-from webapp.metrics import async_timer
+from webapp.metrics import async_integrations_timer
 from webapp.models.sirius.user import User
 from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.password import hash_password
 
 
-@async_timer
+@async_integrations_timer
 async def get_user(session: AsyncSession, user_info: UserInfo) -> User | None:
     return (
         await session.scalars(

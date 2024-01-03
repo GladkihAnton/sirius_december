@@ -11,7 +11,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @activity_router.post('/update/{activity_id}')
-async def get_activity(
+async def update_activity(
     body: ActivityInfo,
     activity_id: int,
     session: AsyncSession = Depends(get_session),

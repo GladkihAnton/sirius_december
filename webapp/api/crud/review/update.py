@@ -11,7 +11,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @review_router.post('/update/{review_id}')
-async def get_users(
+async def update_review(
     body: ReviewInfo,
     review_id: int,
     session: AsyncSession = Depends(get_session),

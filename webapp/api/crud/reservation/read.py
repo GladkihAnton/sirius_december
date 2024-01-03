@@ -23,7 +23,7 @@ async def get_reservations(
 
 
 @reservation_router.get('/{reservation_id}')
-async def get_review(
+async def get_cached_reservation(
     reservation_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

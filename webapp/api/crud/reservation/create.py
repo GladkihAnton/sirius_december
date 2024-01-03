@@ -12,7 +12,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @reservation_router.post('/create')
-async def create_review(
+async def create_reservation(
     body: ReservationInfo,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

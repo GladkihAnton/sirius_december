@@ -23,7 +23,7 @@ async def get_users(
 
 
 @user_router.get('/{user_id}')
-async def get_user(
+async def get_cached_user(
     user_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),

@@ -11,7 +11,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @reservation_router.post('/update/{reservation_id}')
-async def get_users(
+async def update_reservation(
     body: ReservationInfo,
     reservation_id: int,
     session: AsyncSession = Depends(get_session),

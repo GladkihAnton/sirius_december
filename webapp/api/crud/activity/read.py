@@ -23,7 +23,7 @@ async def get_activities(
 
 
 @activity_router.get('/{activity_id}')
-async def get_activity(
+async def get_cached_activity(
     activity_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
