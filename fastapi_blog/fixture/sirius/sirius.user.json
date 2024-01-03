@@ -1,0 +1,32 @@
+[
+  {
+    "username": "autotest",
+    "email": "autotest@autotest.ru",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user2",
+    "email": "user2@example.com",
+    "hashed_password": "5f4dcc3b5aa765d61d8327deb882cf99"
+  },
+  {
+    "username": "user3",
+    "email": "user3@example.com",
+    "hashed_password": "5e884898da28047151d0e56f8dc62927"
+  },
+  {
+    "username": "user4",
+    "email": "user4@example.com",
+    "hashed_password": "7c222fb2927d828af22f592134e8932480637c0d"
+  },
+  {
+    "username": "user5",
+    "email": "user5@example.com",
+    "hashed_password": "12dada2368fc1389ea5a4b06f31b7719"
+  },
+  {
+    "username": "user6",
+    "email": "user6@example.com",
+    "hashed_password": "3d4f2bf07dc1be38b20cd6e4694fda44"
+  }
+]
