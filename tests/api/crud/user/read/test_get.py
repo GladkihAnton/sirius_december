@@ -30,7 +30,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             [
                 FIXTURES_PATH / 'sirius.user.json',
             ],
-        )
+        ),
     ],
 )
 @pytest.mark.asyncio()

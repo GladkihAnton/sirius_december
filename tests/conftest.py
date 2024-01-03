@@ -28,4 +28,6 @@ async def _migrate_db() -> AsyncGenerator[None, None]:
     yield
 
     async with engine.begin() as conn:
-        await conn.run_sync(meta.metadata.drop_all)
+        # to run pytest in web container
+        await conn.run_sync(meta.metadata.create_all)
+        # await conn.run_sync(meta.metadata.drop_all)

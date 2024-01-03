@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 import pytest
 from httpx import AsyncClient
@@ -12,7 +12,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('tour_id', 'username', 'password', 'body',  'expected_status', 'fixtures'),
+    ('tour_id', 'username', 'password', 'body', 'expected_status', 'fixtures'),
     [
         (
             '0',
