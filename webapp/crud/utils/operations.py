@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import DeclarativeMeta
 
-from webapp.metrics import async_timer
+from webapp.metrics import async_integrations_timer
 
 ModelT = TypeVar('ModelT', bound=DeclarativeMeta)
 
@@ -15,7 +15,7 @@ class AsyncCRUDFactory:
     def __init__(self, model: Type[ModelT]) -> None:
         self.model = model
 
-    @async_timer
+    @async_integrations_timer
     async def create(self, session: AsyncSession, model_info: Any) -> ModelT:
         async with session.begin_nested():
             async with session.begin_nested():
@@ -30,11 +30,11 @@ class AsyncCRUDFactory:
                 await session.commit()
             return instance
 
-    @async_timer
+    @async_integrations_timer
     async def get_all(self, session: AsyncSession) -> Sequence[ModelT]:
         return (await session.scalars(select(self.model))).all()
 
-    @async_timer
+    @async_integrations_timer
     async def update(self, session: AsyncSession, model_id: int, model_info: Any) -> ModelT | None:
         model = self.model
         model_id_attr = getattr(model, 'id', None)
@@ -53,7 +53,7 @@ class AsyncCRUDFactory:
         updated_instance = await session.get(self.model, model_id)
         return updated_instance
 
-    @async_timer
+    @async_integrations_timer
     async def delete(self, session: AsyncSession, model_id: int) -> bool:
         instance = await session.get(self.model, model_id)
         if instance:

@@ -7,13 +7,13 @@ from webapp.api.crud.review.router import review_router
 from webapp.api.crud.tour.router import tour_router
 from webapp.api.crud.user.router import user_router
 from webapp.api.login.router import auth_router
-from webapp.metrics import metrics
+from webapp.metrics import metrics, prometheus_metrics
 from webapp.on_startup.redis import start_redis
 
 
 def setup_middleware(app: FastAPI) -> None:
     # CORS Middleware should be the last.
-    # See https://github.com/tiangolo/fastapi/issues/1663 .
+    # See https://github.com/tiangolo/fastapi/issues/1663.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=['*'],
@@ -21,17 +21,21 @@ def setup_middleware(app: FastAPI) -> None:
         allow_methods=['*'],
         allow_headers=['*'],
     )
+    app.middleware('http')(prometheus_metrics)
 
 
 def setup_routers(app: FastAPI) -> None:
     app.add_route('/metrics', metrics)
-
-    app.include_router(auth_router)
-    app.include_router(activity_router)
-    app.include_router(reservation_router)
-    app.include_router(review_router)
-    app.include_router(tour_router)
-    app.include_router(user_router)
+    routers = [
+        auth_router,
+        activity_router,
+        reservation_router,
+        review_router,
+        tour_router,
+        user_router,
+    ]
+    for router in routers:
+        app.include_router(router)
 
 
 def create_app() -> FastAPI:
