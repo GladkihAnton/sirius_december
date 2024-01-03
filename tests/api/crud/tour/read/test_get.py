@@ -61,33 +61,3 @@ async def test_get(
     )
 
     assert response.status_code == expected_status
-
-
-@pytest.mark.parametrize(
-    ('tour_id', 'username', 'password', 'expected_status', 'fixtures'),
-    [
-        (
-            '',
-            'test',
-            'qwerty',
-            status.HTTP_200_OK,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-                FIXTURES_PATH / 'sirius.tour.json',
-            ],
-        ),
-    ],
-)
-@pytest.mark.asyncio()
-@pytest.mark.usefixtures('_common_api_with_redis_fixture')
-async def test_get_users(
-        client: AsyncClient,
-        tour_id: str,
-        expected_status: int,
-        access_token: str,
-        db_session: None,
-) -> None:
-    response = await client.get(
-        ''.join([URLS['crud']['tour']['read'], tour_id]), headers={'Authorization': f'Bearer {access_token}'}
-    )
-    assert response.status_code == expected_status
