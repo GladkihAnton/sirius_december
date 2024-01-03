@@ -41,8 +41,7 @@ async def test_get(
             "price": 10000.0,
             "start_date": "2023-01-28",
             "end_date": "2023-01-28"
-        }
-        ,
+        },
         headers={'Authorization': f'Bearer {access_token}'}
     )
     assert response.status_code == expected_status
