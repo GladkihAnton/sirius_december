@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 

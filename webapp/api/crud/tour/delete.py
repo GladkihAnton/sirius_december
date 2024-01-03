@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -16,7 +15,6 @@ async def delete_tour(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-
     if not await tour_crud.delete(session, tour_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

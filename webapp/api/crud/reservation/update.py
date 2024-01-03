@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -18,7 +17,6 @@ async def get_users(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-
     if await reservation_crud.update(session, reservation_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
