@@ -66,12 +66,14 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    build:
+      context: grafana
     ports:
       - "3000:3000"
     restart: unless-stopped
     env_file: grafana/.env
-    volumes:
-      - ./grafana:/etc/grafana/provisioning/datasources
+#    volumes:
+#      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
     depends_on:
       - web
     networks:

@@ -63,7 +63,8 @@ async def prometheus_metrics(request: Request, call_next: Callable[..., Awaitabl
     start_time = monotonic()
     response = await call_next(request)
     process_time = monotonic() - start_time
-
+    if path in ['/favicon.ico', '/metrics']:
+        return response
     REQUEST_COUNT.labels(method=method, endpoint=path, http_status=str(response.status_code)).inc()
     ROUTES_LATENCY.labels(method=method, endpoint=path).observe(process_time)
 
