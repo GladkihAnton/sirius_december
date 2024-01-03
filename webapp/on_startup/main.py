@@ -7,7 +7,8 @@ from webapp.api.crud.review.router import review_router
 from webapp.api.crud.tour.router import tour_router
 from webapp.api.crud.user.router import user_router
 from webapp.api.login.router import auth_router
-from webapp.metrics import metrics, prometheus_metrics
+from webapp.integrations.metrics.metrics import metrics
+from webapp.integrations.metrics.middleware import prometheus_metrics
 from webapp.on_startup.redis import start_redis
 
 

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import DeclarativeMeta
 
-from webapp.metrics import async_integrations_timer
+from webapp.integrations.metrics.metrics import async_integrations_timer
 
 ModelT = TypeVar('ModelT', bound=DeclarativeMeta)
 

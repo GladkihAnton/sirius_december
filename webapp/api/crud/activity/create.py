@@ -7,7 +7,7 @@ from starlette import status
 from webapp.api.crud.activity.router import activity_router
 from webapp.crud.activity import activity_crud
 from webapp.integrations.postgres import get_session
-from webapp.schema.info.activity import ActivityInfo
+from webapp.schema.auth.activity import ActivityInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 

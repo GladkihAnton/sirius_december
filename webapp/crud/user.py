@@ -2,9 +2,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from webapp.crud.utils.operations import AsyncCRUDFactory
-from webapp.metrics import async_integrations_timer
+from webapp.integrations.metrics.metrics import async_integrations_timer
 from webapp.models.sirius.user import User
-from webapp.schema.info.user import UserInfo
+from webapp.schema.auth.user import UserInfo
 from webapp.utils.auth.password import hash_password
 
 

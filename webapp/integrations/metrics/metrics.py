@@ -56,24 +56,6 @@ ROUTES_LATENCY = prometheus_client.Histogram(
 )
 
 
-async def prometheus_metrics(request: Request, call_next: Callable[..., Awaitable[Any]]) -> Awaitable[Any]:
-    method = request.method
-    path = request.url.path
-
-    start_time = monotonic()
-    response = await call_next(request)
-    process_time = monotonic() - start_time
-    if path in ['/favicon.ico', '/metrics']:
-        return response
-    REQUEST_COUNT.labels(method=method, endpoint=path, http_status=str(response.status_code)).inc()
-    ROUTES_LATENCY.labels(method=method, endpoint=path).observe(process_time)
-
-    if 400 <= response.status_code < 600:
-        ERROR_COUNT.labels(method=method, endpoint=path, http_status=str(response.status_code)).inc()
-
-    return response
-
-
 def async_integrations_timer(func: Callable[..., Awaitable[Any]]) -> Callable[..., Awaitable[Any]]:
     async def wrapper(*args: List[Any], **kwargs: Dict[Any, Any]) -> Awaitable[Any]:
         start_time: float = monotonic()

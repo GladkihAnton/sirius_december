@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from webapp.metrics import async_integrations_timer
+from webapp.integrations.metrics.metrics import async_integrations_timer
 from webapp.models.sirius.activity import Activity
 
 
