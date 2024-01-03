@@ -20,4 +20,4 @@ async def get_users(
     if await review_crud.update(session, review_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return ORJSONResponse(content={'message': 'Review removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(content={'message': 'Review updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

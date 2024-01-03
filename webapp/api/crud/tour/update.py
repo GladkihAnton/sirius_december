@@ -20,4 +20,4 @@ async def get_users(
     if await tour_crud.update(session, tour_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return ORJSONResponse(content={'message': 'Tour removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(content={'message': 'Tour updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

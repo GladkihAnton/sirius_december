@@ -20,4 +20,4 @@ async def update_user(
     if await user_crud.update(session, user_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return ORJSONResponse(content={'message': 'User removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

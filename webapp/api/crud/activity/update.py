@@ -20,4 +20,4 @@ async def get_activity(
     if await activity_crud.update(session, activity_id, body) is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return ORJSONResponse(content={'message': 'Activity removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(content={'message': 'Activity updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

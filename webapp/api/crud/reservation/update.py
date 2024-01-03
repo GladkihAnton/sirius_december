@@ -21,5 +21,5 @@ async def get_users(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(
-        content={'message': 'Reservation removed successfully'}, status_code=status.HTTP_204_NO_CONTENT
+        content={'message': 'Reservation updated successfully'}, status_code=status.HTTP_204_NO_CONTENT
     )
