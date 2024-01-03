@@ -28,7 +28,7 @@ async def main(fixtures: List[str]) -> None:
         for model_obj in values:
             for key, val in model_obj.items():
                 if 'date' in key:
-                    model_obj[key] = datetime.strptime(val, '%d/%m/%y %H:%M:%S').date()
+                    model_obj[key] = datetime.strptime(val, '%Y-%m-%d').date()
 
         async with async_session() as session:
             await session.execute(insert(model).values(values))

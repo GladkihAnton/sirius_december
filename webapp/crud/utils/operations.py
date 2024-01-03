@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Sequence, Type, TypeVar
 
 from sqlalchemy import update
@@ -14,11 +15,17 @@ class AsyncCRUDFactory:
 
     async def create(self, session: AsyncSession, model_info: Any) -> ModelT:
         async with session.begin_nested():
-            instance = self.model(**model_info.dict())
-            session.add(instance)
-            await session.flush()
-            await session.commit()
-        return instance
+            async with session.begin_nested():
+                model_info_dict = model_info.dict()
+                for key, val in model_info_dict.items():
+                    if isinstance(val, str) and 'date' in key:
+                        model_info_dict[key] = datetime.strptime(val, '%Y-%m-%d').date()
+
+                instance = self.model(**model_info_dict)
+                session.add(instance)
+                await session.flush()
+                await session.commit()
+            return instance
 
     async def get(self, session: AsyncSession, model_id: int) -> ModelT | None:
         return (await session.scalars(select(self.model).filter_by(id=model_id))).one_or_none()
@@ -30,9 +37,14 @@ class AsyncCRUDFactory:
         model = self.model
         model_id_attr = getattr(model, 'id', None)
 
+        model_info_dict = model_info.dict()
+        for key, val in model_info_dict.items():
+            if isinstance(val, str) and 'date' in key:
+                model_info_dict[key] = datetime.strptime(val, '%Y-%m-%d').date()
+
         if model_id_attr is None:
             return None
-        query = update(model).where(model_id_attr == model_id).values(**model_info.dict())
+        query = update(model).where(model_id_attr == model_id).values(**model_info_dict)
         await session.execute(query)
         await session.commit()
 
