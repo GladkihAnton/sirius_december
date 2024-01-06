@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from webapp.api.auth.router import auth_router
 from webapp.api.crud.activity.router import activity_router
 from webapp.api.crud.reservation.router import reservation_router
 from webapp.api.crud.review.router import review_router
 from webapp.api.crud.tour.router import tour_router
 from webapp.api.crud.user.router import user_router
-from webapp.api.login.router import auth_router
 from webapp.integrations.metrics.metrics import metrics
 from webapp.integrations.metrics.middleware import prometheus_metrics
 from webapp.on_startup.redis import start_redis

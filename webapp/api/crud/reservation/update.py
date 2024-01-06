@@ -6,7 +6,7 @@ from starlette import status
 from webapp.api.crud.reservation.router import reservation_router
 from webapp.crud.reservation import reservation_crud
 from webapp.integrations.postgres import get_session
-from webapp.schema.auth.reservation import ReservationInfo
+from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 

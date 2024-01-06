@@ -4,10 +4,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from webapp.api.login.router import auth_router
+from webapp.api.auth.router import auth_router
 from webapp.crud.user import user_crud
 from webapp.integrations.postgres import get_session
-from webapp.schema.auth.user import UserInfo
+from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.password import hash_password
 
 
