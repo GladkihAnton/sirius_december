@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.user.router import user_router
-from webapp.api.crud.user.utils.get_user import get_user_model
 from webapp.crud.user import user_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -31,7 +30,7 @@ async def get_cached_user(
     if cached := (await redis_get(User.__name__, user_id)):
         return ORJSONResponse({'cached_user': cached})
 
-    user = await get_user_model(session, user_id)
+    user = await user_crud.get_model(session, user_id)
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

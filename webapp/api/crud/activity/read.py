@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.activity.router import activity_router
-from webapp.api.crud.activity.utils.get_activity import get_activity_model
 from webapp.crud.activity import activity_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -31,7 +30,7 @@ async def get_cached_activity(
     if cached := (await redis_get(Activity.__name__, activity_id)):
         return ORJSONResponse({'cached_activity': cached})
 
-    activity = await get_activity_model(session, activity_id)
+    activity = await activity_crud.get_model(session, activity_id)
 
     if activity is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

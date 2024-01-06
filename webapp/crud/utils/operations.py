@@ -31,6 +31,10 @@ class AsyncCRUDFactory:
         return (await session.scalars(select(self.model))).all()
 
     @async_integrations_timer
+    async def get_model(self, session: AsyncSession, model_id: int) -> ModelT | None:
+        return await session.get(self.model, model_id)
+
+    @async_integrations_timer
     async def update(self, session: AsyncSession, model_id: int, model_info: Any) -> ModelT | None:
         model = self.model
         model_id_attr = getattr(model, 'id', None)

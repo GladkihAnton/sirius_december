@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -17,7 +17,10 @@ async def update_user(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if await user_crud.update(session, user_id, body) is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    exists = user_crud.get_model(session, user_id) is not None
 
-    return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    await user_crud.update(session, user_id, body)
+
+    if exists:
+        return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(content={'message': 'User created successfully'}, status_code=status.HTTP_201_CREATED)

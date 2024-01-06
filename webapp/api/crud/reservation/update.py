@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -17,9 +17,12 @@ async def update_reservation(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    if await reservation_crud.update(session, reservation_id, body) is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    exists = reservation_crud.get_model(session, reservation_id) is not None
 
-    return ORJSONResponse(
-        content={'message': 'Reservation updated successfully'}, status_code=status.HTTP_204_NO_CONTENT
-    )
+    await reservation_crud.update(session, reservation_id, body)
+
+    if exists:
+        return ORJSONResponse(
+            content={'message': 'Reservation updated successfully'}, status_code=status.HTTP_204_NO_CONTENT
+        )
+    return ORJSONResponse(content={'message': 'Reservation created successfully'}, status_code=status.HTTP_201_CREATED)

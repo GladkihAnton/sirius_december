@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.review.router import review_router
-from webapp.api.crud.review.utils.get_review import get_review_model
 from webapp.crud.review import review_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -31,7 +30,7 @@ async def get_cached_review(
     if cached := (await redis_get(Review.__name__, review_id)):
         return ORJSONResponse({'cached_review': cached})
 
-    review = await get_review_model(session, review_id)
+    review = await review_crud.get_model(session, review_id)
     if review is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.tour.router import tour_router
-from webapp.api.crud.tour.utils.get_tour import get_tour_model
 from webapp.crud.tour import tour_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -31,7 +30,7 @@ async def get_cached_tour(
     if cached := (await redis_get(Tour.__name__, tour_id)):
         return ORJSONResponse({'cached_tour': cached})
 
-    tour = await get_tour_model(session, tour_id)
+    tour = await tour_crud.get_model(session, tour_id)
     if tour is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 

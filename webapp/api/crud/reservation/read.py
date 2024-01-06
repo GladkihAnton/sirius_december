@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.reservation.router import reservation_router
-from webapp.api.crud.reservation.utils.get_activity import get_reservation_model
 from webapp.crud.reservation import reservation_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
@@ -31,7 +30,7 @@ async def get_cached_reservation(
     if cached := (await redis_get(Reservation.__name__, reservation_id)):
         return ORJSONResponse({'cached_reservation': cached})
 
-    reservation = await get_reservation_model(session, reservation_id)
+    reservation = await reservation_crud.get_model(session, reservation_id)
     if reservation is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
