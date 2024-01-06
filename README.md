@@ -61,12 +61,12 @@ ___
 
 |Название     |URL  |
 |-------------|-----|
-|Документация | http://0.0.0.0:8000/swagger|
-|Метрика      | http://0.0.0.0:8000/metrics|
-|Prometheus   | http://0.0.0.0:9090|
-|Redpanda     | http://0.0.0.0:8080|
-|MinIO        | http://0.0.0.0:9001/login|
-|Grafana      | http://0.0.0.0:3000/login|
+|Документация | http://localhost:8000/swagger|
+|Метрика      | http://localhost:8000/metrics|
+|Prometheus   | http://localhost:9090|
+|Redpanda     | http://localhost:8080|
+|MinIO        | http://localhost:9001/login|
+|Grafana      | http://localhost:3000/login|
 
 ___
 🏎️ *Roadmap*
