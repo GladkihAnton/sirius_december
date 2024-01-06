@@ -36,6 +36,7 @@ async def get_cached_tour(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     serialized_tour = serialize_model(tour)
+
     await redis_set(Tour.__name__, tour_id, serialized_tour)
 
     return ORJSONResponse({'tour': serialized_tour})

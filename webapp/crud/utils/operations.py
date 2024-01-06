@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any, Sequence, Type, TypeVar
 
 from sqlalchemy import update
@@ -20,9 +19,6 @@ class AsyncCRUDFactory:
         async with session.begin_nested():
             async with session.begin_nested():
                 model_info_dict = model_info.dict()
-                for key, val in model_info_dict.items():
-                    if isinstance(val, str) and 'date' in key:
-                        model_info_dict[key] = datetime.strptime(val, '%Y-%m-%d').date()
 
                 instance = self.model(**model_info_dict)
                 session.add(instance)
@@ -40,9 +36,6 @@ class AsyncCRUDFactory:
         model_id_attr = getattr(model, 'id', None)
 
         model_info_dict = model_info.dict()
-        for key, val in model_info_dict.items():
-            if isinstance(val, str) and 'date' in key:
-                model_info_dict[key] = datetime.strptime(val, '%Y-%m-%d').date()
 
         if model_id_attr is None:
             return None
