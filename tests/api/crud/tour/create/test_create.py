@@ -24,6 +24,15 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
+            'test',
+            'qwerty',
+            {'title': 'test', 'price': 10000.00, 'start_date': '2023-01-28', 'end_date': '2023-01'},
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+            ],
+        ),
+        (
             'test1',
             'qwerty',
             {'title': 'test', 'price': 10000.00, 'start_date': '2023-01-28', 'end_date': '2023-01-28'},

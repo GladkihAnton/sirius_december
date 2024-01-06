@@ -25,6 +25,28 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.tour.json',
             ],
         ),
+        (
+            '0',
+            'test',
+            'qwerty',
+            {'title': 'new', 'price': 10000.0, 'start_date': '2023-01-28', 'end_date': '2023-28'},
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+                FIXTURES_PATH / 'sirius.tour.json',
+            ],
+        ),
+        (
+            '0',
+            'tes',
+            'qwerty',
+            {'title': 'new', 'price': 10000.0, 'start_date': '2023-01-28', 'end_date': '2023-28'},
+            status.HTTP_403_FORBIDDEN,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+                FIXTURES_PATH / 'sirius.tour.json',
+            ],
+        ),
     ],
 )
 @pytest.mark.asyncio()

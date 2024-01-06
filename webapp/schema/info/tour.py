@@ -18,6 +18,5 @@ class TourInfo(BaseModel):
             try:
                 return datetime.strptime(value, '%Y-%m-%d').date()
             except ValueError:
-                raise ValueError('Неверный формат даты. Используйте формат YYYY-MM-DD.')
-        else:
-            raise ValueError('Неверный тип данных. Ожидалась строка или объект date.')
+                raise ValueError('Invalid date format. Use YYYY-MM-DD.')
+        raise ValueError('Invalid data type. Expected a string or a date object.')

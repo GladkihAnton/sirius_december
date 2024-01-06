@@ -28,6 +28,18 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         ),
         (
             '0',
+            'test',
+            'qwerty',
+            {'user_id': 0, 'tour_id': 0, 'booking_date': '2023-29', 'booking_status': 'confirmed'},
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+                FIXTURES_PATH / 'sirius.tour.json',
+                FIXTURES_PATH / 'sirius.reservation.json',
+            ],
+        ),
+        (
+            '0',
             'test0',
             'qwerty',
             {'user_id': 0, 'tour_id': 0, 'booking_date': '2023-01-29', 'booking_status': 'confirmed'},
