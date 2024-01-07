@@ -1,3 +1,4 @@
+# alembic version
 """Generate table
 
 Revision ID: 3e0c1bf7289a
