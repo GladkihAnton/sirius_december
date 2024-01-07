@@ -1,3 +1,5 @@
+# crud for user
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +26,7 @@ async def get_user_by_id(session: AsyncSession, user_id: int) -> User | None:
 
 async def create_user(session: AsyncSession, username: str, email: str, hashed_password: str) -> User:
     new_user = User(email=email, username=username, hashed_password=hashed_password)
-    session.add(new_user)
+    session.add(new_user) # сохранение пользователя при регистрации
     await session.commit()
     await session.refresh(new_user)
     return new_user
