@@ -1,3 +1,7 @@
+# функционал для работы с постами (просмотр всех постов, просмотр одного поста по id, 
+# удаление, редактирование (только тот пользователь что создал), 
+# создание постов (только авторизованные пользователи)
+
 from typing import List
 
 import orjson
@@ -58,8 +62,8 @@ async def read_posts_by_user(user_id: int, session: AsyncSession = Depends(get_s
     posts = await get_posts_by_user(session, user_id)
     return [PostRead.from_orm(post) for post in posts]
 
-
-@post_router.post(
+#создание постов (только авторизованные пользователи)
+@post_router.post( 
     '/create',
     response_model=PostRead,
     status_code=status.HTTP_201_CREATED,
@@ -67,12 +71,12 @@ async def read_posts_by_user(user_id: int, session: AsyncSession = Depends(get_s
     tags=['Posts'],
 )
 async def create(
-    post: PostCreate, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)
+    post: PostCreate, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user) #current_user
 ):
     new_post = await create_post(session, post.content, current_user.id)
     return PostRead.from_orm(new_post)
 
-
+# редактирование (только тот пользователь что создал)
 @post_router.put('/{post_id}', response_model=PostRead, response_class=ORJSONResponse, tags=['Posts'])
 async def update(
     post_id: int,
@@ -81,7 +85,7 @@ async def update(
     current_user: User = Depends(get_current_user),
 ):
     post = await get_post_by_id(session, post_id)
-    if not post or post.author_id != current_user.id:
+    if not post or post.author_id != current_user.id: 
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Not authorized to update this post')
     if post_update.content and post_update.content is not None:
         updated_post = await update_post(session, post_id, post_update.content)
