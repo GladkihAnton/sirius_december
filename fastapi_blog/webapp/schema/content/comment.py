@@ -1,3 +1,4 @@
+# проверка данных, сериализация/десериализация
 from datetime import datetime
 from typing import Optional
 
