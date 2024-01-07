@@ -1,3 +1,7 @@
+# post model
+# many-to-one with User
+# много пубикаций может быть написано 1 пользователем
+
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
