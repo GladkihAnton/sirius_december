@@ -1,0 +1,8 @@
+[
+  {
+    "user_id": 1,
+    "tour_id": 1,
+    "booking_date": "2023-01-28",
+    "booking_status": "confirmed"
+  }
+]

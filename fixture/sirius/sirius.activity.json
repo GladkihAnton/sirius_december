@@ -1,0 +1,14 @@
+[
+  {
+    "tour_id": 1,
+    "title": "zoo",
+    "place": "Central zoo",
+    "type": "excursion"
+  },
+  {
+    "tour_id": 1,
+    "title": "plane museum",
+    "place": "Plane museum",
+    "type": "excursion"
+  }
+]
