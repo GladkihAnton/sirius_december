@@ -1,4 +1,5 @@
-# Здесь как раз определяется метрика DEPS_LATENCY, которая используется в middleware 
+# учитывающиеся метрики для работы с middleware
+# здесь как раз определяется метрика DEPS_LATENCY, которая используется в middleware 
 import os
 
 import prometheus_client  # type: ignore

@@ -15,7 +15,7 @@ from webapp.on_startup.kafka import create_producer
 from webapp.on_startup.redis import get_redis_pool
 from webapp.utils.middleware import MeasureLatencyMiddleware
 
-
+# добавление работы с middleware
 def setup_middleware(app: FastAPI) -> None:
     # CORS Middleware should be the last.
     # See https://github.com/tiangolo/fastapi/issues/1663 .
