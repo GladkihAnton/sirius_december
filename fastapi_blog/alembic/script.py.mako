@@ -1,3 +1,4 @@
+# script for alembic
 """${message}
 
 Revision ID: ${up_revision}

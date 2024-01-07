@@ -1,3 +1,6 @@
+#env.py для alembic.ini 
+#run_migrations
+
 from logging.config import fileConfig
 
 from alembic import context
