@@ -1,3 +1,4 @@
+# Здесь как раз определяется метрика DEPS_LATENCY, которая используется в middleware 
 import os
 
 import prometheus_client  # type: ignore
@@ -43,7 +44,9 @@ DEPS_LATENCY = prometheus_client.Histogram(
     ['endpoint'],
     buckets=DEFAULT_BUCKETS,
 )
-
+# предоставляет метрики приложения в формате Prometheus
+# использует библиотеку prometheus_client для регистрации метрик и генерации данных в формате Prometheus
+#  вызывается, когда приложение получает запрос на /metrics. В ответ на этот запрос, функция возвращает данные метрик в формате Prometheus
 
 def metrics(request: Request) -> Response:
     if 'prometheus_multiproc_dir' in os.environ:
