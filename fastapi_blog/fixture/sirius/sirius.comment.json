@@ -1,0 +1,137 @@
+[
+  {
+    "content": "Great post!",
+    "author_id": 1,
+    "post_id": 1
+  },
+  {
+    "content": "I disagree",
+    "author_id": 1,
+    "post_id": 2
+  },
+  {
+    "content": "Very interesting article",
+    "author_id": 2,
+    "post_id": 3
+  },
+  {
+    "content": "I have a different opinion",
+    "author_id": 3,
+    "post_id": 4
+  },
+  {
+    "content": "Thanks for sharing!",
+    "author_id": 4,
+    "post_id": 5
+  },
+  {
+    "content": "This is amazing",
+    "author_id": 5,
+    "post_id": 6
+  },
+  {
+    "content": "I learned a lot",
+    "author_id": 6,
+    "post_id": 7
+  },
+  {
+    "content": "This doesn't make any sense",
+    "author_id": 2,
+    "post_id": 8
+  },
+  {
+    "content": "Brilliant perspective",
+    "author_id": 1,
+    "post_id": 9
+  },
+  {
+    "content": "Could you elaborate more?",
+    "author_id": 3,
+    "post_id": 10
+  },
+  {
+    "content": "Totally agree",
+    "author_id": 4,
+    "post_id": 11
+  },
+  {
+    "content": "That's not true",
+    "author_id": 5,
+    "post_id": 12
+  },
+  {
+    "content": "I see it differently",
+    "author_id": 6,
+    "post_id": 13
+  },
+  {
+    "content": "Inspirational!",
+    "author_id": 1,
+    "post_id": 14
+  },
+  {
+    "content": "I had a similar experience",
+    "author_id": 2,
+    "post_id": 15
+  },
+  {
+    "content": "Nice point of view",
+    "author_id": 3,
+    "post_id": 1
+  },
+  {
+    "content": "I don't see it that way",
+    "author_id": 4,
+    "post_id": 2
+  },
+  {
+    "content": "Quite informative",
+    "author_id": 5,
+    "post_id": 3
+  },
+  {
+    "content": "I have questions about this",
+    "author_id": 6,
+    "post_id": 4
+  },
+  {
+    "content": "This helped me understand better",
+    "author_id": 1,
+    "post_id": 5
+  },
+  {
+    "content": "I completely disagree",
+    "author_id": 2,
+    "post_id": 6
+  },
+  {
+    "content": "This is eye-opening",
+    "author_id": 3,
+    "post_id": 7
+  },
+  {
+    "content": "I need to think about this...",
+    "author_id": 4,
+    "post_id": 8
+  },
+  {
+    "content": "Can you provide more details?",
+    "author_id": 5,
+    "post_id": 9
+  },
+  {
+    "content": "This changed my perspective",
+    "author_id": 6,
+    "post_id": 10
+  },
+  {
+    "content": "What a great read!",
+    "author_id": 1,
+    "post_id": 11
+  },
+  {
+    "content": "Not sure I agree",
+    "author_id": 2,
+    "post_id": 12
+  }
+]
