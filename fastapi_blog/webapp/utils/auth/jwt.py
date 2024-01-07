@@ -1,5 +1,4 @@
 # создание и проверка токена аутентификации JSON Web Token (JWT)
-
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -22,7 +21,6 @@ class JwtTokenT(TypedDict):
 @dataclass
 class JwtAuth:
     secret: str
-
     # принимает идентификатор пользователя в качестве параметра и возвращает JWT-токен, содержащий идентификатор пользователя и срок действия токена
     def create_token(self, user_id: int) -> str:
         access_token = {
@@ -31,15 +29,19 @@ class JwtAuth:
             'user_id': user_id,
         }
         return jwt.encode(access_token, self.secret)
-    
+
     # принимает заголовок Authorization, содержащий токен, и проверяет его подлинность
     def validate_token(self, authorization: Annotated[str, Header()]) -> JwtTokenT:
-        _, token = authorization.split()
+        parts = authorization.split()
+        if len(parts) != 2 or parts[0].lower() != 'bearer':
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid authorization header")
 
+        token = parts[1]
         try:
             return cast(JwtTokenT, jwt.decode(token, self.secret))
         except JWTError:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
+
 
 # объект jwt_auth создается с использованием секретного ключа, определенного в файле конфигурации settings
 jwt_auth = JwtAuth(settings.JWT_SECRET_SALT)

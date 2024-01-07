@@ -1,3 +1,4 @@
+# conftest
 import json
 import uuid
 from pathlib import Path
@@ -16,6 +17,20 @@ from tests.my_types import FixtureFunctionT
 from webapp.db import kafka
 from webapp.db.postgres import engine, get_session
 from webapp.models.meta import metadata
+
+
+TEST_USERNAME = 'autotest'
+TEST_PASSWORD = 'qwerty'
+
+
+@pytest.fixture()
+def username() -> str:
+    return TEST_USERNAME
+
+
+@pytest.fixture()
+def password() -> str:
+    return TEST_PASSWORD
 
 
 @pytest.fixture()

@@ -1,3 +1,4 @@
+# conftest
 import asyncio
 from typing import AsyncGenerator
 
@@ -32,7 +33,7 @@ async def _migrate_db() -> AsyncGenerator[None, None]:
         await conn.run_sync(meta.metadata.drop_all)
 
 
-# В данном коде определяются несколько фикстур для тестирования FastAPI-приложения,
+# Здесь определяются несколько фикстур для тестирования FastAPI-приложения,
 # использующего базу данных Postgres.
 
 # Фикстура app создает экземпляр FastAPI-приложения, используя функцию create_app() из
