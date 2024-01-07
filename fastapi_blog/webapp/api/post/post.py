@@ -18,7 +18,8 @@ from webapp.schema.login.user import User
 from webapp.utils.auth.user import get_current_user
 
 
-# Дополнительная функция для инвалидации кэша
+# дополнительная функция для инвалидации кэша
+# при обновлении или удалении поста мы могли удалить соответствующий кэш-ключ из Redis, чтобы при следующем запросе к этому посту данные были получены из базы данных, а не из устаревшего кэша
 async def invalidate_cache_post(post_id: int):
     cache_key = f'posts_{post_id}'
     await redis_startup.redis.delete(cache_key) if redis_startup.redis is not None else None
@@ -29,15 +30,15 @@ async def read_posts(session: AsyncSession = Depends(get_session)):
     cache_key = 'all_posts'
     cached_posts = await redis_startup.redis.get(cache_key) if redis_startup.redis is not None else None
     if cached_posts:
-        # Десериализация кэшированных данных
+        # десериализация кэшированных данных
         return [PostRead(**post) for post in orjson.loads(cached_posts)]
 
     posts = await get_all_posts(session)
-    # Преобразование в модели Pydantic и сериализация
+    # преобразование в модели Pydantic и сериализация
     pydantic_posts = [PostRead.from_orm(post) for post in posts]
     serialized_posts = orjson.dumps([post.dict() for post in pydantic_posts])
     await redis_startup.redis.set(cache_key, serialized_posts, ex=60) if redis_startup.redis is not None else None
-    # Кэширование на 60 секунд
+    # кэширование на 60 секунд
     return pydantic_posts
 
 
@@ -106,3 +107,7 @@ async def delete(
     await delete_post(session, post_id)
     await invalidate_cache_post(post_id)
     return {'detail': 'Post deleted'}
+
+# кэширование - это процесс сохранения данных в памяти для быстрого доступа к ним в будущем. В данном случае, мы используем Redis как кэш-сервер, чтобы ускорить доступ к данным из базы данных. Кэширование позволяет уменьшить нагрузку на базу данных и сократить время отклика сервера.
+# Pydantic - это библиотека для сериализации и десериализации данных. Она позволяет определять схемы данных в виде классов Python и автоматически преобразовывать данные в объекты этих классов и наоборот. Pydantic также обеспечивает проверку типов данных и валидацию входных данных.
+# ORJSON - это библиотека для сериализации и десериализации JSON, написанная на языке C. Она быстрее стандартной библиотеки Python json и используется для оптимизации производительности при работе с большими объемами данных.
