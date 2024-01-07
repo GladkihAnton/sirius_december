@@ -1,3 +1,7 @@
+# user model
+# one-to-many with Post and Comment
+# пользователь может иметь много сообщений и комментариев
+
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
