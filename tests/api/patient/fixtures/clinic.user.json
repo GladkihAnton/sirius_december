@@ -1,0 +1,23 @@
+[
+    {
+      "id": 1,
+      "username": "first",
+      "first_name": "test",
+      "last_name": "test",
+      "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+    },
+    {
+      "id": 2,
+      "username": "unique",
+      "first_name": "test",
+      "last_name": "test",
+      "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca5"
+    },
+    {
+        "id": 3,
+        "username": "test",
+        "first_name": "test",
+        "last_name": "test",
+        "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca5"
+      }
+  ]

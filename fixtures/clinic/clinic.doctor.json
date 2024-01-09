@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "first_name": "Piter",
+        "last_name": "Kovalsky",
+        "specialization": "cosmetologist"
+    },
+    {
+        "id": 2,
+        "first_name": "Asya",
+        "last_name": "Bulstova",
+        "specialization": "cosmetologist"
+    }
+]
