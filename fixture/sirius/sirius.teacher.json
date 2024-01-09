@@ -1,0 +1,18 @@
+[
+    {
+      "id": 1,
+      "first_name": "Алексей",
+      "last_name": "Загородний",
+      "surname": "Николаевич",
+      "user_id": 3,
+      "institution_id": 1
+    },
+    {
+        "id": 2,
+        "first_name": "Наталья",
+        "last_name": "Рыбина",
+        "surname": "Викторовна",
+        "user_id": 4,
+        "institution_id": 2
+    }
+]

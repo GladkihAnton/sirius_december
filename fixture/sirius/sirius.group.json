@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "title": "К89",
+      "institution_id": 1
+    },
+    {
+      "id": 2,
+      "title": "М12",
+      "institution_id": 1
+    },
+    {
+      "id": 3,
+      "title": "D12",
+      "institution_id": 2
+    }
+]

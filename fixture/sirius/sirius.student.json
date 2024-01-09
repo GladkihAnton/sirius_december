@@ -1,0 +1,32 @@
+[
+    {
+      "id": 1,
+      "first_name": "Михаил",
+      "last_name": "Загородний",
+      "surname": "Михайлович",
+      "birthdate": "2000-04-12",
+      "user_id": 1,
+      "institution_id": 1,
+      "group_id": 1
+    },
+    {
+        "id": 2,
+        "first_name": "Анастасия",
+        "last_name": "Рыбина",
+        "surname": "Константиновна",
+        "birthdate": "2000-04-15",
+        "user_id": 2,
+        "institution_id": 1,
+        "group_id": 1
+    },
+    {
+      "id": 3,
+      "first_name": "Григорий",
+      "last_name": "Гришин",
+      "surname": "Николаеви",
+      "birthdate": "2001-01-20",
+      "user_id": 5,
+      "institution_id": 2,
+      "group_id": 3
+  }
+]

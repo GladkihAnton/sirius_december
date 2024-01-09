@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "username": "test",
+    "password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 2,
+    "username": "user",
+    "password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 3,
+    "username": "username",
+    "password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 4,
+    "username": "custom",
+    "password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 5,
+    "username": "user2",
+    "password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  }
+]
