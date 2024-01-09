@@ -2,11 +2,15 @@ from pathlib import Path
 
 import pytest
 from httpx import AsyncClient
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from tests.conf import URLS
 
 from webapp.crud.activity import activity_crud
+from webapp.models.sirius.activity import Activity
+from webapp.schema.info.activity import ActivityInfo
 
 BASE_DIR = Path(__file__).parent
 FIXTURES_PATH = BASE_DIR / 'fixtures'
@@ -41,23 +45,23 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture')
-async def test_delete(
+async def test_delete_activity(
     client: AsyncClient,
     activity_id: str,
     username: str,
     password: str,
     expected_status: int,
     access_token: str,
-    db_session: None,
+    db_session: AsyncSession,
 ) -> None:
-    import loguru
+    activity_ids = [activity.id for activity in (await db_session.scalars(select(Activity))).all()]
+    assert int(activity_id) in activity_ids
 
-    # assert await activity_crud.get_model(db_session, int(activity_id)) is not None
     response = await client.post(
         ''.join([URLS['crud']['activity']['delete'], activity_id]),
         headers={'Authorization': f'Bearer {access_token}'},
     )
-    loguru.logger.debug(await activity_crud.get_model(db_session, int(activity_id)))
-    # assert await activity_crud.get_model(db_session, int(activity_id)) is None
 
+    activity_ids = [activity.id for activity in (await db_session.scalars(select(Activity))).all()]
+    assert activity_id not in activity_ids
     assert response.status_code == expected_status

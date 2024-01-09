@@ -27,7 +27,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_with_redis_fixture')
-async def test_get(
+async def test_get_tour(
     client: AsyncClient,
     tour_id: str,
     expected_status: int,

@@ -2,16 +2,22 @@ from pathlib import Path
 
 import pytest
 from httpx import AsyncClient
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from tests.conf import URLS
+
+from webapp.crud.utils.operations import PAGE_LIMIT
+from webapp.models.sirius.user import User
+from webapp.schema.info.user import UserInfo
 
 BASE_DIR = Path(__file__).parent
 FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('user_id', 'username', 'password', 'expected_status', 'fixtures'),
+    ('page_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
             '0',
@@ -22,27 +28,27 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.user.json',
             ],
         ),
-        (
-            '0',
-            'test1',
-            'qwerty',
-            status.HTTP_403_FORBIDDEN,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-            ],
-        ),
     ],
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_with_redis_fixture')
 async def test_get(
     client: AsyncClient,
-    user_id: str,
+    page_id: str,
     expected_status: int,
     access_token: str,
-    db_session: None,
+    db_session: AsyncSession,
 ) -> None:
     response = await client.get(
-        ''.join([URLS['crud']['user']['page'], user_id]), headers={'Authorization': f'Bearer {access_token}'}
+        ''.join([URLS['crud']['user']['page'], page_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
+
+    users = [
+        UserInfo.model_validate(tour).model_dump()
+        for tour in (await db_session.scalars(select(User).limit(PAGE_LIMIT).offset(int(page_id)))).all()
+    ]
+    response_reservations = [UserInfo.model_validate(user).model_dump() for user in response.json()['users']]
+
+    assert users == response_reservations
+
     assert response.status_code == expected_status

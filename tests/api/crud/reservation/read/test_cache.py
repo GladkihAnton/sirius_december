@@ -28,7 +28,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_with_redis_fixture')
-async def test_cache(
+async def test_cache_reservation(
     client: AsyncClient,
     reservation_id: str,
     expected_status: int,
