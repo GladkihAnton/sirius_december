@@ -9,12 +9,12 @@ WORKDIR /code
 RUN /usr/local/bin/python -m pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir poetry==1.3.2
 
-COPY pyproject.toml poetry.lock /code/
+COPY pyproject.toml /code/
 
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --without dev \
     && echo yes | poetry cache clear . --all
-
+#
 ## stand image
 #FROM base AS prod
 #
