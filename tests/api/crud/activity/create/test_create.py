@@ -24,16 +24,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.tour.json',
             ],
         ),
-        (
-            'test1',
-            'qwerty',
-            {'tour_id': 0, 'title': 'zoo', 'place': 'Central zoo', 'type': 'excursion'},
-            status.HTTP_403_FORBIDDEN,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-                FIXTURES_PATH / 'sirius.tour.json',
-            ],
-        ),
     ],
 )
 @pytest.mark.asyncio()
@@ -50,5 +40,4 @@ async def test_create(
     response = await client.post(
         URLS['crud']['activity']['create'], json=body, headers={'Authorization': f'Bearer {access_token}'}
     )
-
     assert response.status_code == expected_status

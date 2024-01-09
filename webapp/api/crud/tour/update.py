@@ -5,7 +5,9 @@ from starlette import status
 
 from webapp.api.crud.tour.router import tour_router
 from webapp.crud.tour import tour_crud
+from webapp.integrations.cache.cache import redis_drop_key
 from webapp.integrations.postgres import get_session
+from webapp.models.sirius.tour import Tour
 from webapp.schema.info.tour import TourInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
@@ -20,6 +22,8 @@ async def update_tour(
     exists = tour_crud.get_model(session, tour_id) is not None
 
     await tour_crud.update(session, tour_id, body)
+
+    await redis_drop_key(Tour.__name__, tour_id)
 
     if exists:
         return ORJSONResponse(content={'message': 'Tour updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

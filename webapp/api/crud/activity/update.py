@@ -5,7 +5,9 @@ from starlette import status
 
 from webapp.api.crud.activity.router import activity_router
 from webapp.crud.activity import activity_crud
+from webapp.integrations.cache.cache import redis_drop_key
 from webapp.integrations.postgres import get_session
+from webapp.models.sirius.activity import Activity
 from webapp.schema.info.activity import ActivityInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
@@ -20,6 +22,8 @@ async def update_activity(
     exists = activity_crud.get_model(session, activity_id) is not None
 
     await activity_crud.update(session, activity_id, body)
+
+    await redis_drop_key(Activity.__name__, activity_id)
 
     if exists:
         return ORJSONResponse(

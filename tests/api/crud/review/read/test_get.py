@@ -14,7 +14,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     ('review_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
-            '',
+            '0',
             'test',
             'qwerty',
             status.HTTP_200_OK,
@@ -24,7 +24,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '',
+            '0',
             'test1',
             'qwerty',
             status.HTTP_403_FORBIDDEN,
@@ -47,7 +47,7 @@ async def test_get(
     db_session: None,
 ) -> None:
     response = await client.get(
-        ''.join([URLS['crud']['review']['read'], review_id]), headers={'Authorization': f'Bearer {access_token}'}
+        ''.join([URLS['crud']['review']['page'], review_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
 
     assert response.status_code == expected_status

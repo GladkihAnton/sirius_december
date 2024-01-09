@@ -5,7 +5,9 @@ from starlette import status
 
 from webapp.api.crud.reservation.router import reservation_router
 from webapp.crud.reservation import reservation_crud
+from webapp.integrations.cache.cache import redis_drop_key
 from webapp.integrations.postgres import get_session
+from webapp.models.sirius.reservation import Reservation
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
@@ -17,6 +19,8 @@ async def delete_reservation(
 ) -> ORJSONResponse:
     if not await reservation_crud.delete(session, reservation_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    await redis_drop_key(Reservation.__name__, reservation_id)
 
     return ORJSONResponse(
         content={'message': 'Reservation removed successfully'}, status_code=status.HTTP_204_NO_CONTENT

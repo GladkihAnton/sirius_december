@@ -8,16 +8,19 @@ from webapp.crud.review import review_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.review import Review
+from webapp.schema.info.review import ReviewInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
-from webapp.utils.crud.serializers import serialize_model
 
 
-@review_router.get('/')
+@review_router.get('/page/{page}')
 async def get_reviews(
+    page: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    serialized_reviews = serialize_model(list(await review_crud.get_all(session)))
+    serialized_reviews = [
+        ReviewInfo.model_validate(review).model_dump() for review in await review_crud.get_page(session, page)
+    ]
     return ORJSONResponse({'reviews': serialized_reviews})
 
 
@@ -34,7 +37,7 @@ async def get_cached_review(
     if review is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    serialized_review = serialize_model(review)
+    serialized_review = ReviewInfo.model_validate(review).model_dump(mode='json')
     await redis_set(Review.__name__, review_id, serialized_review)
 
     return ORJSONResponse({'review': serialized_review})

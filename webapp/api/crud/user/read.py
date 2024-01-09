@@ -8,16 +8,17 @@ from webapp.crud.user import user_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.user import User
+from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
-from webapp.utils.crud.serializers import serialize_model
 
 
-@user_router.get('/')
+@user_router.get('/page/{page}')
 async def get_users(
+    page: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    serialized_users = serialize_model(list(await user_crud.get_all(session)))
+    serialized_users = [UserInfo.model_validate(user).model_dump() for user in await user_crud.get_page(session, page)]
     return ORJSONResponse({'users': serialized_users})
 
 
@@ -34,7 +35,7 @@ async def get_cached_user(
     if user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    serialized_user = serialize_model(user)
+    serialized_user = UserInfo.model_validate(user).model_dump(mode='json')
     await redis_set(User.__name__, user_id, serialized_user)
 
     return ORJSONResponse({'user': serialized_user})

@@ -1,9 +1,11 @@
 from datetime import date, datetime
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class ReservationInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     user_id: int
     tour_id: int
     booking_date: date

@@ -8,16 +8,17 @@ from webapp.crud.tour import tour_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.tour import Tour
+from webapp.schema.info.tour import TourInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
-from webapp.utils.crud.serializers import serialize_model
 
 
-@tour_router.get('/')
+@tour_router.get('/page/{page}')
 async def get_tours(
+    page: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    serialized_tours = serialize_model(list(await tour_crud.get_all(session)))
+    serialized_tours = [TourInfo.model_validate(tour).model_dump() for tour in await tour_crud.get_page(session, page)]
     return ORJSONResponse({'tours': serialized_tours})
 
 
@@ -34,7 +35,7 @@ async def get_cached_tour(
     if tour is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    serialized_tour = serialize_model(tour)
+    serialized_tour = TourInfo.model_validate(tour).model_dump(mode='json')
 
     await redis_set(Tour.__name__, tour_id, serialized_tour)
 

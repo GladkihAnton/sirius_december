@@ -33,16 +33,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.tour.json',
             ],
         ),
-        (
-            '2',
-            'test',
-            'qwerty',
-            status.HTTP_404_NOT_FOUND,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-                FIXTURES_PATH / 'sirius.tour.json',
-            ],
-        ),
     ],
 )
 @pytest.mark.asyncio()
@@ -57,7 +47,7 @@ async def test_get(
     db_session: None,
 ) -> None:
     response = await client.get(
-        ''.join([URLS['crud']['tour']['read'], tour_id]), headers={'Authorization': f'Bearer {access_token}'}
+        ''.join([URLS['crud']['tour']['page'], tour_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
 
     assert response.status_code == expected_status

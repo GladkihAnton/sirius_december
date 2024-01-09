@@ -11,10 +11,10 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('review_id', 'username', 'password', 'expected_status', 'fixtures'),
+    ('activity_id', 'username', 'password', 'expected_status', 'fixtures'),
     [
         (
-            '',
+            '0',
             'test',
             'qwerty',
             status.HTTP_200_OK,
@@ -24,7 +24,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
             ],
         ),
         (
-            '',
+            '0',
             'test1',
             'qwerty',
             status.HTTP_403_FORBIDDEN,
@@ -39,7 +39,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 @pytest.mark.usefixtures('_common_api_fixture')
 async def test_get(
     client: AsyncClient,
-    review_id: str,
+    activity_id: str,
     username: str,
     password: str,
     expected_status: int,
@@ -47,7 +47,7 @@ async def test_get(
     db_session: None,
 ) -> None:
     response = await client.get(
-        ''.join([URLS['crud']['review']['read'], review_id]), headers={'Authorization': f'Bearer {access_token}'}
+        ''.join([URLS['crud']['activity']['page'], activity_id]), headers={'Authorization': f'Bearer {access_token}'}
     )
 
     assert response.status_code == expected_status

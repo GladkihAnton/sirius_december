@@ -8,16 +8,19 @@ from webapp.crud.activity import activity_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.activity import Activity
+from webapp.schema.info.activity import ActivityInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
-from webapp.utils.crud.serializers import serialize_model
 
 
-@activity_router.get('/')
+@activity_router.get('/page/{page}')
 async def get_activities(
+    page: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    serialized_activity = serialize_model(list(await activity_crud.get_all(session)))
+    serialized_activity = [
+        ActivityInfo.model_validate(activity).model_dump() for activity in await activity_crud.get_page(session, page)
+    ]
     return ORJSONResponse({'activity': serialized_activity})
 
 
@@ -35,7 +38,7 @@ async def get_cached_activity(
     if activity is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    serialized_activity = serialize_model(activity)
+    serialized_activity = ActivityInfo.model_validate(activity).model_dump(mode='json')
     await redis_set(Activity.__name__, activity_id, serialized_activity)
 
     return ORJSONResponse({'activity': serialized_activity})

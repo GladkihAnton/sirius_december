@@ -5,7 +5,9 @@ from starlette import status
 
 from webapp.api.crud.user.router import user_router
 from webapp.crud.user import user_crud
+from webapp.integrations.cache.cache import redis_drop_key
 from webapp.integrations.postgres import get_session
+from webapp.models.sirius.user import User
 from webapp.schema.info.user import UserInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
@@ -21,6 +23,9 @@ async def update_user(
 
     await user_crud.update(session, user_id, body)
 
+    await redis_drop_key(User.__name__, user_id)
+
     if exists:
         return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+
     return ORJSONResponse(content={'message': 'User created successfully'}, status_code=status.HTTP_201_CREATED)

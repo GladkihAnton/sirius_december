@@ -8,16 +8,20 @@ from webapp.crud.reservation import reservation_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.reservation import Reservation
+from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
-from webapp.utils.crud.serializers import serialize_model
 
 
-@reservation_router.get('/')
+@reservation_router.get('/page/{page}')
 async def get_reservations(
+    page: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    serialized_reservations = serialize_model(list(await reservation_crud.get_all(session)))
+    serialized_reservations = [
+        ReservationInfo.model_validate(reservation).model_dump()
+        for reservation in await reservation_crud.get_page(session, page)
+    ]
     return ORJSONResponse({'reservations': serialized_reservations})
 
 
@@ -34,7 +38,7 @@ async def get_cached_reservation(
     if reservation is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    serialized_reservation = serialize_model(reservation)
+    serialized_reservation = ReservationInfo(**reservation.__dict__).model_dump(mode='json')
     await redis_set(Reservation.__name__, reservation_id, serialized_reservation)
 
     return ORJSONResponse({'reservation': serialized_reservation})

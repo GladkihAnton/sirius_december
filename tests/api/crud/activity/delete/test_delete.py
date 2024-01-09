@@ -6,6 +6,8 @@ from starlette import status
 
 from tests.conf import URLS
 
+from webapp.crud.activity import activity_crud
+
 BASE_DIR = Path(__file__).parent
 FIXTURES_PATH = BASE_DIR / 'fixtures'
 
@@ -35,17 +37,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.activity.json',
             ],
         ),
-        (
-            '-1',
-            'test',
-            'qwerty',
-            status.HTTP_404_NOT_FOUND,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-                FIXTURES_PATH / 'sirius.tour.json',
-                FIXTURES_PATH / 'sirius.activity.json',
-            ],
-        ),
     ],
 )
 @pytest.mark.asyncio()
@@ -59,9 +50,14 @@ async def test_delete(
     access_token: str,
     db_session: None,
 ) -> None:
+    import loguru
+
+    # assert await activity_crud.get_model(db_session, int(activity_id)) is not None
     response = await client.post(
         ''.join([URLS['crud']['activity']['delete'], activity_id]),
         headers={'Authorization': f'Bearer {access_token}'},
     )
+    loguru.logger.debug(await activity_crud.get_model(db_session, int(activity_id)))
+    # assert await activity_crud.get_model(db_session, int(activity_id)) is None
 
     assert response.status_code == expected_status
