@@ -1,0 +1,13 @@
+fastapi==0.103.1
+uvicorn==0.23.1
+uvloop==0.17.0
+pydantic==2.3.0
+pydantic-settings==2.0.3
+orjson==3.9.7
+poetry==1.5.1
+aiohttp==3.8.5
+python-jose==3.3.0
+redis==5.0.1
+asyncpg==0.28.0
+alembic==1.12.1
+sqlalchemy==2.0.23
