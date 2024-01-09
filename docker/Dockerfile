@@ -28,5 +28,3 @@ RUN poetry config virtualenvs.create false \
 FROM base AS test
 
 RUN poetry install --no-interaction --no-ansi --with dev
-
-USER 1001

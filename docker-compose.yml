@@ -98,4 +98,4 @@ services:
 
 networks:
   sirius_network:
-    external: True
+    driver: bridge
