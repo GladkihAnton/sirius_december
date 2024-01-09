@@ -7,8 +7,8 @@ from webapp.models.meta import DEFAULT_SCHEMA, Base
 
 if TYPE_CHECKING:
     from webapp.models.sirius.group import Group
-    from webapp.models.sirius.user import User
     from webapp.models.sirius.journal import Journal
+    from webapp.models.sirius.user import User
 
 
 class Student(Base):

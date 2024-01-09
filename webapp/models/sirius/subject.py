@@ -8,8 +8,8 @@ from webapp.models.meta import DEFAULT_SCHEMA, Base
 if TYPE_CHECKING:
     from webapp.models.sirius.group import Group
     from webapp.models.sirius.institution import Institution
-    from webapp.models.sirius.teacher import Teacher
     from webapp.models.sirius.journal import Journal
+    from webapp.models.sirius.teacher import Teacher
 
 
 class Subject(Base):

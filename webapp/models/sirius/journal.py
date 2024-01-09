@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Date, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -6,8 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from webapp.models.meta import DEFAULT_SCHEMA, Base
 
 if TYPE_CHECKING:
-    from webapp.models.sirius.subject import Subject
     from webapp.models.sirius.student import Student
+    from webapp.models.sirius.subject import Subject
 
 
 class Journal(Base):
