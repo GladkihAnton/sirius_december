@@ -7,7 +7,7 @@ from webapp.api.crud.deal.router import deal_router
 from webapp.crud.deal import deal_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
-from webapp.models.sirius.client import Deal
+from webapp.models.sirius.deal import Deal
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 from webapp.utils.crud.serializers import serialize_model
 

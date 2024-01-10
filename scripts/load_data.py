@@ -20,7 +20,13 @@ args = parser.parse_args()
 async def main(fixtures: List[str]) -> None:
     for fixture in fixtures:
         fixture_path = Path(fixture)
-        model = metadata.tables[fixture_path.stem]
+        model_name = fixture_path.stem
+
+        if model_name not in metadata.tables:
+            print(f"Table '{model_name}' not found in metadata.")
+            continue
+
+        model = metadata.tables[model_name]
 
         with open(fixture_path, 'r') as file:
             values = json.load(file)
@@ -33,7 +39,6 @@ async def main(fixtures: List[str]) -> None:
         async with async_session() as session:
             await session.execute(insert(model).values(values))
             await session.commit()
-
 
 if __name__ == '__main__':
     asyncio.run(main(args.fixtures))

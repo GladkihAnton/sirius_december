@@ -3,10 +3,12 @@
 echo "Start service"
 
 # migrate database
-python scripts/migrate.py
+python3 scripts/migrate.py
+
+echo "Migrated!"
 
 # load fixtures
-python scripts/load_data.py fixture/sirius/sirius.user.json fixture/sirius/sirius.deal.json \
+python3 scripts/load_data.py fixture/sirius/sirius.user.json fixture/sirius/sirius.deal.json \
  fixture/sirius/sirius.client.json
 
 

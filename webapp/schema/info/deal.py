@@ -1,14 +1,14 @@
 from datetime import date, datetime
-
-from pydantic import BaseModel, field_validator
-
+from pydantic import BaseModel, ConfigDict, field_validator
 
 class DealInfo(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     title: str
     amount: float
     date: date
 
-    @field_validator('start_date')
+    @field_validator('date')
     @classmethod
     def parse_date(cls, value: date | str) -> date:
         if isinstance(value, date):
