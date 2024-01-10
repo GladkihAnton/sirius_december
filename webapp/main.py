@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
-from webapp.patient_api.router import patient_router
-from webapp.service_api.router import service_router
-from webapp.doctor_api.router import doctor_router
-from webapp.access.auth.router import auth_router
+from webapp.api.patient.router import patient_router
+from webapp.api.service.router import service_router
+from webapp.api.doctor.router import doctor_router
+from webapp.api.auth.router import auth_router
 import uvicorn
 from webapp.metrics import metrics
 from redis.asyncio import ConnectionPool, Redis
