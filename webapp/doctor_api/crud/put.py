@@ -8,11 +8,13 @@ from fastapi.responses import ORJSONResponse
 from webapp.metrics import resp_counter, errors_counter
 from fastapi import Depends, HTTPException
 from starlette import status
+from webapp.db.redis import get_redis
 
 
 @doctor_router.put('/')
 async def update_doctor(body: DoctorModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
     resp_counter.labels(endpoint='PUT /doctor/').inc()
+    redis = get_redis()
     try:
         updated_data = (
             await session.execute(
@@ -26,6 +28,7 @@ async def update_doctor(body: DoctorModel, session: AsyncSession = Depends(get_s
             )
         ).one()
         await session.commit()
+        await redis.delete(f'doctor {body.id}')
         return ORJSONResponse(
             {
                 'last_name': updated_data.last_name,
