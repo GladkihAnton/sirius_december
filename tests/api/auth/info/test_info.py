@@ -32,6 +32,9 @@ async def test_login(
     access_token: str,
     expected_status: int,
 ) -> None:
-    response = await client.post(URLS['auth']['info'], headers={'Authorization': f'Bearer {access_token}'})
+    response = await client.post(
+        URLS['auth']['info'],
+        headers={'Authorization': f'Bearer {access_token}'},
+    )
 
     assert response.status_code == expected_status
