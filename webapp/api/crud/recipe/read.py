@@ -6,7 +6,8 @@ from starlette import status
 from webapp.api.crud.recipe.router import recipe_router
 from webapp.crud.get_recipe import get_recipe
 from webapp.db.postgres import get_session
-from webapp.schema.recipe import RecipeData, RecipeResponse
+from webapp.schema.recipe import RecipeData, RecipeResponse, RecipesResponse
+from webapp.models.sirius.recipe import Recipe
 
 
 @recipe_router.get(
@@ -28,4 +29,20 @@ async def read_recipe(
             'title': body.title,
             'ingredients': body.ingredients
         }
+    )
+
+
+@recipe_router.get(
+    '/read_all',
+    response_model=RecipesResponse,
+)
+async def read_recipes(session: AsyncSession = Depends(get_session),) -> ORJSONResponse:
+    recipes = await get_recipe(session, Recipe)
+
+    return ORJSONResponse(
+        [{
+            'id': recipe.id,
+            'title': recipe.title,
+            'ingredients': recipe.ingredients
+        } for recipe in recipes] 
     )

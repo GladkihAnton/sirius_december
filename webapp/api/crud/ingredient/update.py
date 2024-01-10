@@ -1,24 +1,32 @@
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from starlette import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from starlette import status
 from webapp.api.crud.ingredient.router import ingredient_router
 from webapp.crud.crud import update
 from webapp.db.postgres import get_session
-from webapp.schema.ingredient import IngredientData, IngredientResponse, INGREDIENT_TABLE
+from webapp.schema.ingredient import IngredientData, IngredientResponse
+from webapp.models.sirius.ingredient import Ingredient
 
 
 @ingredient_router.post(
     '/update/{ingredient_id}',
     response_model=IngredientResponse,
 )
-async def update_ingredient(ingredient_id: int, body: IngredientData) -> ORJSONResponse:
-    session = get_session()
-    update(session, ingredient_id, body, INGREDIENT_TABLE)
+async def update_ingredient(
+    ingredient_id: int,
+    body: IngredientData,
+    session: AsyncSession = Depends(get_session)
+    ) -> ORJSONResponse:
+    updated_id = await update(session, ingredient_id, body, Ingredient)
+
+    if updated_id is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     return ORJSONResponse(
         {
-            'id': ingredient_id,
+            'id': updated_id,
             'title': body.title
         }
     )

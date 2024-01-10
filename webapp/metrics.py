@@ -1,6 +1,7 @@
 import os
 
 import prometheus_client
+from aiokafka import AIOKafkaConsumer
 from prometheus_client import (
     CONTENT_TYPE_LATEST,
     REGISTRY,
@@ -35,6 +36,16 @@ DEFAULT_BUCKETS = (
 )
 
 
+
+# TODO in middleware
+# prometheus_client.Counter(
+#     'sirius_deps_latency_seconds',
+#     '',
+#     ['endpoint'],
+# )
+
+# histogram_quantile(0.99, sum(rate(sirius_deps_latency_seconds_bucket[1m])) by (le, endpoint))
+# среднее время обработки за 1 мин
 DEPS_LATENCY = prometheus_client.Histogram(
     'sirius_deps_latency_seconds',
     '',

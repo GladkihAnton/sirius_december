@@ -4,6 +4,7 @@ from typing import List
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
 from webapp.models.sirius.ingredient_to_recipe import ingredient_to_recipe
+# from webapp.models.sirius.recipe import Recipe
 
 
 class Ingredient(Base):
@@ -14,4 +15,4 @@ class Ingredient(Base):
 
     title: Mapped[str] = mapped_column(String, unique=True)
 
-    recipes: Mapped[List["Recipe"]] = relationship(secondary=ingredient_to_recipe, back_populates='ingredients')
+    recipes: Mapped[List["Recipe"]] = relationship(secondary=ingredient_to_recipe, back_populates='ingredients')  #, cascade="all, delete-orphan")

@@ -12,3 +12,7 @@ class RecipeResponse(BaseModel):
     id: int
     title: str
     ingredients: List
+
+
+class RecipesResponse(BaseModel):
+    recipes: List[RecipeResponse]

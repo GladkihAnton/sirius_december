@@ -4,6 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
+# from webapp.models.sirius.ingredient import Ingredient
 from webapp.models.sirius.ingredient_to_recipe import ingredient_to_recipe
 
 
@@ -15,4 +16,4 @@ class Recipe(Base):
 
     title: Mapped[str] = mapped_column(String, unique=True)
 
-    ingredients: Mapped[List["Ingredient"]] = relationship(secondary=ingredient_to_recipe, back_populates='recipes')
+    ingredients: Mapped[List["Ingredient"]] = relationship(secondary=ingredient_to_recipe, back_populates='recipes') #, cascade="all, delete-orphan")
