@@ -11,11 +11,9 @@ from tests.const import URLS
 
 from webapp.models.meta import metadata
 
-# Пути к фикстурам
 USER_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.user.json'
 POST_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.post.json'
 COMMENT_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.comment.json'
-
 
 # Загрузка данных комментариев для использования в тестах
 with open(COMMENT_FIXTURES_PATH, 'r') as file:
@@ -41,21 +39,29 @@ async def _load_fixtures(db_session: AsyncSession):
         await db_session.execute(insert(post_model).values(post_data))
         await db_session.commit()
 
+    # Загрузка данных комментариев
+    with open(COMMENT_FIXTURES_PATH, 'r') as comment_file:
+        comment_data = json.load(comment_file)
+        comment_model = metadata.tables['sirius.comment']
+        await db_session.execute(insert(comment_model).values(comment_data))
+        await db_session.commit()
+
     return
 
 
-# Тест на создание комментария
+# Тест на получение комментария
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture', '_load_fixtures')
-async def test_create_comment(client: AsyncClient, access_token: str):
-    headers = {'Authorization': f'Bearer Bearer {access_token}'}
+async def test_read_comment(client: AsyncClient, access_token: str):
     post_id = int(post_data[0]['id'])
-    response = await client.post(
-        URLS['comments']['create'].format(post_id=post_id),
-        json=comment_data[0],
+    comment_id = int(comment_data[0]['id'])
+    comment_content = comment_data[0]['content']
+    headers = {'Authorization': f'Bearer Bearer {access_token}'}
+    response = await client.get(
+        URLS['comments']['read'].format(post_id=post_id),
         headers=headers,
     )
-
-    assert response.status_code == status.HTTP_201_CREATED
-    assert response.json()['content'] == comment_data[0]['content']
-    assert response.json()['post_id'] == comment_data[0]['post_id']
+    print(response.json())
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['comments'][0]['id'] == comment_id
+    assert comment_content in response.json()['comments'][0]['content']
