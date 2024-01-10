@@ -1,5 +1,6 @@
 [flake8]
-max-line-length = 120
+#line_length = 120
+max-line-length = 79
 no-accept-encodings = True
 inline-quotes = '
 docstring-quotes = '
@@ -22,7 +23,7 @@ exclude =
 # B008: Do not perform function calls in argument defaults. Because FastAPI
 # PIE781: PIE781: assign-and-return. Because it's too noisy
 # G200: Logging exception. Because sometime its needed
-ignore = E203,E501,W503,W505,B008,G200,PIE781,Q002,EXE002
+ignore = E203,E501,W503,W505,B008,G200,PIE781,Q002,EXE002,I001,I005,BLK100
 select = C,E,F,G,I,P,S,W,Q,T,B,B950
 per-file-ignores = __init__.py:F401,F403
 

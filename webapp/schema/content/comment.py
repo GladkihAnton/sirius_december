@@ -1,8 +1,7 @@
-# проверка данных, сериализация/десериализация
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CommentBase(BaseModel):
@@ -14,13 +13,12 @@ class CommentCreate(CommentBase):
 
 
 class CommentRead(CommentBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     author_id: int
     post_id: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class CommentUpdate(BaseModel):

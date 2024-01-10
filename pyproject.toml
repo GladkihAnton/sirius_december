@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 120
+line-length = 79
 target-version = ["py311"]
 skip-string-normalization = true
 exclude = '''
@@ -17,7 +17,7 @@ exclude = '''
 '''
 
 [tool.isort]
-line_length = 120
+line_length = 79
 combine_as_imports = true
 order_by_type = true
 length_sort_straight = true
