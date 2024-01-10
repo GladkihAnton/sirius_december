@@ -8,9 +8,7 @@ from starlette import status
 
 from tests.conf import URLS
 
-from webapp.crud.activity import activity_crud
 from webapp.models.sirius.activity import Activity
-from webapp.schema.info.activity import ActivityInfo
 
 BASE_DIR = Path(__file__).parent
 FIXTURES_PATH = BASE_DIR / 'fixtures'

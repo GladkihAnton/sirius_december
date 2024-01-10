@@ -1,5 +1,5 @@
 from fastapi import Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -18,7 +18,7 @@ async def update_review(
     review_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-) -> ORJSONResponse:
+) -> Response:
     exists = review_crud.get_model(session, review_id) is not None
 
     await review_crud.update(session, review_id, body)
@@ -26,8 +26,6 @@ async def update_review(
     await redis_drop_key(Review.__name__, review_id)
 
     if exists:
-        return ORJSONResponse(
-            content={'message': 'Review updated successfully'}, status_code=status.HTTP_204_NO_CONTENT
-        )
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    return ORJSONResponse(content={'message': 'Review created successfully'}, status_code=status.HTTP_201_CREATED)
+    return Response(content={'message': 'Review created successfully'}, status_code=status.HTTP_201_CREATED)

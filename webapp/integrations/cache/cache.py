@@ -29,6 +29,4 @@ async def redis_get(model: str, model_id: int) -> dict[str, str]:
 async def redis_drop_key(model: str, model_id: int) -> None:
     redis = get_redis()
     redis_key = await get_cache_title(model, model_id)
-    cache = await redis.get(redis_key)
-    if cache is not None:
-        redis.delete()
+    await redis.delete(redis_key)

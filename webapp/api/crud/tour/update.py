@@ -1,5 +1,5 @@
 from fastapi import Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -18,7 +18,7 @@ async def update_tour(
     tour_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-) -> ORJSONResponse:
+) -> Response:
     exists = tour_crud.get_model(session, tour_id) is not None
 
     await tour_crud.update(session, tour_id, body)
@@ -26,6 +26,6 @@ async def update_tour(
     await redis_drop_key(Tour.__name__, tour_id)
 
     if exists:
-        return ORJSONResponse(content={'message': 'Tour updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    return ORJSONResponse(content={'message': 'Tour created successfully'}, status_code=status.HTTP_201_CREATED)
+    return Response(content={'message': 'Tour created successfully'}, status_code=status.HTTP_201_CREATED)

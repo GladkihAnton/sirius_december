@@ -11,3 +11,10 @@ class TestRedisClient:
     @classmethod
     async def get(cls, key: str) -> str | None:
         return cls.redis_data.get(key)
+
+    @classmethod
+    async def delete(cls, key: str) -> int:
+        if key in cls.redis_data:
+            cls.redis_data.pop(key)
+            return 1
+        return 0

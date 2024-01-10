@@ -1,5 +1,5 @@
 from fastapi import Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -18,7 +18,7 @@ async def update_reservation(
     reservation_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-) -> ORJSONResponse:
+) -> Response:
     exists = reservation_crud.get_model(session, reservation_id) is not None
 
     await reservation_crud.update(session, reservation_id, body)
@@ -26,7 +26,6 @@ async def update_reservation(
     await redis_drop_key(Reservation.__name__, reservation_id)
 
     if exists:
-        return ORJSONResponse(
-            content={'message': 'Reservation updated successfully'}, status_code=status.HTTP_204_NO_CONTENT
-        )
-    return ORJSONResponse(content={'message': 'Reservation created successfully'}, status_code=status.HTTP_201_CREATED)
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+    return Response(content={'message': 'Reservation created successfully'}, status_code=status.HTTP_201_CREATED)

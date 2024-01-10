@@ -1,5 +1,5 @@
 from fastapi import Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -18,7 +18,7 @@ async def update_user(
     user_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-) -> ORJSONResponse:
+) -> Response:
     exists = user_crud.get_model(session, user_id) is not None
 
     await user_crud.update(session, user_id, body)
@@ -26,6 +26,6 @@ async def update_user(
     await redis_drop_key(User.__name__, user_id)
 
     if exists:
-        return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-    return ORJSONResponse(content={'message': 'User created successfully'}, status_code=status.HTTP_201_CREATED)
+    return Response(content={'message': 'User created successfully'}, status_code=status.HTTP_201_CREATED)

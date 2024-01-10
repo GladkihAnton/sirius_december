@@ -64,6 +64,7 @@ def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
     redis = get_redis()
     monkeypatch.setattr(redis, 'set', TestRedisClient.set)
     monkeypatch.setattr(redis, 'get', TestRedisClient.get)
+    monkeypatch.setattr(redis, 'delete', TestRedisClient.delete)
 
 
 @pytest.fixture()

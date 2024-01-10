@@ -50,3 +50,14 @@ async def test_cache_activity(
     assert 'activity' not in response.json()
     assert 'cached_activity' in response.json()
     assert response.status_code == expected_status
+
+    await client.post(
+        ''.join([URLS['crud']['activity']['delete'], activity_id]),
+        headers={'Authorization': f'Bearer {access_token}'},
+    )
+
+    response = await client.get(
+        ''.join([URLS['crud']['activity']['read'], activity_id]),
+        headers={'Authorization': f'Bearer {access_token}'},
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND

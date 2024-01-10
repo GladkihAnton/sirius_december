@@ -1,5 +1,5 @@
 from fastapi import Depends, HTTPException
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -16,10 +16,10 @@ async def delete_review(
     review_id: int,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-) -> ORJSONResponse:
+) -> Response:
     if not await review_crud.delete(session, review_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     await redis_drop_key(Review.__name__, review_id)
 
-    return ORJSONResponse(content={'message': 'Review removed successfully'}, status_code=status.HTTP_204_NO_CONTENT)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
