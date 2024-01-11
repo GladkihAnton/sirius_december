@@ -1,14 +1,15 @@
-from contextlib import asynccontextmanager
-from typing import AsyncIterator
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from webapp.api.file.router import file_router
+from webapp.api.crud.order.router import order_router
+from webapp.api.crud.order_product.router import op_router
+from webapp.api.crud.product.router import product_router
+from webapp.api.crud.restaurant.router import restaurant_router
+from webapp.api.crud.user.router import user_router
 from webapp.api.login.router import auth_router
-from webapp.api.chouse_restaurant.router import restaurants_router
-from webapp.on_shutdown import stop_producer
-from webapp.on_startup.kafka import create_producer
+from webapp.db.redis import start_redis
+from webapp.integrations.metrics.metrics import metrics
+from webapp.integrations.metrics.middleware import prometheus_metrics
 
 
 def setup_middleware(app: FastAPI) -> None:
@@ -21,26 +22,26 @@ def setup_middleware(app: FastAPI) -> None:
         allow_methods=['*'],
         allow_headers=['*'],
     )
+    app.middleware('http')(prometheus_metrics)
 
 
 def setup_routers(app: FastAPI) -> None:
-    app.include_router(auth_router)
-    app.include_router(file_router)
-    app.include_router(restaurants_router)
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    await create_producer()
-    print('START APP')
-    yield
-    await stop_producer()
-    print('END APP')
+    app.add_route('/metrics', metrics)
+    routers = [
+        auth_router,
+        product_router,
+        restaurant_router,
+        order_router,
+        op_router,
+        user_router,
+    ]
+    for router in routers:
+        app.include_router(router)
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(docs_url='/swagger', lifespan=lifespan)
-
+    app = FastAPI(docs_url='/swagger')
+    start_redis()
     setup_middleware(app)
     setup_routers(app)
 

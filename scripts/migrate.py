@@ -1,8 +1,6 @@
 import asyncio
 
-from sqlalchemy import text
-
-from webapp.db.postgres import async_session, engine
+from webapp.db.postgres import engine
 from webapp.models import meta
 
 

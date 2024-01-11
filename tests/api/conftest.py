@@ -1,5 +1,5 @@
 import json
-import uuid
+from datetime import datetime
 from pathlib import Path
 from typing import AsyncGenerator, List
 
@@ -10,11 +10,10 @@ from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tests.const import URLS
-from tests.mocking.kafka import TestKafkaProducer
-from tests.my_types import FixtureFunctionT
+from tests.mocking.redis import TestRedisClient
 
-from webapp.db import kafka
 from webapp.db.postgres import engine, get_session
+from webapp.integrations.cache.redis import get_redis
 from webapp.models.meta import metadata
 
 
@@ -41,12 +40,18 @@ async def db_session(app: FastAPI) -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest.fixture()
-async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> FixtureFunctionT:
+async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> None:
     for fixture in fixtures:
-        model = metadata.tables[fixture.stem]
+        fixture_path = Path(fixture)
+        model = metadata.tables[fixture_path.stem]
 
-        with open(fixture, 'r') as file:
+        with open(fixture_path, 'r') as file:
             values = json.load(file)
+
+        for model_obj in values:
+            for key, val in model_obj.items():
+                if 'date' in key:
+                    model_obj[key] = datetime.strptime(val, '%Y-%m-%d').date()
 
         await db_session.execute(insert(model).values(values))
         await db_session.commit()
@@ -55,15 +60,11 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> Fixt
 
 
 @pytest.fixture()
-def _mock_kafka(monkeypatch: pytest.MonkeyPatch, kafka_received_messages: List, mocked_hex: str) -> FixtureFunctionT:
-    monkeypatch.setattr(kafka, 'get_producer', lambda: TestKafkaProducer(kafka_received_messages))
-    monkeypatch.setattr(kafka, 'get_partition', lambda: 1)
-    monkeypatch.setattr(uuid.UUID, 'hex', mocked_hex)
-
-
-@pytest.fixture()
-def kafka_received_messages() -> List:
-    return []
+def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
+    redis = get_redis()
+    monkeypatch.setattr(redis, 'set', TestRedisClient.set)
+    monkeypatch.setattr(redis, 'get', TestRedisClient.get)
+    monkeypatch.setattr(redis, 'delete', TestRedisClient.delete)
 
 
 @pytest.fixture()
@@ -71,21 +72,21 @@ async def access_token(
     client: AsyncClient,
     username: str,
     password: str,
-) -> str:
+) -> str | None:
     response = await client.post(URLS['auth']['login'], json={'username': username, 'password': password})
-    return response.json()['access_token']
+    return response.json().get('access_token')
 
 
 @pytest.fixture()
 async def _common_api_fixture(
-    _load_fixtures: FixtureFunctionT,
+    _load_fixtures: None,
 ) -> None:
     return
 
 
 @pytest.fixture()
-async def _common_api_with_kafka_fixture(
-    _common_api_fixture: FixtureFunctionT,
-    _mock_kafka: FixtureFunctionT,
+async def _common_api_with_redis_fixture(
+    _common_api_fixture: None,
+    _mock_redis: None,
 ) -> None:
     return

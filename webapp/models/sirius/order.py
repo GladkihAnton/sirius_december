@@ -25,7 +25,7 @@ class Order(Base):
 
     where_to_deliver: Mapped[str] = mapped_column(String, nullable=False)
 
-    user: Mapped[List['User']] = relationship(back_populates='orders')
+    user: Mapped['User'] = relationship(back_populates='orders')
 
     products: Mapped[List['Product']] = relationship(
         secondary=f'{DEFAULT_SCHEMA}.order_product',

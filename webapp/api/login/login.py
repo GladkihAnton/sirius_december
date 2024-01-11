@@ -6,7 +6,7 @@ from starlette import status
 from webapp.api.login.router import auth_router
 from webapp.crud.user import get_user
 from webapp.db.postgres import get_session
-from webapp.schema.login.user import UserLogin, UserLoginResponse
+from webapp.schema.info.user import UserLogin, UserLoginResponse
 from webapp.utils.auth.jwt import jwt_auth
 
 

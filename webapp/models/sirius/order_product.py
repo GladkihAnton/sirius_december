@@ -1,7 +1,5 @@
-from typing import TYPE_CHECKING
-
-from sqlalchemy import ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Integer
+from sqlalchemy.orm import Mapped, mapped_column
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
 

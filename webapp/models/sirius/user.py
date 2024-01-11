@@ -19,4 +19,4 @@ class User(Base):
 
     hashed_password: Mapped[str] = mapped_column(String)
 
-    orders: Mapped[List['Order']] = relationship(back_populates="user")
+    orders: Mapped[List['Order']] = relationship(back_populates='user')
