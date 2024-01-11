@@ -1,31 +1,17 @@
 from webapp.api.patient.router import patient_router
-from webapp.models.clinic.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 from webapp.db.postgres import get_session
 from fastapi import Depends, HTTPException
-from sqlalchemy import update
 from starlette import status
 from fastapi.responses import ORJSONResponse
 from webapp.pydantic_schemas.user import UserModel
-from webapp.metrics import resp_counter, errors_counter
+from webapp.crud.patient import update_user
 
 
 @patient_router.put('/')
 async def update_user_data(body: UserModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
-    resp_counter.labels(endpoint='PUT /patient').inc()
     try:
-        updated_data = (
-            await session.execute(
-                update(User)
-                .where(User.id == body.id)
-                .values({
-                    'username': body.username,
-                    'last_name': body.last_name,
-                    'first_name': body.first_name,
-                }).returning(User.username, User.first_name, User.last_name),
-            )
-        ).one()
-        await session.commit()
+        updated_data = update_user(body.id, body.username, body.first_name, body.last_name, session)
         return ORJSONResponse(
             {
                 'username': updated_data.username,
@@ -33,9 +19,7 @@ async def update_user_data(body: UserModel, session: AsyncSession = Depends(get_
                 'last_name': updated_data.last_name,
             },
         )
-    except Exception as err:
-        print(err)
-        errors_counter.labels(endpoint='PUT /patient').inc()
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail='username is already used',

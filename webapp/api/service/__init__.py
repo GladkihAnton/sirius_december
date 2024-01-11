@@ -1,1 +1,1 @@
-from .crud import get, post, put, delete
+from . import delete, get, post, put

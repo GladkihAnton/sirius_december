@@ -1,4 +1,6 @@
 import os
+from time import monotonic
+from typing import Any, Awaitable, Callable, Dict, List
 import prometheus_client
 from prometheus_client import (
     CONTENT_TYPE_LATEST,
@@ -33,17 +35,63 @@ DEFAULT_BUCKETS = (
     float('+inf'),
 )
 
-resp_counter = prometheus_client.Counter(
-    'number_of_responses',
-    '',
-    ['endpoint'],
+
+REQUEST_COUNT = prometheus_client.Counter(
+    "http_requests_total",
+    "Total count of HTTP requests",
+    ["method", "endpoint", "http_status"],
 )
 
-errors_counter = prometheus_client.Counter(
-    'number_of_exceptions',
-    '',
-    ['endpoint'],
+ERROR_COUNT = prometheus_client.Counter(
+    "http_errors_total",
+    "Total count of HTTP errors",
+    ["method", "endpoint", "http_status"],
 )
+
+# histogram_quantile(0.99, sum(rate(sirius_integrations_latency_seconds[1m])) by (le, integration))
+# среднее время обработки за 1 мин
+INTEGRATIONS_LATENCY = prometheus_client.Histogram(
+    "sirius_integrations_latency_seconds",
+    "",
+    ["integration"],
+    buckets=DEFAULT_BUCKETS,
+)
+# histogram_quantile(0.99, sum(rate(sirius_routes_latency_seconds_bucket[1m])) by (le, endpoint))
+# среднее время обработки за 1 мин
+ROUTES_LATENCY = prometheus_client.Histogram(
+    "sirius_routes_latency_seconds",
+    "",
+    ["method", "endpoint"],
+    buckets=DEFAULT_BUCKETS,
+)
+
+
+def async_integrations_timer(func: Callable[..., Awaitable[Any]]) -> Callable[..., Awaitable[Any]]:
+    async def wrapper(*args: List[Any], **kwargs: Dict[Any, Any]) -> Awaitable[Any]:
+        start_time: float = monotonic()
+        result = await func(*args, **kwargs)
+        INTEGRATIONS_LATENCY.labels(integration=func.__name__).observe(monotonic() - start_time)
+        return result
+
+    return wrapper
+
+
+async def prometheus_metrics(request: Request, call_next: Callable[..., Awaitable[Any]]) -> Awaitable[Any]:
+    method = request.method
+    path = request.url.path
+
+    start_time = monotonic()
+    response = await call_next(request)
+    process_time = monotonic() - start_time
+    if path in ['/favicon.ico', '/metrics']:
+        return response
+    REQUEST_COUNT.labels(method=method, endpoint=path, http_status=str(response.status_code)).inc()
+    ROUTES_LATENCY.labels(method=method, endpoint=path).observe(process_time)
+
+    if 400 <= response.status_code < 600:
+        ERROR_COUNT.labels(method=method, endpoint=path, http_status=str(response.status_code)).inc()
+
+    return response
 
 
 def metrics(request: Request) -> Response:

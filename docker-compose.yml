@@ -51,7 +51,19 @@ services:
       - web
     volumes:
       - ./prometheus:/etc/prometheus
-      #- prom_data:/prometheus
+    networks:
+      - sirius_network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - web
     networks:
       - sirius_network
 
