@@ -1,6 +1,5 @@
 import json
 import asyncio  # для выполнения асинхронных операций
-import argparse  # обработка аргументов командной строки
 from pathlib import Path  # работа с путями файловой системы
 from typing import List
 
@@ -8,15 +7,6 @@ from sqlalchemy import insert
 
 from webapp.db.postgres import async_session
 from webapp.models.meta import metadata
-
-print(metadata.info)
-# определяется парсер аргументов командной строки, который ожидает список
-# имен файлов фикстур для загрузки в базу данных
-parser = argparse.ArgumentParser()
-
-parser.add_argument('fixtures', nargs='+', help='<Required> Set flag')
-
-args = parser.parse_args()
 
 
 # определяется асинхронная функция main, которая принимает список имен файлов
@@ -40,8 +30,17 @@ async def main(fixtures: List[str]) -> None:
 # функция открывает JSON-файл, загружает данные и выполняет операцию
 # вставки в базу данных с помощью метода execute объекта сессии SQLAlchemy
 
+def process_args():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('fixtures', nargs='+', help='<Required> Set flag')
+    args = parser.parse_args()
+    return args.fixtures
+
+
 if __name__ == '__main__':
-    asyncio.run(main(args.fixtures))
+    fixtures = process_args()
+    asyncio.run(main(fixtures))
 
 # если этот скрипт запущен как основной файл (а не импортирован как модуль),
 # то вызывается функция main с аргументами командной строки, переданными в

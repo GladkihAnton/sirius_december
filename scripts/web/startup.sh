@@ -9,6 +9,7 @@ echo "Start service" # выводит сообщения
 # Выполнение миграций Alembic
 alembic upgrade head
 # load fixtures
+
 python scripts/load_data.py fixture/sirius/sirius.user.json
 python scripts/load_data.py fixture/sirius/sirius.post.json
 python scripts/load_data.py fixture/sirius/sirius.comment.json
@@ -17,4 +18,4 @@ python scripts/load_data.py fixture/sirius/sirius.comment.json
 #  выполняется команда 
 exec uvicorn webapp.main:create_app --host=$BIND_IP --port=$BIND_PORT
 
-# которая запускает сервер uvicorn с приложением, созданным в файле main.py в пакете webapp. Параметры –host и –port задают хост и порт, на которых будет работать сервер. 
+# которая запускает сервер uvicorn с приложением, созданным в файле main.py
