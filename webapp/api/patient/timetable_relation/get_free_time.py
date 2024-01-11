@@ -14,9 +14,9 @@ from webapp.api.patient.timetable_relation.config import CLOSING_TIME, OPENNING_
 
 async def hours_for_service_by_doctor(date: date, doctor_id: int, service_id: int, session: AsyncSession) -> List[str]:
     free_hours = []
-    service_duration = get_service_duration(service_id, session)
+    service_duration = await get_service_duration(service_id, session)
     duration = timedelta(hours=service_duration.hour, minutes=service_duration.minute)
-    doctor_working_hours = timetable_point_time_for_doctor(doctor_id, date, session)
+    doctor_working_hours = await timetable_point_time_for_doctor(doctor_id, date, session)
     interval_point = datetime.combine(date.today(), OPENNING_TIME)
     while interval_point.time() < CLOSING_TIME:
         interval_point_flag = True
@@ -34,7 +34,7 @@ async def get_free_hours(body: GetHoursResp, session: AsyncSession = Depends(get
     if body.doctor_id:
         free_hours = await hours_for_service_by_doctor(body.search_date, body.doctor_id, body.service_id, session)
         return ORJSONResponse({'free_time': free_hours})
-    doctor_ids = get_doctors_ids_for_service(body.service_id, session)
+    doctor_ids = await get_doctors_ids_for_service(body.service_id, session)
     result: set = set()
     for doctor_id in doctor_ids:
         free_hours: List[str] = await hours_for_service_by_doctor(body.search_date, doctor_id, body.service_id, session)

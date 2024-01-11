@@ -17,7 +17,7 @@ async def get_services(doctor_id: int, session: AsyncSession = Depends(get_sessi
     if services_bytes:
         services = orjson.loads(services_bytes)
         return ORJSONResponse({'services': services})
-    sqlalch_obj_services = get_doctor_services(doctor_id, session)
+    sqlalch_obj_services = await get_doctor_services(doctor_id, session)
     services = [service.to_dict() for service in sqlalch_obj_services]
     await redis.set(f'doctor {doctor_id} services', orjson.dumps(services))
 

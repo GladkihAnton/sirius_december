@@ -12,7 +12,7 @@ from webapp.db.redis import get_redis
 async def delete_service(id: int, session: AsyncSession = Depends(get_session)) -> Response:
     redis = get_redis()
     try:
-        delete_service(id, session)
+        await delete_service(id, session)
         await redis.delete(f'service {id}')
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     except Exception:

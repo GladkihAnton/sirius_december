@@ -10,7 +10,7 @@ from starlette import status
 
 @doctor_router.post('/')
 async def create_doctor(body: DoctorCreateModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
-    new_id = create_doctor(body.last_name, body.first_name, body.specialization, session)
+    new_id = await create_doctor(body.last_name, body.first_name, body.specialization, session)
     return ORJSONResponse(
         content={'id': new_id},
         status_code=status.HTTP_201_CREATED,

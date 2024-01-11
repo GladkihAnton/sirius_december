@@ -27,7 +27,6 @@ async def login(
             )
         )
     ).one_or_none()
-    print(body.username, hash_password(body.password))
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 

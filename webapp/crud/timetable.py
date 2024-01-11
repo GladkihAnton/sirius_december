@@ -42,7 +42,7 @@ async def timetable_point_start_for_doctor(doctor_id: int, start: datetime, sess
 
 
 @async_integrations_timer
-async def make_appointment(
+async def make_timetable_point(
         doctor_id: int,
         user_id: int,
         service_id: int,

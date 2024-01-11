@@ -12,7 +12,7 @@ from webapp.db.redis import get_redis
 async def assign_service_to_doctor(body: DoctorServiceID, session: AsyncSession = Depends(get_session)) -> Response:
     redis = get_redis()
     try:
-        assign_service(body.doctor_id, body.service_id, session)
+        await assign_service(body.doctor_id, body.service_id, session)
         await redis.delete(f'doctor {body.doctor_id} services')
         return Response(status_code=status.HTTP_200_OK)
     except Exception:

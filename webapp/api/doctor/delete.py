@@ -12,7 +12,7 @@ from webapp.crud.doctor import delete_doctor
 async def delete_doctor(id: int, session: AsyncSession = Depends(get_session)) -> Response:
     redis = get_redis()
     try:
-        delete_doctor(id, session)
+        await delete_doctor(id, session)
         await redis.delete(f'doctor {id}')
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     except Exception:

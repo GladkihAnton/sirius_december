@@ -13,7 +13,7 @@ from webapp.db.redis import get_redis
 async def update_doctor(body: DoctorModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
     redis = get_redis()
     try:
-        updated_data = update_doctor(body.id, body.last_name, body.first_name, body.specialization, session)
+        updated_data = await update_doctor(body.id, body.last_name, body.first_name, body.specialization, session)
         await redis.delete(f'doctor {body.id}')
         return ORJSONResponse(
             {

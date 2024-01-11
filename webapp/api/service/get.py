@@ -13,7 +13,7 @@ import orjson
 
 @service_router.get('/page/{page_num}', response_model=List[ServiceModel])
 async def get_services(page_num: int, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
-    services = get_services(page_num, session)
+    services = await get_services(page_num, session)
     services_json = [ServiceModel.model_validate(service).model_dump(mode='json') for service in services]
     return ORJSONResponse(services_json)
 
@@ -26,7 +26,7 @@ async def get_service(id: int, session: AsyncSession = Depends(get_session)) -> 
         service = orjson.loads(service_bytes)
         return ORJSONResponse(service)
     try:
-        service_sqlalch = get_service(id, session)
+        service_sqlalch = await get_service(id, session)
         service = ServiceModel.model_validate(service_sqlalch).model_dump(mode='json')
         await redis.set(f'service {id}', orjson.dumps(service))
         return service

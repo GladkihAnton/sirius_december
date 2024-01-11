@@ -19,7 +19,7 @@ async def get_doctor(id: int, session: AsyncSession = Depends(get_session)) -> d
         doctor = orjson.loads(doctor_bytes)
         return ORJSONResponse(doctor)
     try:
-        doctor = get_doctor(id, session)
+        doctor = await get_doctor(id, session)
         doctor_json = DoctorModel.model_validate(doctor).model_dump(mode='json')
         await redis.set(f'doctor {id}', orjson.dumps(doctor_json))
         return doctor_json

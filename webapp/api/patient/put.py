@@ -11,7 +11,7 @@ from webapp.crud.patient import update_user
 @patient_router.put('/')
 async def update_user_data(body: UserModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
     try:
-        updated_data = update_user(body.id, body.username, body.first_name, body.last_name, session)
+        updated_data = await update_user(body.id, body.username, body.first_name, body.last_name, session)
         return ORJSONResponse(
             {
                 'username': updated_data.username,

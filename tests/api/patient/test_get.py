@@ -3,7 +3,6 @@ from starlette import status
 import pytest
 from httpx import AsyncClient
 from tests.const import URLS
-import pytest_asyncio
 
 
 BASE_DIR = Path(__file__).parent
@@ -27,7 +26,7 @@ async def test_get_user(
     client: AsyncClient,
     expected_status: int
 ) -> None:
-    response = await client.get(URLS['patient']['get_all'])
+    response = await client.get(URLS['patient']['get_all'] + '1')
 
     assert response.status_code == expected_status
 

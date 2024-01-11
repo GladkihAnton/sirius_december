@@ -11,7 +11,7 @@ from webapp.pydantic_schemas.service import ServiceCreateModel
 @service_router.post('/')
 async def create_service(body: ServiceCreateModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
     try:
-        new_id = create_service(body.name, body.duration, session)
+        new_id = await create_service(body.name, body.duration, session)
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

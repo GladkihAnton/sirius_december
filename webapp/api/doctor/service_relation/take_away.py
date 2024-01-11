@@ -12,7 +12,7 @@ from webapp.db.redis import get_redis
 async def take_away(body: DoctorServiceID, session: AsyncSession = Depends(get_session)) -> Response:
     redis = get_redis()
     try:
-        take_service_away(body.doctor_id, body.service_id, session)
+        await take_service_away(body.doctor_id, body.service_id, session)
         await redis.delete(f'doctor {body.doctor_id} services')
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     except Exception:

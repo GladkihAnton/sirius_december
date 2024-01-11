@@ -11,7 +11,7 @@ from webapp.crud.patient import create_user
 @patient_router.post('/')
 async def create_user(body: UserCreateModel, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
     try:
-        new_id = create_user(body.username, body.first_name, body.last_name, body.password, session)
+        new_id = await create_user(body.username, body.first_name, body.last_name, body.password, session)
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,

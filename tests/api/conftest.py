@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from httpx import AsyncClient
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-
+from datetime import time, datetime
 from webapp.db.postgres import engine, get_session
 from webapp.models.meta import metadata
 
@@ -41,6 +41,13 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]):
 
         with open(fixture, 'r') as file:
             values = json.load(file)
+        if fixture.stem == 'clinic.service':
+            for data in values:
+                data['duration'] = time(*map(int, data['duration'].split(':')))
+        elif fixture.stem == 'clinic.timetable':
+            for data in values:
+                data['start'] = datetime.strptime(data['start'], "%Y-%m-%d %H:%M:%S%z")
+                data['end'] = datetime.strptime(data['end'], "%Y-%m-%d %H:%M:%S%z")
         await db_session.execute(insert(model).values(values))  
         await db_session.commit()
 

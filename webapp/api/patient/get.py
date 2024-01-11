@@ -13,7 +13,7 @@ from starlette import status
 
 @patient_router.get('/page/{page_num}', response_model=List[UserModel])
 async def get_patients(page_num: int, session: AsyncSession = Depends(get_session)) -> ORJSONResponse:
-    users = get_users(page_num, session)
+    users = await get_users(page_num, session)
     users_json = [UserModel.model_validate(user).model_dump(mode='json') for user in users]
     return ORJSONResponse(users_json)
 
@@ -21,7 +21,7 @@ async def get_patients(page_num: int, session: AsyncSession = Depends(get_sessio
 @patient_router.get('/{id:int}', response_model=UserModel)
 async def get_patient(id: int, session: AsyncSession = Depends(get_session)) -> dict[str, Any]:
     try:
-        patient_elem = get_user(id, session)
+        patient_elem = await get_user(id, session)
         return UserModel.model_validate(patient_elem).model_dump(mode='json')
     except Exception:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
