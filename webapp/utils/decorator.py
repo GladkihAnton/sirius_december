@@ -33,7 +33,6 @@ def kafka_producer_decorator(topic):
             await kafka.producer.send_and_wait(
                 topic=topic,
                 value=json.dumps(result_data).encode('utf-8'),
-                partition=kafka.get_partition(),
             )
 
             DEPS_LATENCY.labels(endpoint=topic).observe(time.time() - start)

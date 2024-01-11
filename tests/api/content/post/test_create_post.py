@@ -3,46 +3,57 @@ from pathlib import Path
 
 import pytest
 from httpx import AsyncClient
-from sqlalchemy import insert
-from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from tests.const import URLS
 
-from webapp.models.meta import metadata
-
-USER_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.user.json'
-POST_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.post.json'
+BASE_DIR = Path(__file__).parent
+POST_FIXTURES_PATH = BASE_DIR / 'fixtures' / 'sirius.post.json'
 
 # Загрузка данных постов для использования в тестах
 with open(POST_FIXTURES_PATH, 'r') as file:
-    post_data = json.load(file)
+    posts_data = json.load(file)
 
 
-@pytest.fixture()
-async def _load_fixtures(db_session: AsyncSession):
-    # Загрузка данных пользователей
-    with open(USER_FIXTURES_PATH, 'r') as user_file:
-        user_data = json.load(user_file)
-        user_model = metadata.tables['sirius.user']
-        await db_session.execute(insert(user_model).values(user_data))
-        await db_session.commit()
-
-    return
-
-
-# Тест на создание поста
+@pytest.mark.parametrize(
+    (
+        'post',
+        'expected_status',
+        'expected_content',
+        'expected_author_id'
+    ),
+    [
+        (post, status.HTTP_201_CREATED, post['content'], post['author_id'])
+        for post in posts_data
+    ]
+)
 @pytest.mark.asyncio()
-@pytest.mark.usefixtures('_common_api_fixture', '_load_fixtures')
-async def test_create_post(client: AsyncClient, access_token: str):
+@pytest.mark.usefixtures('_common_api_with_kafka_fixture')
+async def test_create_post(
+    client: AsyncClient,
+    access_token: str,
+    post: dict,
+    expected_status: int,
+    expected_content: str,
+    expected_author_id: int,
+    kafka_received_messages,
+):
     headers = {'Authorization': f'Bearer Bearer {access_token}'}
 
     response = await client.post(
         URLS['posts']['create'],
-        json=post_data[0],
+        json=post,
         headers=headers,
     )
 
-    assert response.status_code == status.HTTP_201_CREATED
-    assert response.json()['content'] == post_data[0]['content']
-    assert response.json()['author_id'] == post_data[0]['author_id']
+    assert response.status_code == expected_status
+    assert response.json()['content'] == expected_content
+    assert response.json()['author_id'] == expected_author_id
+
+    assert len(kafka_received_messages) == 1
+    kafka_message = kafka_received_messages[0]
+    assert kafka_message['topic'] == 'create_post'
+    message_value = json.loads(kafka_message['value'])
+    assert message_value['content'] == posts_data[0]['content']
+    assert message_value['author_id'] == posts_data[0]['author_id']
+    assert message_value['post_id'] == response.json()['id']
