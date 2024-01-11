@@ -1,5 +1,4 @@
 [flake8]
-#line_length = 120
 max-line-length = 79
 no-accept-encodings = True
 inline-quotes = '
