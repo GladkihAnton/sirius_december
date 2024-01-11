@@ -1,15 +1,19 @@
-# работа с middleware
-# middleware (промежуточное ПО) для измерения времени выполнения запроса к серверу
-# компонент, который обрабатывает запросы и ответы между клиентом и сервером. Он может выполнять различные функции, такие как аутентификация, обработка ошибок, кэширование
-
 import time
 
+from prometheus_client import Counter
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 
 from webapp.metrics import DEPS_LATENCY
 
-# Измеряет время выполнения запроса и записывает его в метрику DEPS_LATENCY. Метрика DEPS_LATENCY используется для отслеживания времени выполнения запросов к зависимым сервисам (например, базе данных или API другого сервиса)
+# Создаем счетчик для отслеживания запросов
+REQUESTS_COUNTER = Counter(
+    'sirius_api_requests_total',
+    'Total number of requests to the API',
+    ['method', 'endpoint', 'http_status'],
+)
+
+
 class MeasureLatencyMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         endpoint = request.url.path
@@ -20,6 +24,11 @@ class MeasureLatencyMiddleware(BaseHTTPMiddleware):
         process_time = time.time() - start_time
         DEPS_LATENCY.labels(endpoint=endpoint).observe(process_time)
 
+        # Увеличиваем счетчик запросов
+        REQUESTS_COUNTER.labels(
+            method=request.method,
+            endpoint=endpoint,
+            http_status=response.status_code,
+        ).inc()
+
         return response
-    
-# отслеживаем производительность приложения
