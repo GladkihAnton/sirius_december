@@ -5,6 +5,7 @@ from redis.exceptions import RedisError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .router import post_router
+from webapp import kafka_producer_decorator
 from webapp.crud.post import (
     create_post,
     delete_post,
@@ -31,6 +32,7 @@ async def invalidate_cache_post(post_id: int):
 
 
 @post_router.get('/', tags=['Posts'])
+@kafka_producer_decorator('get_post')
 async def read_posts(
     session: AsyncSession = Depends(get_session),
     page: int = 1,
@@ -66,6 +68,7 @@ async def read_posts(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
+@kafka_producer_decorator('get_post')
 async def read_post_by_id(
     post_id: int, session: AsyncSession = Depends(get_session)
 ):
@@ -94,6 +97,7 @@ async def read_post_by_id(
 
 
 @post_router.get('/user/{user_id}', tags=['Posts'])
+@kafka_producer_decorator('get_post')
 async def read_posts_by_user(
     user_id: int,
     session: AsyncSession = Depends(get_session),
@@ -133,6 +137,7 @@ async def read_posts_by_user(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
+@kafka_producer_decorator('create_post')
 async def create(
     post: PostCreate,
     session: AsyncSession = Depends(get_session),
@@ -148,6 +153,7 @@ async def create(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
+@kafka_producer_decorator('update_post')
 async def update(
     post_id: int,
     post_update: PostUpdate,
@@ -177,6 +183,7 @@ async def update(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
+@kafka_producer_decorator('delete_post')
 async def delete(
     post_id: int,
     session: AsyncSession = Depends(get_session),
