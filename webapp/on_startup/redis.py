@@ -13,5 +13,7 @@ async def get_redis_pool() -> Optional[Redis]:
     Вызывается при старте приложения.
     """
     global redis
-    redis = aioredis.from_url('redis://redis', encoding='utf-8', decode_responses=True)
+    redis = aioredis.from_url(
+        'redis://redis', encoding='utf-8', decode_responses=True
+    )
     return redis
