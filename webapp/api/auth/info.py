@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 
-from webapp.api.login.router import auth_router
+from webapp.api.auth.router import auth_router
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 

@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+USER_TABLE = 'user'
+
 
 class UserLogin(BaseModel):
     username: str
@@ -7,4 +9,9 @@ class UserLogin(BaseModel):
 
 
 class UserLoginResponse(BaseModel):
+    id: int
+    username: str
+
+
+class UserTokenResponse(BaseModel):
     access_token: str
