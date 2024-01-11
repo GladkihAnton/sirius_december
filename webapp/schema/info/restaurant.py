@@ -17,3 +17,7 @@ class RestaurantResponse(BaseModel):
 
 class RestaurantsListResponse(BaseModel):
     restaurants: List[RestaurantResponse]
+
+
+class RestaurantSearch(BaseModel):
+    name: str | None

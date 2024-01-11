@@ -7,6 +7,7 @@ from webapp.api.crud.product.router import product_router
 from webapp.api.crud.restaurant.router import restaurant_router
 from webapp.api.crud.user.router import user_router
 from webapp.api.login.router import auth_router
+from webapp.api.v1.router import v1_router
 from webapp.db.redis import start_redis
 from webapp.integrations.metrics.metrics import metrics
 from webapp.integrations.metrics.middleware import prometheus_metrics
@@ -34,6 +35,7 @@ def setup_routers(app: FastAPI) -> None:
         order_router,
         op_router,
         user_router,
+        v1_router,
     ]
     for router in routers:
         app.include_router(router)

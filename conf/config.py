@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     FILE_EXPIRE_TIME: timedelta = timedelta(minutes=15)
 
     PAGE_LIMIT: int = 10
+    SIMILARITY_THRESHOLD: int = 3
 
 
 settings = Settings()

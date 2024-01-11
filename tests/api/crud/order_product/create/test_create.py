@@ -51,9 +51,6 @@ async def test_create_op(
 
     assert response.status_code == expected_status
 
-    ops = [
-        OPInfo.model_validate(op).model_dump()
-        for op in (await db_session.scalars(select(OrderProduct))).all()
-    ]
+    ops = [OPInfo.model_validate(op).model_dump() for op in (await db_session.scalars(select(OrderProduct))).all()]
 
     assert body in ops

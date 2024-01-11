@@ -1,12 +1,15 @@
 from typing import Any, Sequence, Type, TypeVar
 
-from sqlalchemy import update
+from Levenshtein import distance
+from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import DeclarativeMeta
 
 from conf.config import settings
 from webapp.integrations.metrics.metrics import async_integrations_timer
+from webapp.models.sirius.product import Product
+from webapp.models.sirius.restaurant import Restaurant
 
 ModelT = TypeVar('ModelT', bound=DeclarativeMeta)
 
@@ -59,3 +62,32 @@ class AsyncCRUDFactory:
             await session.commit()
             return True
         return False
+
+
+@async_integrations_timer
+async def get_entities_by_name(
+    session: AsyncSession,
+    entity_type: Product | Restaurant,
+    search_info: Any,
+) -> Sequence[Product | Restaurant]:
+    query: Select[tuple[Product | Restaurant]] = select(entity_type)
+    if search_info and search_info.name:
+        exact_match_query = query.where(entity_type.name == search_info.name)
+        exact_match_result = (await session.execute(exact_match_query)).scalars().all()
+
+        if exact_match_result:
+            return exact_match_result
+
+        all_entities = (await session.execute(query)).scalars().all()
+
+        similar_entities = []
+        for entity in all_entities:
+            if entity.name and search_info.name:
+                distance_value = distance(entity.name, search_info.name)
+                if distance_value <= settings.SIMILARITY_THRESHOLD:
+                    similar_entities.append(entity)
+
+        return similar_entities
+
+    result = (await session.execute(query)).scalars().all()
+    return result

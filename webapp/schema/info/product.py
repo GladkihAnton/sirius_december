@@ -18,3 +18,7 @@ class ProductResponse(BaseModel):
 
 class ProductsListResponse(BaseModel):
     products: List[ProductResponse]
+
+
+class ProductSearch(BaseModel):
+    name: str | None

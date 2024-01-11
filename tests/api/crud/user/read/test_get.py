@@ -47,9 +47,7 @@ async def test_get_user(
 
     users = [
         UserInfo.model_validate(user).model_dump()
-        for user in (
-            await db_session.scalars(select(User).limit(settings.PAGE_LIMIT).offset(int(page_id)))
-        ).all()
+        for user in (await db_session.scalars(select(User).limit(settings.PAGE_LIMIT).offset(int(page_id)))).all()
     ]
 
     assert users == response.json()['users']

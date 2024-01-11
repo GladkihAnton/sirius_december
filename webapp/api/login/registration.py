@@ -16,7 +16,7 @@ async def register(
     body: UserInfo,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    body.password = hash_password(body.password)
+    body.hashed_password = hash_password(body.hashed_password)
 
     try:
         await user_crud.create(session, body)

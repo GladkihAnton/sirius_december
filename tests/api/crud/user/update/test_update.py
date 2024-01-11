@@ -46,9 +46,7 @@ async def test_update_user(
     user_ids = [user.id for user in (await db_session.scalars(select(User))).all()]
 
     assert int(user_id) in user_ids
-    pre_update_data = UserInfo.model_validate(
-        await user_crud.get_model(db_session, int(user_id))
-    ).model_dump()
+    pre_update_data = UserInfo.model_validate(await user_crud.get_model(db_session, int(user_id))).model_dump()
 
     response = await client.post(
         ''.join([URLS['crud']['user']['update'], user_id]),

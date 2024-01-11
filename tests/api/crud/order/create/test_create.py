@@ -49,9 +49,6 @@ async def test_create_order(
 
     assert response.status_code == expected_status
 
-    orders = [
-        OrderInfo.model_validate(order).model_dump()
-        for order in (await db_session.scalars(select(Order))).all()
-    ]
+    orders = [OrderInfo.model_validate(order).model_dump() for order in (await db_session.scalars(select(Order))).all()]
 
     assert body in orders

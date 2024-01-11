@@ -3,6 +3,10 @@ from typing import Any, Dict
 from webapp.api.crud.const import API_PREFIX
 
 URLS: Dict[str, Any] = {
+    'v1': {
+        'products_search': f'{API_PREFIX}/v1/products_search',
+        'restaurants_search': f'{API_PREFIX}/v1/restaurants_search',
+    },
     'auth': {
         'login': '/auth/login',
         'info': '/auth/info',

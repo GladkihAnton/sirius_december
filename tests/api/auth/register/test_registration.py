@@ -11,7 +11,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 
 
 @pytest.mark.parametrize(
-    ('username', 'password', 'expected_status', 'fixtures'),
+    ('username', 'hashed_password', 'expected_status', 'fixtures'),
     [
         (
             'invalid_user',
@@ -36,10 +36,12 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 async def test_register(
     client: AsyncClient,
     username: str,
-    password: str,
+    hashed_password: str,
     expected_status: int,
     db_session: None,
 ) -> None:
-    response = await client.post(URLS['auth']['register'], json={'username': username, 'password': password})
+    response = await client.post(
+        URLS['auth']['register'], json={'username': username, 'hashed_password': hashed_password}
+    )
 
     assert response.status_code == expected_status
