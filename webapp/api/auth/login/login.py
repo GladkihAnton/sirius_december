@@ -8,11 +8,10 @@ from webapp.crud.user import auth_get_user
 from webapp.db.postgres import get_session
 from webapp.schema.auth.login.user import UserLogin, UserLoginResponse
 from webapp.utils.auth.jwt import jwt_auth
-from json import loads
 
 
 @auth_router.post(
-    '/login',
+    "/login",
     response_model=UserLoginResponse,
 )
 async def login(
@@ -26,6 +25,6 @@ async def login(
 
     return ORJSONResponse(
         {
-            'access_token': jwt_auth.create_token(user.id),
+            "access_token": jwt_auth.create_token(user.id),
         }
     )

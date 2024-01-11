@@ -1,11 +1,11 @@
-from sqlalchemy import select, insert
-from sqlalchemy.sql import exists
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql import exists
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from webapp.models.tms.user import User
 from webapp.schema.auth.login.user import UserLogin
 from webapp.schema.auth.register.user import UserRegister
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 async def auth_get_user(session: AsyncSession, user_info: UserLogin) -> User | None:
@@ -22,14 +22,10 @@ async def auth_get_user(session: AsyncSession, user_info: UserLogin) -> User | N
 
     return None
 
+
 async def get_user(session: AsyncSession, user_id: int) -> User | None:
-    return (
-        await session.scalars(
-            select(User).where(
-                User.id == user_id
-            )
-        )
-    ).one_or_none()
+    return (await session.scalars(select(User).where(User.id == user_id))).one_or_none()
+
 
 async def check_user(session: AsyncSession, username: str) -> bool:
     query = select(exists().where(User.username == username))
@@ -39,9 +35,8 @@ async def check_user(session: AsyncSession, username: str) -> bool:
 async def create_user(session: AsyncSession, user_info: UserRegister) -> None:
     user = User(
         username=user_info.username,
-        hashed_password=generate_password_hash(user_info.password)
+        hashed_password=generate_password_hash(user_info.password),
     )
 
     session.add(user)
     await session.commit()
-

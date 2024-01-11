@@ -1,3 +1,3 @@
 from fastapi import APIRouter
 
-task_router = APIRouter(prefix='/task')
+task_router = APIRouter(prefix="/task")

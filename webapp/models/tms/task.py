@@ -1,12 +1,14 @@
-from typing import List, TYPE_CHECKING, Type
-
-from sqlalchemy import Integer, String, DateTime, ForeignKey
-from sqlalchemy import Enum as EnumType
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from enum import Enum
+from typing import TYPE_CHECKING
+
+from sqlalchemy import DateTime
+from sqlalchemy import Enum as EnumType
+from sqlalchemy import ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
+
 
 class StatusEnum(Enum):
     CREATED = "created"
@@ -14,11 +16,18 @@ class StatusEnum(Enum):
     COMPLETED = "completed"
 
 
-class Task(Base):
-    __tablename__ = 'task'
-    __table_args__ = ({'schema': DEFAULT_SCHEMA},)
+if TYPE_CHECKING:
+    from webapp.models.tms.category import Category
+    from webapp.models.tms.user import User
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+
+class Task(Base):
+    __tablename__ = "task"
+    __table_args__ = ({"schema": DEFAULT_SCHEMA},)
+
+    id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, index=True, autoincrement=True
+    )
 
     title: Mapped[str] = mapped_column(String, nullable=False)
 
@@ -30,17 +39,23 @@ class Task(Base):
 
     deadline: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
-    category_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.category.id'))
+    category_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey(f"{DEFAULT_SCHEMA}.category.id")
+    )
 
-    category: Mapped[List["Category"]] = relationship('Category', back_populates='tasks')
+    category: Mapped["Category"] = relationship("Category", back_populates="tasks")
 
-    creator_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.user.id'), nullable=False)
+    creator_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey(f"{DEFAULT_SCHEMA}.user.id"), nullable=False
+    )
 
-    receiver_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.user.id'), nullable=False)
+    receiver_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey(f"{DEFAULT_SCHEMA}.user.id"), nullable=False
+    )
 
-    creator: Mapped[List["User"]] = relationship('User', foreign_keys=[creator_id])
+    creator: Mapped["User"] = relationship("User", foreign_keys=[creator_id])
 
-    receiver: Mapped[List["User"]] = relationship('User', foreign_keys=[receiver_id])
+    receiver: Mapped["User"] = relationship("User", foreign_keys=[receiver_id])
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, default=datetime.utcnow

@@ -1,0 +1,7 @@
+[
+    {
+      "id": 0,
+      "username": "test",
+      "hashed_password": "scrypt:32768:8:1$f1F42mS3CCEkUHnP$0718d8b1106a2baa265703eb71a72fecb8c10ea82c98701962021e358f401038018604acbf343c95da015caeeb0cf89f54b4b3ad9e3267ad5ea00a3f92b46d34"
+    }
+]

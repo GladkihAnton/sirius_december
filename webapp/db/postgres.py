@@ -1,7 +1,8 @@
 from typing import AsyncGenerator
 
 from sqlalchemy import QueuePool
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (AsyncEngine, AsyncSession,
+                                    async_sessionmaker, create_async_engine)
 
 from conf.config import settings
 
@@ -11,12 +12,14 @@ def create_engine() -> AsyncEngine:
         settings.DB_URL,
         poolclass=QueuePool,
         connect_args={
-            'statement_cache_size': 0,
+            "statement_cache_size": 0,
         },
     )
 
 
-def create_session(engine: AsyncEngine | None = None) -> async_sessionmaker[AsyncSession]:
+def create_session(
+    engine: AsyncEngine | None = None,
+) -> async_sessionmaker[AsyncSession]:
     return async_sessionmaker(
         bind=engine or create_engine(),
         class_=AsyncSession,

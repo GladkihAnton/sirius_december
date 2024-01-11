@@ -1,3 +1,3 @@
 from fastapi import APIRouter
 
-category_router = APIRouter(prefix='/category')
+category_router = APIRouter(prefix="/category")

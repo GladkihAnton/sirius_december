@@ -16,11 +16,15 @@ RUN poetry config virtualenvs.create false \
     && echo yes | poetry cache clear . --all
 
 
-FROM base AS prod
+# FROM base AS prod
 
-COPY . .
+# COPY . .
 
-RUN mkdir -p /var/log && chmod -R 1777 /var/log
+# RUN mkdir -p /var/log && chmod -R 1777 /var/log
+
+FROM base AS test
+
+RUN poetry install --no-interaction --no-ansi --with dev
 
 COPY scripts/web/startup.sh /scripts/web/startup.sh
 
