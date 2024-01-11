@@ -1,5 +1,6 @@
 from passlib.hash import bcrypt
 
+
 def hash_password(password: str) -> str:
     """
     Хеширование пароля.
@@ -12,6 +13,7 @@ def hash_password(password: str) -> str:
     """
     hashed_password = bcrypt.hash(password)
     return hashed_password
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """

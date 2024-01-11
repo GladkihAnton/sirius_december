@@ -1,4 +1,7 @@
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from typing import AsyncGenerator
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
 from app.core.config import Config
 
 # Создаем асинхронный движок SQLAlchemy и устанавливаем соединение с базой данных
@@ -8,7 +11,8 @@ engine = create_async_engine(Config.SQLALCHEMY_DATABASE_URI, pool_pre_ping=True,
 # Создаем асинхронную фабрику сессий
 AsyncSessionLocal = async_sessionmaker(autocommit=False, autoflush=False, expire_on_commit=False, bind=engine)
 
-async def get_db() -> AsyncSession:
+
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Создает и предоставляет сессию базы данных как асинхронный контекстный ресурс.
 
