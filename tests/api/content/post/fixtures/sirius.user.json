@@ -1,7 +1,8 @@
 [
-    {
-      "username": "autotest",
-      "email": "autotest@autotest.ru",
-      "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
-    }
-]  
+  {
+    "id": 1,
+    "username": "autotest",
+    "email": "autotest@autotest.ru",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  }
+]

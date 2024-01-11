@@ -1,14 +1,14 @@
 [
-  {
-    "id": 1,
-    "content": "Great post!",
-    "author_id": 1,
-    "post_id": 1
-  },
-  {
-    "id": 2,
-    "content": "I disagree",
-    "author_id": 1,
-    "post_id": 2
-  }
-]
+    {
+      "id": 1,
+      "content": "Great post!",
+      "author_id": 1,
+      "post_id": 1
+    },
+    {
+      "id": 2,
+      "content": "I disagree",
+      "author_id": 1,
+      "post_id": 2
+    }
+  ] 

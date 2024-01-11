@@ -11,16 +11,10 @@ from tests.const import URLS
 
 from webapp.models.meta import metadata
 
-# Пути к фикстурам
 USER_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.user.json'
 POST_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.post.json'
-COMMENT_FIXTURES_PATH = Path(__file__).parent / 'fixtures' / 'sirius.comment.json'
 
-
-# Загрузка данных комментариев для использования в тестах
-with open(COMMENT_FIXTURES_PATH, 'r') as file:
-    comment_data = json.load(file)
-
+# Загрузка данных постов для использования в тестах
 with open(POST_FIXTURES_PATH, 'r') as file:
     post_data = json.load(file)
 
@@ -34,28 +28,21 @@ async def _load_fixtures(db_session: AsyncSession):
         await db_session.execute(insert(user_model).values(user_data))
         await db_session.commit()
 
-    # Загрузка данных постов
-    with open(POST_FIXTURES_PATH, 'r') as post_file:
-        post_data = json.load(post_file)
-        post_model = metadata.tables['sirius.post']
-        await db_session.execute(insert(post_model).values(post_data))
-        await db_session.commit()
-
     return
 
 
-# Тест на создание комментария
+# Тест на создание поста
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture', '_load_fixtures')
-async def test_create_comment(client: AsyncClient, access_token: str):
+async def test_create_post(client: AsyncClient, access_token: str):
     headers = {'Authorization': f'Bearer Bearer {access_token}'}
-    post_id = int(post_data[0]['id'])
+
     response = await client.post(
-        URLS['comments']['create'].format(post_id=post_id),
-        json=comment_data[0],
+        URLS['posts']['create'],
+        json=post_data[0],
         headers=headers,
     )
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert response.json()['content'] == comment_data[0]['content']
-    assert response.json()['post_id'] == comment_data[0]['post_id']
+    assert response.json()['content'] == post_data[0]['content']
+    assert response.json()['author_id'] == post_data[0]['author_id']
