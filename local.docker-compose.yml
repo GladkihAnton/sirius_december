@@ -6,12 +6,6 @@ x-common-backend: &common-backend
     dockerfile: Dockerfile
   image: sirius-backend
 
-x-common-tests: &common-tests
-  <<: *common-backend
-  command: [ "pytest", "-vvs" ]
-  profiles:
-    - donotstart
-
 x-common-db: &common-db
   image: library/postgres:13.2
   restart: unless-stopped
@@ -22,7 +16,12 @@ x-common-db: &common-db
     interval: 10s
     timeout: 5s
     retries: 5
-
+  environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_HOST: ${PG_HOST}
+      POSTGRES_PORT: 5432
 
 services:
   online_shop:
@@ -57,27 +56,34 @@ services:
     container_name: sirius-postgres
     ports:
       - 5432:5432
-    environment:
-      POSTGRES_USER: ${PG_USER}
-      POSTGRES_PASSWORD: ${PG_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_HOST: ${PG_HOST}
-      POSTGRES_PORT: 5432
 
-  tests:
-    <<: *common-tests
-    container_name: sirius-tests
-    volumes:
-      - ./:/app/
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus_config.yml"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
     depends_on:
-      db:
-        condition: service_healthy
+      - online_shop
+    volumes:
+      - ./prometheus:/etc/prometheus
 
-  db_test:
-    <<: *common-db
-    container_name: sirius-postgres-ci
-    hostname: sirius-postgres-ci
-    profiles:
-      - donotstart
-
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - online_shop
 

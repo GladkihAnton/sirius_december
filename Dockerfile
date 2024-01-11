@@ -14,7 +14,7 @@ COPY pyproject.toml /app/
 RUN /usr/local/bin/python -m pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir poetry==1.3.2 \
     && poetry config virtualenvs.create false \
-    && poetry install --no-interaction --no-ansi --without dev \
+    && poetry install --no-interaction --no-ansi --with dev \
     && echo yes | poetry cache clear . --all
 
 FROM python:${PYTHON_VERSION}-slim-buster AS release
@@ -46,4 +46,3 @@ COPY --from=deps_install /usr/local /usr/local
 RUN mkdir -p ${LOG_FOLDER} && chown ${APP_USER}:${APP_GROUP} ${LOG_FOLDER}
 
 COPY --chown=${APP_USER}:${APP_GROUP} . .
-
