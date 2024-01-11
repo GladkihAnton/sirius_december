@@ -1,0 +1,31 @@
+[flake8]
+max-line-length = 120
+no-accept-encodings = True
+inline-quotes = '
+docstring-quotes = '
+multiline-quotes = '
+exclude =
+    .git,
+    .venv,
+    .mypy_cache,
+    .pytest_cache,
+    __pycache__,
+
+extend-immutable-calls = Depends
+per-file-ignores = __init__.py:F401,F403
+
+ignore = 
+    I001,
+    # Missing docstring in public function, package, module
+    D103,
+    D100,
+    D104,
+    D101
+    # Found too long ``try`` body length
+    WPS229,
+    # Found complex default value
+    WPS404,
+    # Found builtin shadowing ?
+    WPS125,
+    # Found upper-case constant in a class
+    WPS115

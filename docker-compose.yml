@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  web:
+    container_name: web
+    build:
+      dockerfile: /home/roi/RPM_December/Dockerfile
+      context: .
+    ports:
+      - "8000:8000"
+    command: scripts/web/startup.sh -m -l
+    restart: on-failure
+    env_file:
+      - ./conf/.env
+    volumes:
+      - .:/code
+    depends_on:
+      web_db:
+        condition: service_healthy
+    networks:
+      - sirius_network
+
+  web_db:
+    container_name: web_db
+    image: library/postgres:13.2
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=main_db
+    restart: on-failure
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "main_db" ]
+      interval: 5s
+      retries: 5
+    volumes:
+      - ./scripts/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - sirius_network
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus_config.yml"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - web
+    volumes:
+      - ./prometheus:/etc/prometheus
+    networks:
+      - sirius_network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - web
+    networks:
+      - sirius_network
+
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+    networks:
+      - sirius_network
+
+networks:
+  sirius_network:
+    external: True

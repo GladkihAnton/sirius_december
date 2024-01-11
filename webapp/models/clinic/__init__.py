@@ -1,0 +1,1 @@
+from . import timetable, user, doctor, service, doctor_to_service
