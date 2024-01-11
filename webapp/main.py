@@ -5,17 +5,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from webapp.api.comment.router import comment_router
-from webapp.api.file.router import file_router
 from webapp.api.login.router import auth_router
 from webapp.api.post.router import post_router
-from webapp.api.registration.router import reg_router
 from webapp.metrics import metrics
 from webapp.on_shutdown import close_redis_pool, stop_producer
 from webapp.on_startup.kafka import create_producer
 from webapp.on_startup.redis import get_redis_pool
 from webapp.utils.middleware import MeasureLatencyMiddleware
 
-# добавление работы с middleware
+
 def setup_middleware(app: FastAPI) -> None:
     # CORS Middleware should be the last.
     # See https://github.com/tiangolo/fastapi/issues/1663 .
@@ -33,10 +31,8 @@ def setup_routers(app: FastAPI) -> None:
     app.add_route('/metrics', metrics)
 
     app.include_router(auth_router)
-    app.include_router(reg_router)
     app.include_router(post_router)
     app.include_router(comment_router)
-    app.include_router(file_router)
 
 
 @asynccontextmanager
