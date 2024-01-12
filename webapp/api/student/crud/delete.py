@@ -4,8 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.student.router import student_router
+from webapp.cache.cache import redis_remove
 from webapp.crud.student import student_crud
 from webapp.db.postgres import get_session
+from webapp.models.sirius.student import Student
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
@@ -17,5 +19,7 @@ async def delete(
 ) -> ORJSONResponse:
     if not await student_crud.delete(session, student_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    await redis_remove(Student.__name__, student_id)
 
     return ORJSONResponse(content={'detail': 'Student deleted successfully'}, status_code=status.HTTP_204_NO_CONTENT)

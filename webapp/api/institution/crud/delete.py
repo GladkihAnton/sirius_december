@@ -4,8 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.institution.router import institution_router
+from webapp.cache.cache import redis_remove
 from webapp.crud.institution import institution_crud
 from webapp.db.postgres import get_session
+from webapp.models.sirius.institution import Institution
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
@@ -17,6 +19,8 @@ async def delete(
 ) -> ORJSONResponse:
     if not await institution_crud.delete(session, institution_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    await redis_remove(Institution.__name__, institution_id)
 
     return ORJSONResponse(
         content={'detail': 'Institution deleted successfully'}, status_code=status.HTTP_204_NO_CONTENT

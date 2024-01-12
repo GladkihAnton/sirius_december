@@ -1,13 +1,14 @@
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.subject.router import subject_router
-from webapp.crud.institution import get_institution_by_id
+from webapp.cache.cache import redis_remove
 from webapp.crud.subject import subject_crud
-from webapp.crud.teacher import get_teacher_by_id
 from webapp.db.postgres import get_session
+from webapp.models.sirius.subject import Subject
 from webapp.schema.subject import SubjectInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
@@ -19,16 +20,14 @@ async def update(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    # # Check if teacher exists for creating a relationship
-    # if await get_teacher_by_id(session, body.teacher_id) is None:
-    #     raise HTTPException(detail='Teacher not found', status_code=status.HTTP_404_NOT_FOUND)
+    try:
+        result = await subject_crud.update(session, body, subject_id)
+    except IntegrityError:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT)
 
-    # # Check if institution exists for creating a relationship
-    # if await get_institution_by_id(session, body.institution_id) is None:
-    #     raise HTTPException(detail='Institution not found', status_code=status.HTTP_404_NOT_FOUND)
-
-    result = await subject_crud.update(session, body, subject_id)
-    if result is None:
+    if not result:
         raise HTTPException(detail='Subject not found', status_code=status.HTTP_404_NOT_FOUND)
+
+    await redis_remove(Subject.__name__, subject_id)
 
     return ORJSONResponse(content={'detail': 'Subject updated successfully'}, status_code=status.HTTP_200_OK)
