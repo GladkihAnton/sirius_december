@@ -1,6 +1,5 @@
 from pydantic import BaseModel
 
-USER_TABLE = 'user'
 
 
 class UserLogin(BaseModel):

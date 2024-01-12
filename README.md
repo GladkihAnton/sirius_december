@@ -7,7 +7,7 @@
 ## auth
 
 > REGISTER
-curl -X POST http://127.0.0.1:8000/auth/register -H "Content-Type: application/json" -d '{"username": "test", "password": "test"}'
+curl -X POST http://127.0.0.1:8000/auth/register -H "Content-Type: application/json" -d '{"username": "new user", "password": "new"}'
 
 
 > LOGIN
@@ -46,6 +46,33 @@ curl -X POST http://127.0.0.1:8000/ingredient/update/1 -H "Content-Type: applica
 curl -X POST http://127.0.0.1:8000/ingredient/delete/1 -H "Content-Type: application/json"
 
 
-> GET_ALL
+> READ_ALL
 curl -X GET http://127.0.0.1:8000/ingredient/read_all    -H "Content-Type: application/json"
 
+
+## RECIPE
+
+> CREATE
+curl -X POST http://127.0.0.1:8000/recipe/create -H "Content-Type: application/json" -d '{"title": "new recipe", "ingredients": ["Tomato", "Pasta"]}'
+
+
+> READ
+curl -X GET http://127.0.0.1:8000/recipe/read -H "Content-Type: application/json" -d '{"title": "new recipe"}'
+
+
+> UPDATE
+curl -X POST http://127.0.0.1:8000/recipe/update/1 -H "Content-Type: application/json" -d '{"title": "newt"}'
+
+
+> ADD INGREDIENT
+curl -X POST http://127.0.0.1:8000/recipe/add_ingredient/1 -H "Content-Type: application/json" -d '{"ingredient": "Tomato"}'
+
+
+> DELETE
+curl -X POST http://127.0.0.1:8000/recipe/delete/1 -H "Content-Type: application/json"
+
+Key (id)=(1) is still referenced from table "ingredient_to_recipe".
+
+
+> READ_ALL
+curl -X GET http://127.0.0.1:8000/recipe/read_all    -H "Content-Type: application/json"

@@ -1,14 +1,11 @@
 [
     {
-        "id": 1,
         "title": "Salad"
     },
     {
-        "id": 2,
         "title": "Soup"
     },
     {
-        "id": 3,
         "title": "Tomato Pasta"
     }
 ]

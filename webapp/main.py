@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from webapp.api.crud.ingredient.router import ingredient_router
 from webapp.api.crud.recipe.router import recipe_router
 from webapp.api.auth.router import auth_router
-from webapp.metrics import metrics
+from webapp.metrics import metrics, MetricsMiddleware
 from webapp.on_shutdown import stop_producer
 from webapp.on_startup.kafka import create_producer
 from webapp.on_startup.redis import start_redis
@@ -23,7 +23,7 @@ def setup_middleware(app: FastAPI) -> None:
         allow_methods=['*'],
         allow_headers=['*'],
     )
-
+    app.add_middleware(MetricsMiddleware)
 
 def setup_routers(app: FastAPI) -> None:
     app.add_route('/metrics', metrics)

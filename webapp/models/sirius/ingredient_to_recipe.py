@@ -12,3 +12,5 @@ ingredient_to_recipe = Table(
     Column("recipe_id", ForeignKey(f"{DEFAULT_SCHEMA}.recipe.id"), primary_key=True),
     schema=DEFAULT_SCHEMA,
 )
+
+

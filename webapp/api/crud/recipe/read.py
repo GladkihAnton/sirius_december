@@ -4,9 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from webapp.api.crud.recipe.router import recipe_router
+from webapp.crud.crud import get_all
 from webapp.crud.get_recipe import get_recipe
 from webapp.db.postgres import get_session
-from webapp.schema.recipe import RecipeData, RecipeResponse, RecipesResponse
+from webapp.schema.recipe import RecipeData, RecipeResponse, RecipesResponse, RecipeTitle
 from webapp.models.sirius.recipe import Recipe
 
 
@@ -15,7 +16,7 @@ from webapp.models.sirius.recipe import Recipe
     response_model=RecipeResponse,
 )
 async def read_recipe(
-    body: RecipeData,
+    body: RecipeTitle,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     recipe = await get_recipe(session, body)
@@ -26,8 +27,7 @@ async def read_recipe(
     return ORJSONResponse(
         {
             'id': recipe.id,
-            'title': body.title,
-            'ingredients': body.ingredients
+            'title': recipe.title
         }
     )
 
@@ -37,12 +37,11 @@ async def read_recipe(
     response_model=RecipesResponse,
 )
 async def read_recipes(session: AsyncSession = Depends(get_session),) -> ORJSONResponse:
-    recipes = await get_recipe(session, Recipe)
+    recipes = await get_all(session, Recipe)
 
     return ORJSONResponse(
         [{
             'id': recipe.id,
-            'title': recipe.title,
-            'ingredients': recipe.ingredients
+            'title': recipe.title
         } for recipe in recipes] 
     )

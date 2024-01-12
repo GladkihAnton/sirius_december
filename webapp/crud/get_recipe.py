@@ -9,8 +9,8 @@ async def get_recipe(session: AsyncSession, recipe_data: RecipeData) -> Recipe |
     return (
         await session.scalars(
             select(Recipe).where(
-                Recipe.title == recipe_data.title,
-                Recipe.ingredients == recipe_data.ingredients
+                Recipe.title == recipe_data.title
             )
         )
     ).one_or_none()
+

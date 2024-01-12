@@ -1,7 +1,6 @@
 [
   {
-    "id": 1,
-    "username": "test",
-    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+    "username": "test user",
+    "password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW"
   }
 ]

@@ -1,5 +1,5 @@
 import json
-import uuid
+import datetime
 from pathlib import Path
 from typing import AsyncGenerator, List
 
@@ -10,17 +10,17 @@ from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from tests.const import URLS
-from tests.mocking.kafka import TestKafkaProducer
+from tests.mocking.redis import TestRedisClient
 from tests.my_types import FixtureFunctionT
-from webapp.db import kafka
 
 from webapp.db.postgres import engine, get_session
+from webapp.db.redis import get_redis
 from webapp.models.meta import metadata
 
 
 @pytest.fixture()
 async def client(app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
-    async with AsyncClient(app=app, base_url='http://test.com') as client:
+    async with AsyncClient(app=app, base_url="http://test.com") as client:
         yield client
 
 
@@ -28,7 +28,7 @@ async def client(app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
 async def db_session(app: FastAPI) -> AsyncGenerator[AsyncSession, None]:
     async with engine.begin() as connection:
         session_maker = async_sessionmaker(bind=connection)
-        session = session_maker()
+        session = session_maker(expire_on_commit=False)
 
         async def mocked_session() -> AsyncGenerator[AsyncSession, None]:
             yield session
@@ -45,8 +45,11 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> Fixt
     for fixture in fixtures:
         model = metadata.tables[fixture.stem]
 
-        with open(fixture, 'r') as file:
+        with open(fixture, "r") as file:
             values = json.load(file)
+        for value in values:
+            if "date_time" in value:
+                value["date_time"] = datetime.datetime.strptime(value["date_time"], "%Y-%m-%d %H:%M:%S %z")
 
         await db_session.execute(insert(model).values(values))
         await db_session.commit()
@@ -55,25 +58,30 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> Fixt
 
 
 @pytest.fixture()
-def _mock_kafka(monkeypatch: pytest.MonkeyPatch, kafka_received_messages: List, mocked_hex: str) -> FixtureFunctionT:
-    monkeypatch.setattr(kafka, 'get_producer', lambda: TestKafkaProducer(kafka_received_messages))
-    monkeypatch.setattr(kafka, 'get_partition', lambda: 1)
-    monkeypatch.setattr(uuid.UUID, 'hex', mocked_hex)
-
-
-@pytest.fixture()
-def kafka_received_messages() -> List:
-    return []
-
-
-@pytest.fixture()
 async def access_token(
     client: AsyncClient,
     username: str,
     password: str,
 ) -> str:
-    response = await client.post(URLS['auth']['login'], json={'username': username, 'password': password})
-    return response.json()['access_token']
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+
+    response = await client.post(
+        URLS["api"]["v1"]["auth"]["token"],
+        data={"username": username, "password": password},
+        headers=headers,
+    )
+    return response.json().get("access_token")
+
+
+@pytest.fixture()
+def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
+    redis = get_redis()
+    monkeypatch.setattr(redis, "set", TestRedisClient.set)
+    monkeypatch.setattr(redis, "get", TestRedisClient.get)
+    monkeypatch.setattr(redis, "delete", TestRedisClient.delete)
 
 
 @pytest.fixture()
@@ -82,9 +90,7 @@ async def _common_api_fixture(
 ) -> None:
     return
 
+
 @pytest.fixture()
-async def _common_api_with_kafka_fixture(
-    _common_api_fixture: FixtureFunctionT,
-    _mock_kafka: FixtureFunctionT,
-) -> None:
+async def _common_api_fixture_with_redis(_load_fixtures: FixtureFunctionT, _mock_redis: FixtureFunctionT) -> None:
     return

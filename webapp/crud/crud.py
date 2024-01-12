@@ -7,15 +7,21 @@ from sqlalchemy.orm import DeclarativeMeta
 ModelT = TypeVar('ModelT', bound=DeclarativeMeta)
 
 
-async def get_all(session: AsyncSession, table: Type[ModelT]) -> List[ModelT] | None:
-    return (await session.scalars(sqlalchemy.select(table))).all()
+async def get(session: AsyncSession, data: Any, model: Type[ModelT]) -> List[ModelT] | None:
+     return (
+        await session.scalars(
+            sqlalchemy.select(model).where(
+                model.id == data.id
+            )
+        )
+    ).one_or_none()
+
+
+async def get_all(session: AsyncSession, model: Type[ModelT]) -> List[ModelT] | None:
+    return (await session.scalars(sqlalchemy.select(model))).all()
 
 
 async def create(session: AsyncSession, data: Any, model: ModelT) -> ModelT:
-    # data_dict = data.dict()
-    # instance = await session.execute(insert(model).values(**data_dict))
-    # await session.commit()
-    # return instance.id
     async with session.begin_nested():
         async with session.begin_nested():
             data_dict = data.dict()

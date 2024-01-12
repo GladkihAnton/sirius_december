@@ -6,7 +6,7 @@ from starlette import status
 from webapp.api.crud.recipe.router import recipe_router
 from webapp.crud.crud import delete
 from webapp.db.postgres import get_session
-from webapp.schema.recipe import RecipeData, RECIPE_TABLE
+from webapp.schema.recipe import RecipeData
 from webapp.models.sirius.recipe import Recipe
 from webapp.models.sirius.recipe import Recipe
 

@@ -15,3 +15,7 @@ async def get_user(session: AsyncSession, user_info: UserLogin) -> User | None:
             )
         )
     ).one_or_none()
+
+
+async def get_user_by_id(session: AsyncSession, user_id: int) -> User | None:
+    return await session.get(User, user_id)

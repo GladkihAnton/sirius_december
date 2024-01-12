@@ -16,5 +16,7 @@ class Settings(BaseSettings):
     REDIS_PORT: int
     REDIS_PASSWORD: str
 
+    API_PREFIX: str = "/api"
+
 
 settings = Settings()
