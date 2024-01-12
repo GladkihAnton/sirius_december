@@ -1,6 +1,5 @@
 from typing import Any, Sequence, Type, TypeVar
 
-from Levenshtein import distance
 from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -71,6 +70,7 @@ async def get_entities_by_name(
     search_info: Any,
 ) -> Sequence[Product | Restaurant]:
     query: Select[tuple[Product | Restaurant]] = select(entity_type)
+
     if search_info and search_info.name:
         exact_match_query = query.where(entity_type.name == search_info.name)
         exact_match_result = (await session.execute(exact_match_query)).scalars().all()
@@ -78,16 +78,10 @@ async def get_entities_by_name(
         if exact_match_result:
             return exact_match_result
 
-        all_entities = (await session.execute(query)).scalars().all()
-
-        similar_entities = []
-        for entity in all_entities:
-            if entity.name and search_info.name:
-                distance_value = distance(entity.name, search_info.name)
-                if distance_value <= settings.SIMILARITY_THRESHOLD:
-                    similar_entities.append(entity)
+        similar_entities = (await session.execute(
+            select(entity_type).where(entity_type.name.ilike(f"{search_info.name}%"))
+        )).scalars().all()
 
         return similar_entities
 
-    result = (await session.execute(query)).scalars().all()
-    return result
+    return (await session.execute(query)).scalars().all()

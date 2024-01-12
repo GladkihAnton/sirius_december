@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Float, ForeignKey, Integer, String
+from sqlalchemy import Float, ForeignKey, Integer, String, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
@@ -28,3 +28,6 @@ class Product(Base):
         secondary=f'{DEFAULT_SCHEMA}.order_product',
         back_populates='products',
     )
+
+
+product_index = Index('product_index', Product.name, postgresql_using='btree')
