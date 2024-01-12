@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -6,6 +7,11 @@ from pydantic import BaseModel, ConfigDict
 class CategoryCreate(BaseModel):
     name: str
     description: str
+
+
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
 
 
 class CategoryResponse(BaseModel):

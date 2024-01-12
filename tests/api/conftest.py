@@ -25,7 +25,7 @@ async def client(app: FastAPI) -> AsyncGenerator[AsyncClient, None]:
 @pytest.fixture()
 async def db_session(app: FastAPI) -> AsyncGenerator[AsyncSession, None]:
     async with engine.begin() as connection:
-        session_maker = async_sessionmaker(bind=connection)
+        session_maker = async_sessionmaker(bind=connection, expire_on_commit=False)
         session = session_maker()
 
         async def mocked_session() -> AsyncGenerator[AsyncSession, None]:

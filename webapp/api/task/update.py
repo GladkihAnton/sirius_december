@@ -12,12 +12,12 @@ from webapp.schema.task.task import TaskResponse, TaskUpdate
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@task_router.put("/update/{task_id}/", response_model=TaskResponse)
+@task_router.put("/update/{task_id}", response_model=TaskResponse)
 async def update_task_handle(
     task_id: int,
     body: TaskUpdate,
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token)
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     task_to_update = await get_task(session, task_id)
 

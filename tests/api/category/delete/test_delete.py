@@ -18,7 +18,7 @@ FIXTURES_PATH = BASE_DIR / "fixtures"
     [
         (
             "0",
-            "test_d",
+            "test",
             "test",
             status.HTTP_204_NO_CONTENT,
             [
@@ -43,14 +43,17 @@ async def test_delete_category(
         category.id for category in (await db_session.scalars(select(Category))).all()
     ]
     assert int(category_id) in category_ids
-
-    response = await client.post(
+    response = await client.delete(
         "".join([URLS["crud"]["category"]["delete"], category_id]),
         headers={"Authorization": f"Bearer {access_token}"},
     )
+    a = "".join([URLS["crud"]["category"]["delete"], category_id])
+    print(a)
+    print(response.__dict__)
 
     category_ids = [
         category.id for category in (await db_session.scalars(select(Category))).all()
     ]
+
     assert category_id not in category_ids
     assert response.status_code == expected_status

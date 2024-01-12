@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from webapp.models.tms.category import Category
-from webapp.schema.category.category import CategoryCreate
+from webapp.schema.category.category import CategoryCreate, CategoryUpdate
 
 
 async def get_category(session: AsyncSession, category_id: int) -> Category | None:
@@ -31,3 +31,15 @@ async def create_category(
 async def delete_category(session: AsyncSession, category: Category) -> None:
     await session.delete(category)
     await session.commit()
+
+
+async def update_category(
+    session: AsyncSession, category: Category, category_info: CategoryUpdate
+) -> Category:
+    for key, value in category_info.model_dump().items():
+        if value is not None:
+            setattr(category, key, value)
+
+    await session.commit()
+
+    return category

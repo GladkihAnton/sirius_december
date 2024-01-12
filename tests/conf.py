@@ -17,6 +17,7 @@ URLS: Dict[str, Any] = {
             "create": "category/create",
             "read": "category/info/",
             "delete": "category/delete/",
+            "update": "category/update/",
         },
     },
 }

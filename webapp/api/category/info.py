@@ -12,11 +12,11 @@ from webapp.schema.category.category import CategoryResponse
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@category_router.get("/info/{category_id}/", response_model=CategoryResponse)
+@category_router.get("/info/{category_id}", response_model=CategoryResponse)
 async def info(
     category_id: int,
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
-    session: AsyncSession = Depends(get_session)
+    session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     cached_category = await redis_get(Category.__tablename__, category_id)
 

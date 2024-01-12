@@ -11,11 +11,11 @@ from webapp.models.tms.task import Task
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@task_router.delete("/delete/{task_id}/")
+@task_router.delete("/delete/{task_id}")
 async def delete_task_handle(
     task_id: int,
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token)
+    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> Response:
     task_to_delete = await get_task(session, task_id)
 

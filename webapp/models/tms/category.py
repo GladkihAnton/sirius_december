@@ -22,7 +22,9 @@ class Category(Base):
 
     description: Mapped[str] = mapped_column(String, nullable=False)
 
-    tasks: Mapped[List["Task"]] = relationship("Task", back_populates="category")
+    tasks: Mapped[List["Task"]] = relationship(
+        "Task", back_populates="category", lazy="selectin"
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, default=datetime.utcnow
