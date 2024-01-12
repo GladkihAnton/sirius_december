@@ -4,11 +4,14 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
+from webapp.crud.const import SKIP_LIMIT
 from webapp.crud.models_crud import ModelsCRUD
+from webapp.metrics.metrics import INTEGRATIONS_LATENCY
 from webapp.models.sirius.group import Group
 from webapp.models.sirius.student import Student
 
 
+@INTEGRATIONS_LATENCY.time()
 async def get_group_by_id(session: AsyncSession, group_id: int) -> Group | None:
     return (
         (
@@ -26,9 +29,17 @@ async def get_group_by_id(session: AsyncSession, group_id: int) -> Group | None:
     )
 
 
-async def get_all(session: AsyncSession) -> Sequence[Group]:
+@INTEGRATIONS_LATENCY.time()
+async def get_all(session: AsyncSession, offset: int) -> Sequence[Group]:
     return (
-        (await session.execute(select(Group).options(joinedload(Group.students).joinedload(Student.user))))
+        (
+            await session.execute(
+                select(Group)
+                .options(joinedload(Group.students).joinedload(Student.user))
+                .limit(SKIP_LIMIT)
+                .offset(offset)
+            )
+        )
         .unique()
         .scalars()
         .all()
