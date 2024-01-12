@@ -12,15 +12,20 @@ from webapp.api.login.router import auth_router
 from webapp.api.student.router import student_router
 from webapp.api.subject.router import subject_router
 from webapp.api.teacher.router import teacher_router
+from webapp.metrics.metrics import MetricsMiddleware, metrics
+from webapp.on_startup.redis import start_redis
 
 
 def setup_middleware(app: FastAPI) -> None:
     app.add_middleware(
         CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*']
     )
+    app.add_middleware(MetricsMiddleware)
 
 
 def setup_routers(app: FastAPI) -> None:
+    app.add_route('/metrics', metrics)
+
     routers = [
         auth_router,
         group_router,
@@ -38,7 +43,7 @@ def setup_routers(app: FastAPI) -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    # await setup_redis()
+    await start_redis()
     print('START APP')
     yield
     print('STOP APP')
