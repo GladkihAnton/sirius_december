@@ -11,6 +11,22 @@ class ItemData(BaseModel):
     exchanges: List[int] = []  # Идентификаторы обменов
 
 
+class ItemTitle(BaseModel):
+    title: str
+
+
+class ItemExchanges(BaseModel):
+    exchanges: List[int]
+
+
+class ItemExchange(BaseModel):
+    exchange: int
+
+
+class ItemId(BaseModel):
+    id: int
+
+
 class ItemResponse(BaseModel):
     id: int
     title: str

@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from webapp.api.crud.exchange.router import exchange_router
 from webapp.api.crud.item.router import item_router
 from webapp.api.auth.router import auth_router
-from webapp.metrics import metrics
+from webapp.metrics import metrics, MetricsMiddleware
 from webapp.on_shutdown import stop_producer
 from webapp.on_startup.kafka import create_producer
 from webapp.on_startup.redis import start_redis
