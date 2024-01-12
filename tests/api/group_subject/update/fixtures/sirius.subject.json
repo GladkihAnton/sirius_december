@@ -1,0 +1,14 @@
+[
+    {
+      "id": 0,
+      "title": "subject",
+      "institution_id": 0,
+      "teacher_id": 0
+    },
+    {
+      "id": 1000000,
+      "title": "subject2",
+      "institution_id": 0,
+      "teacher_id": 0
+    }
+]

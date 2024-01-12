@@ -1,0 +1,12 @@
+[
+    {
+      "id": 0,
+      "first_name": "name",
+      "last_name": "last name",
+      "surname": "surname",
+      "birthdate": "2000-12-12",
+      "user_id": 1000000,
+      "institution_id": 0,
+      "group_id": 0
+    }
+]
