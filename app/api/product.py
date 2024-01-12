@@ -36,7 +36,7 @@ async def create_product(product_info: ProductInfo, db: AsyncSession = Depends(s
         if created_product is None:
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create product")
         await redis_drop_key("products", "all_products")
-        return ORJSONResponse(ProductInfo.model_validate(created_product).model_dump())
+        return ORJSONResponse(ProductInfo.model_validate(created_product).model_dump(), status_code=status.HTTP_201_CREATED)
     except Exception as e:
         logger.error(f"Произошла ошибка во время создания продукта: {e}")
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Internal Server Error")

@@ -54,7 +54,8 @@ async def add_to_cart(
         return ORJSONResponse(
             UserResponse.model_validate(
                 serialized
-            ).model_dump()
+            ).model_dump(),
+            status_code=status.HTTP_201_CREATED
         )
     except UserNotFoundException:
         raise HTTPException(
@@ -101,7 +102,8 @@ async def place_order(user_info: UserEntity, db: AsyncSession = Depends(session.
         return ORJSONResponse(
             UserResponse.model_validate(
                 serialized
-            ).model_dump()
+            ).model_dump(),
+            status_code=status.HTTP_201_CREATED
         )
     except UserNotFoundException:
         raise HTTPException(
@@ -113,13 +115,19 @@ async def place_order(user_info: UserEntity, db: AsyncSession = Depends(session.
 
 
 @router.put("/update_cart_product/{product_id}", response_model=OrderInfo, status_code=status.HTTP_200_OK)
-async def update_cart_product(product_id: uuid.UUID, quantity: int, db: AsyncSession = Depends(session.get_db)) -> OrderInfo:
+async def update_cart_product(
+        product_id: uuid.UUID,
+        quantity: int,
+        user_id: uuid.UUID,
+        db: AsyncSession = Depends(session.get_db)
+) -> OrderInfo:
     """
     Обновление количества продукта в корзине.
 
     Args:
         product_id (uuid.UUID): Идентификатор продукта в корзине, который нужно обновить.
         quantity (int): Новое количество продукта.
+        product_id (uuid.UUID): Идентификатор пользователя.
         db (AsyncSession): Сессия базы данных.
 
     Returns:
@@ -129,7 +137,7 @@ async def update_cart_product(product_id: uuid.UUID, quantity: int, db: AsyncSes
         HTTPException: Если произошла ошибка при обновлении продукта в корзине.
     """
     try:
-        updated_order = await crud.update_cart_product(db, product_id, quantity)
+        updated_order = await crud.update_cart_product(db, product_id, quantity, user_id)
 
         if updated_order is None:
             raise HTTPException(
@@ -151,6 +159,7 @@ async def update_cart_product(product_id: uuid.UUID, quantity: int, db: AsyncSes
 @router.delete("/remove_from_cart/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def remove_from_cart(
     product_id: uuid.UUID,
+    user_id : uuid.UUID,
     db: AsyncSession = Depends(session.get_db),
 ) -> None:
     """
@@ -158,13 +167,14 @@ async def remove_from_cart(
 
     Args:
         product_id (uuid.UUID): Идентификатор продукта в корзине, который нужно удалить.
+        user_id (uuid.UUID): Идентификатор пользователя.
         db (AsyncSession): Сессия базы данных.
 
     Raises:
         HTTPException: Если произошла ошибка при удалении продукта из корзины.
     """
     try:
-        result = await crud.remove_from_cart(db, str(product_id))
+        result = await crud.remove_from_cart(db, str(product_id), str(user_id))
 
         if not result:
             raise HTTPException(

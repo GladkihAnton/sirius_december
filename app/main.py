@@ -39,16 +39,18 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     logger.info("END APP")
 
 
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title=Config.SERVICE_NAME,
+        debug=Config.DEBUG, 
+        description=Config.DESCRIPTION, 
+        version=VERSION,
+        lifespan=lifespan
+    )
+    setup_middleware(app)
+    PATH_PREFIX = "/sirius" + Config.API_V1_STR
+    app.add_route("/metrics", metrics)
+    app.include_router(api.router, prefix=PATH_PREFIX)
+    return app
 
-
-app = FastAPI(
-    title=Config.SERVICE_NAME,
-    debug=Config.DEBUG, 
-    description=Config.DESCRIPTION, 
-    version=VERSION,
-    lifespan=lifespan
-)
-setup_middleware(app)
-PATH_PREFIX = "/sirius" + Config.API_V1_STR
-app.add_route("/metrics", metrics)
-app.include_router(api.router, prefix=PATH_PREFIX)
+app = create_app()

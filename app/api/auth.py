@@ -1,10 +1,11 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from app.api.log_route import LogRoute
 from app.db import session
@@ -45,6 +46,8 @@ async def login(
         Token: Модель токена доступа.
     """
     user = await get_user(session, form_data)
+    if not user:
+        raise  HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     access_token_expires = timedelta(minutes=10)
     access_token = create_access_token(
         data={"sub": user.username},

@@ -10,7 +10,7 @@ from app.schemas.schema import UserEntity, UserInfo, UserResponse
 router = APIRouter(route_class=LogRoute)
 
 
-@router.post(path="/сreate", response_model=UserInfo, status_code=status.HTTP_201_CREATED)
+@router.post(path="/create", response_model=UserInfo, status_code=status.HTTP_201_CREATED)
 async def create_user(user_info: UserInfo, db: AsyncSession = Depends(session.get_db)) -> UserInfo:
     """
     Создание нового пользователя.

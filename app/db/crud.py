@@ -34,6 +34,15 @@ async def create_user(session: AsyncSession, user_info: UserInfo) -> Optional[Us
         await session.rollback()
         return None
 
+async def get_user_by_username(session: AsyncSession, username: str) -> User | None:
+    return (
+            await session.scalars(
+                select(User).where(
+                    User.username == username,
+                )
+            )
+    ).one_or_none()
+
 
 async def get_user(session: AsyncSession, user_info: UserEntity) -> Optional[User]:
     """
@@ -266,7 +275,12 @@ async def get_all_products(session: AsyncSession) -> List[Product]:
         return []
 
 
-async def update_cart_product(session: AsyncSession, product_id: uuid.UUID, quantity: int) -> Optional[OrderInfo]:
+async def update_cart_product(
+        session: AsyncSession,
+        product_id: uuid.UUID,
+        quantity: int,
+        user_id: uuid.UUID
+) -> Optional[OrderInfo]:
     """
     Обновляет количество продукта в корзине.
 
@@ -274,6 +288,7 @@ async def update_cart_product(session: AsyncSession, product_id: uuid.UUID, quan
         session (AsyncSession): Сессия базы данных.
         product_id (uuid.UUID): Идентификатор продукта в корзине.
         quantity (int): Новое количество продукта.
+        user_id (uuid.UUID): Идентификатор юзера.
 
     Returns:
         Optional[OrderInfo]: Обновленная информация о корзине пользователя или None в случае ошибки.
@@ -284,7 +299,11 @@ async def update_cart_product(session: AsyncSession, product_id: uuid.UUID, quan
     try:
         order_product = (
             await session.scalars(
-                select(OrderProduct).join(Order).where(Order.status == 'cart', OrderProduct.product_id == product_id)
+                select(OrderProduct).join(Order).where(
+                    Order.status == 'cart',
+                    OrderProduct.product_id == product_id,
+                    Order.user_id == user_id
+                )
             )
         ).one_or_none()
 
@@ -292,7 +311,7 @@ async def update_cart_product(session: AsyncSession, product_id: uuid.UUID, quan
             order_product.quantity = quantity
             await session.commit()
 
-            updated_order = await get_cart(session, order_product.order_id)
+            updated_order = await get_cart(session, order_product.order_id, user_id)
             return updated_order
         else:
             logger.error(f"Продукт с id {product_id} не найден в корзине.")
@@ -303,13 +322,14 @@ async def update_cart_product(session: AsyncSession, product_id: uuid.UUID, quan
         return None
 
 
-async def remove_from_cart(session: AsyncSession, product_id: uuid.UUID) -> bool:
+async def remove_from_cart(session: AsyncSession, product_id: uuid.UUID, user_id: uuid.UUID) -> bool:
     """
     Удаляет продукт из корзины.
 
     Args:
         session (AsyncSession): Сессия базы данных.
         product_id (uuid.UUID): Идентификатор продукта в корзине.
+        user_id (uuid.UUID): Идентификатор пользователя.
 
     Returns:
         bool: True, если продукт успешно удален из корзины, False в случае ошибки.
@@ -320,12 +340,18 @@ async def remove_from_cart(session: AsyncSession, product_id: uuid.UUID) -> bool
     try:
         order_product = (
             await session.scalars(
-                select(OrderProduct).join(Order).where(Order.status == 'cart', OrderProduct.product_id == product_id)
+                select(OrderProduct).join(Order).where(
+                    Order.status == 'cart',
+                    OrderProduct.product_id == product_id,
+                    Order.user_id == user_id
+                )
             )
         ).one_or_none()
 
         if order_product:
-            await session.execute(delete(OrderProduct).where(OrderProduct.id == order_product.id))
+            await session.execute(delete(OrderProduct).where(
+                OrderProduct.product_id == order_product.product_id
+            ))
             await session.commit()
 
             return True
