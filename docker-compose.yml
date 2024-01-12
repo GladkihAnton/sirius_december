@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres_db
+    image: postgres:15.1
+    environment:
+      - POSTGRES_DB=${PG_DB}
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+    restart: on-failure
+    ports:
+      - ${PG_PORT}:5432
+    volumes:
+      - ./scripts/pg:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${PG_USER}", "-d", "${PG_DB}"]
+      interval: 5s
+      retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  web:
+    container_name: webapp
+    build:
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    environment:
+      BIND_PORT: ${BIND_PORT}
+      BIND_HOST: ${BIND_HOST}
+    ports:
+      - "${BIND_PORT}:${BIND_PORT}"
+    restart: on-failure
+    volumes:
+      - .:/code
+    depends_on:
+      postgres:
+        condition: service_healthy
+  
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus_config.yml"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - web
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prom_data:/prometheus
+
+volumes:
+  prom_data:
