@@ -1,0 +1,89 @@
+version: "3.8"
+
+x-common-backend: &common-backend
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: sirius-backend
+
+x-common-db: &common-db
+  image: library/postgres:13.2
+  restart: unless-stopped
+  env_file:
+    - .env
+  healthcheck:
+    test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+  environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_HOST: ${PG_HOST}
+      POSTGRES_PORT: 5432
+
+services:
+  online_shop:
+    <<: *common-backend
+    container_name: sirius-backend
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    ports:
+      - 8011:8000
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    volumes:
+      - ./:/app/
+
+  migrations:
+    <<: *common-backend
+    container_name: sirius-migrations
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["alembic", "upgrade", "head"]
+    volumes:
+      - ./:/app
+
+  db:
+    <<: *common-db
+    container_name: sirius-postgres
+    ports:
+      - 5432:5432
+
+  redis:
+    container_name: redis
+    image: redis:6.2.4
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus_config.yml"
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    depends_on:
+      - online_shop
+    volumes:
+      - ./prometheus:/etc/prometheus
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - online_shop
+
