@@ -3,13 +3,14 @@ import time
 from datetime import datetime
 from functools import wraps
 
+from fastapi import status
 from fastapi.responses import ORJSONResponse
 
 from webapp.db import kafka
 from webapp.metrics import DEPS_LATENCY
 
 
-def kafka_producer_decorator(topic):
+def kafka_producer_decorator(topic, status_code=status.HTTP_200_OK):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
@@ -37,7 +38,8 @@ def kafka_producer_decorator(topic):
 
             DEPS_LATENCY.labels(endpoint=topic).observe(time.time() - start)
 
-            return ORJSONResponse(result_data)
+            return ORJSONResponse(result_data, status_code=status_code)
 
         return wrapper
+
     return decorator

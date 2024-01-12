@@ -59,7 +59,7 @@ async def read_comments(
         CommentRead.model_validate(comment.__dict__) for comment in comments
     ]
     response_data = {
-        'comments': [comment.dict() for comment in pydantic_comments],
+        'comments': [comment.model_dump() for comment in pydantic_comments],
         'total_comments': total_comments,
     }
     serialized_comments = orjson.dumps(response_data)
@@ -76,11 +76,9 @@ async def read_comments(
 @comment_router.post(
     '/{post_id}/create_comments',
     response_model=CommentRead,
-    status_code=status.HTTP_201_CREATED,
-    response_class=ORJSONResponse,
     tags=['Comments'],
 )
-@kafka_producer_decorator('create_comments')
+@kafka_producer_decorator('create_comments', status.HTTP_201_CREATED)
 async def create(
     post_id: int,
     comment: CommentCreate,
@@ -91,6 +89,7 @@ async def create(
         session, comment.content, current_user.id, post_id
     )
     await invalidate_cache(post_id)
+
     return CommentRead.model_validate(created_comment)
 
 
@@ -131,7 +130,7 @@ async def update(
     response_class=ORJSONResponse,
     tags=['Comments'],
 )
-@kafka_producer_decorator('delete_comments')
+@kafka_producer_decorator('delete_comments', status.HTTP_204_NO_CONTENT)
 async def delete(
     comment_id: int,
     session: AsyncSession = Depends(get_session),

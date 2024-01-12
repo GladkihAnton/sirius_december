@@ -19,7 +19,6 @@ from webapp.utils.auth.password import hash_password
 @auth_router.post(
     '/signup',
     response_model=UserLoginResponse,
-    status_code=status.HTTP_201_CREATED,
     tags=['Login'],
 )
 async def signup(

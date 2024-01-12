@@ -1,29 +1,31 @@
 from typing import Any, Dict, List
 
-
+# simulates sending messages to Kafka and appending the sent messages to a list for testing purposes
 class TestKafkaProducer:
     def __init__(self, kafka_received_messages: List[Dict[str, Any]]):
         self.kafka_received_messages: List[
             Dict[str, Any]
         ] = kafka_received_messages
-
+    
     async def send_and_wait(
         self,
         topic,
         value=None,
+        key=None,
+        partition=None,
+        timestamp_ms=None,
+        headers=None,
     ):
         self.kafka_received_messages.append(
             {
                 'topic': topic,
                 'value': value,
+                'partition': partition,
             }
         )
 
 
-# Возможно здесь кстати для сообщений работает то приложение, которое он использовал
-# надо спросить
-
-# Этот код определяет класс TestKafkaProducer для мокирования Kafka Producer.
+# класс TestKafkaProducer для мокирования Kafka Producer.
 
 # Класс имеет метод __init__, который инициализирует список kafka_received_messages
 # для хранения полученных сообщений Kafka.
@@ -61,4 +63,3 @@ class TestKafkaProducer:
 
 # 5. Мониторить логи Kafka и приложений, использующих Kafka, чтобы быстро выявлять
 # проблемы и ошибки в работе системы.
-        

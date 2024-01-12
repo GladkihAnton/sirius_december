@@ -14,7 +14,7 @@ URLS = {
         'read': '/comments/{post_id}',
         'update': '/comments/{comment_id}',
         'delete': '/comments/{comment_id}',
-    }
+    },
 }
 
 

@@ -12,6 +12,7 @@ from webapp.main import create_app
 from webapp.models import meta
 from webapp.on_startup.kafka import create_producer
 
+# "_kafka_producer_fixture" инициализирует Kafka producer перед запуском тестов и закрывает его после завершения
 
 @pytest.fixture(scope='session', autouse=True)
 def _run_after_tests():
@@ -57,7 +58,7 @@ async def _migrate_db() -> FixtureFunctionT:
 
 
 # В данном коде определяются несколько фикстур для тестирования FastAPI-приложения,
-# использующего базу данных Postgres.
+# использующего базу данных Postgres
 
 # Фикстура app создает экземпляр FastAPI-приложения, используя функцию create_app() из
 # модуля webapp.main. Перед созданием приложения выполняется фикстура _migrate_db,

@@ -30,8 +30,10 @@ async def main(fixtures: List[str]) -> None:
 # функция открывает JSON-файл, загружает данные и выполняет операцию
 # вставки в базу данных с помощью метода execute объекта сессии SQLAlchemy
 
+
 def process_args():
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument('fixtures', nargs='+', help='<Required> Set flag')
     args = parser.parse_args()

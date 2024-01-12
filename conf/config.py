@@ -12,9 +12,7 @@ class Settings(BaseSettings):  # наследуется от BaseSettings
     # секретная строка, используемаядля генерации JWT-токенов, которые
     # используются для аутентификации пользователей
 
-    KAFKA_BOOTSTRAP_SERVERS: List[
-        str
-    ]
+    KAFKA_BOOTSTRAP_SERVERS: List[str]
     # список адресов Kafka-брокеров, которые будут
     # использоваться для отправки и получения сообщений
 

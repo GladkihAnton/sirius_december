@@ -86,7 +86,7 @@ async def read_post_by_id(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail='Post not found'
         )
-    serialized_post = PostRead.model_validate(post).json()
+    serialized_post = PostRead.model_validate(post).model_dump_json()
 
     try:
         await redis_startup.redis.set(cache_key, serialized_post, ex=60)
@@ -137,7 +137,7 @@ async def read_posts_by_user(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
-@kafka_producer_decorator('create_post')
+@kafka_producer_decorator('create_post', status.HTTP_201_CREATED)
 async def create(
     post: PostCreate,
     session: AsyncSession = Depends(get_session),
@@ -183,7 +183,7 @@ async def update(
     response_class=ORJSONResponse,
     tags=['Posts'],
 )
-@kafka_producer_decorator('delete_post')
+@kafka_producer_decorator('delete_post', status.HTTP_204_NO_CONTENT)
 async def delete(
     post_id: int,
     session: AsyncSession = Depends(get_session),
