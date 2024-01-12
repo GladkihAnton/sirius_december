@@ -1,6 +1,5 @@
 [
     {
-      "id": 1,
       "first_name": "Алексей",
       "last_name": "Загородний",
       "surname": "Николаевич",
@@ -8,7 +7,6 @@
       "institution_id": 1
     },
     {
-        "id": 2,
         "first_name": "Наталья",
         "last_name": "Рыбина",
         "surname": "Викторовна",

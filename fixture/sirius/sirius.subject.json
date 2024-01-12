@@ -1,24 +1,20 @@
 [
     {
-      "id": 1,
       "title": "Программирование",
       "institution_id": 1,
       "teacher_id": 1
     },
     {
-        "id": 2,
         "title": "Высшая математика",
         "institution_id": 1,
         "teacher_id": 1
     },
     {
-        "id": 3,
         "title": "Экономика",
         "institution_id": 2,
         "teacher_id": 2
     },
     {
-        "id": 4,
         "title": "Менеджмент",
         "institution_id": 2,
         "teacher_id": 2

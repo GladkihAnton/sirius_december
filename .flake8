@@ -22,7 +22,8 @@ exclude =
 # B008: Do not perform function calls in argument defaults. Because FastAPI
 # PIE781: PIE781: assign-and-return. Because it's too noisy
 # G200: Logging exception. Because sometime its needed
-ignore = E203,E501,W503,W505,B008,G200,PIE781,Q002,EXE002
+# Q000: Double quotes found but single quotes preferred
+ignore = E203,E501,W503,W505,B008,G200,PIE781,Q002,EXE002,Q000
 select = C,E,F,G,I,P,S,W,Q,T,B,B950
 per-file-ignores = __init__.py:F401,F403
 

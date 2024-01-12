@@ -1,6 +1,5 @@
 [
     {
-      "id": 1,
       "first_name": "Михаил",
       "last_name": "Загородний",
       "surname": "Михайлович",
@@ -10,7 +9,6 @@
       "group_id": 1
     },
     {
-        "id": 2,
         "first_name": "Анастасия",
         "last_name": "Рыбина",
         "surname": "Константиновна",
@@ -20,7 +18,6 @@
         "group_id": 1
     },
     {
-      "id": 3,
       "first_name": "Григорий",
       "last_name": "Гришин",
       "surname": "Николаеви",

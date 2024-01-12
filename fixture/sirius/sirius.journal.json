@@ -1,0 +1,62 @@
+[
+    {
+      "grade": 5,
+      "class_date": "2023-12-01",
+      "student_id": 1,
+      "subject_id": 1
+    },
+    {
+        "grade": 4,
+        "class_date": "2023-12-03",
+        "student_id": 1,
+        "subject_id": 1
+    },
+    {
+        "grade": 3,
+        "class_date": "2023-12-05",
+        "student_id": 1,
+        "subject_id": 1
+    },
+    {
+        "grade": 5,
+        "class_date": "2023-12-07",
+        "student_id": 1,
+        "subject_id": 1
+    },
+    {
+        "grade": 3,
+        "class_date": "2023-12-09",
+        "student_id": 1,
+        "subject_id": 1
+    },
+    {
+        "grade": 3,
+        "class_date": "2023-12-01",
+        "student_id": 2,
+        "subject_id": 1
+    },
+    {
+        "grade": 4,
+        "class_date": "2023-12-03",
+        "student_id": 2,
+        "subject_id": 1
+    },
+    {
+        "grade": 5,
+        "class_date": "2023-12-05",
+        "student_id": 2,
+        "subject_id": 1
+    },
+    {
+        "grade": 4,
+        "class_date": "2023-12-07",
+        "student_id": 2,
+        "subject_id": 1
+    },
+    {
+        "grade": 5,
+        "class_date": "2023-12-09",
+        "student_id": 2,
+        "subject_id": 1
+    }
+]
