@@ -5,6 +5,7 @@ from httpx import AsyncClient
 from starlette import status
 
 from tests.conf import URLS
+
 from webapp.integrations.cache.cache import redis_get
 from webapp.models.sirius.review import Review
 
@@ -44,4 +45,3 @@ async def test_cache_review(
     assert response.status_code == expected_status
 
     assert await redis_get(Review.__name__, review_id)
-

@@ -41,9 +41,7 @@ async def test_create_tour(
     access_token: str,
     db_session: AsyncSession,
 ) -> None:
-    response = await client.post(
-        URLS['crud']['tour'], json=body, headers={'Authorization': f'Bearer {access_token}'}
-    )
+    response = await client.post(URLS['crud']['tour'], json=body, headers={'Authorization': f'Bearer {access_token}'})
 
     assert response.status_code == expected_status
     reviews = [

@@ -61,7 +61,8 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> None
 @pytest.fixture()
 def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
     from webapp.integrations.cache import redis
-    redis.redis = TestRedisClient()
+
+    redis.redis = TestRedisClient()  # type: ignore
 
 
 @pytest.fixture()

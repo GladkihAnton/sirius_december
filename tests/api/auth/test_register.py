@@ -13,12 +13,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 @pytest.mark.parametrize(
     ('username', 'password', 'expected_status', 'fixtures'),
     [
-        (
-            'test',
-            'qwerty',
-            status.HTTP_201_CREATED,
-            []
-        ),
+        ('test', 'qwerty', status.HTTP_201_CREATED, []),
         (
             'test',
             'qwerty',
