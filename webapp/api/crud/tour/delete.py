@@ -11,7 +11,7 @@ from webapp.models.sirius.tour import Tour
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@tour_router.post('/delete/{tour_id}')
+@tour_router.delete('/{tour_id}')
 async def delete_tour(
     tour_id: int,
     session: AsyncSession = Depends(get_session),

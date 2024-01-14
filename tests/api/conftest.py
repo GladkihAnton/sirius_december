@@ -12,7 +12,6 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from tests.conf import URLS
 from tests.mocking.redis import TestRedisClient
 
-from webapp.integrations.cache.redis import get_redis
 from webapp.integrations.postgres import engine, get_session
 from webapp.models.meta import metadata
 
@@ -61,10 +60,8 @@ async def _load_fixtures(db_session: AsyncSession, fixtures: List[Path]) -> None
 
 @pytest.fixture()
 def _mock_redis(monkeypatch: pytest.MonkeyPatch) -> None:
-    redis = get_redis()
-    monkeypatch.setattr(redis, 'set', TestRedisClient.set)
-    monkeypatch.setattr(redis, 'get', TestRedisClient.get)
-    monkeypatch.setattr(redis, 'delete', TestRedisClient.delete)
+    from webapp.integrations.cache import redis
+    redis.redis = TestRedisClient()
 
 
 @pytest.fixture()

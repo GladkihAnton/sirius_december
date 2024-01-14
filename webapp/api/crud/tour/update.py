@@ -12,7 +12,7 @@ from webapp.schema.info.tour import TourInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@tour_router.post('/update/{tour_id}')
+@tour_router.put('/{tour_id}')
 async def update_tour(
     body: TourInfo,
     tour_id: int,

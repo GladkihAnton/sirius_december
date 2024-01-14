@@ -62,7 +62,7 @@
 ## crud
 `/user/delete/{user_id}` - removes user by id
 
->   curl -X POST http://127.0.0.1:8000/api/v1/user/delete/{user_id} \
+>   curl -X DELETE http://127.0.0.1:8000/api/v1/user/{user_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
 `/user/{user_id}`(Redis usage) - returns user by id
@@ -70,14 +70,14 @@
 >   curl -X GET http://127.0.0.1:8000/api/v1/user/{user_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
-`/user/` - returns all users
+`/user/` - returns users using offset
 
->   curl -X GET http://127.0.0.1:8000/api/v1/user/ \
+>   curl -X GET http://127.0.0.1:8000/api/v1/user/page/{page_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
 `/user/update/{user_id}` - updates user creds
 
->   curl -X POST http://127.0.0.1:8000/user/update/{user_id} \
+>   curl -X Put http://127.0.0.1:8000/user/{user_id} \
     -H "Content-Type: application/json" \
     -d '{
         "username": "test45",
@@ -86,7 +86,7 @@
 
 > **NOTE**
 > 
-> The same situation with tour/review/reservation/activity models but creation locates on `/{model_name}/create`
+> The same situation with tour/review/reservation/activity models but creation locates on `/{model_name}/`
 
 # Pytest
 ## Fixtures
@@ -94,22 +94,22 @@
 
  - app - creates FastAPI application
  - event_loop - returns AbstractEventLoop
- - _migrate_db - global fixture for all db tables, after all tests will complete it will create empty tables or drop all of them
+ - **_migrate_db** - global fixture for all db tables, after all tests will complete it will create empty tables or drop all of them
 
 #### `scope='function'`
 
- - __client__ - returns AsyncClient
- - __db_session__ - creates database session and after tests rollbacks connection
- - ___load_fixtures__ - loads all accepted model fixtures to session
- - ___mock_redis__ - mocking redis
- - __access_token__ - returns access_token for tests with auth
- - ___common_api_fixture__ - uses load_fixtures
- - ___common_api_with_redis_fixture__ - uses load_fixtures and mock_redis
+ - **client** - returns AsyncClient
+ - **db_session** - creates database session and after tests rollbacks connection
+ - **_load_fixtures** - loads all accepted model fixtures to session
+ - **_mock_redis** - mocking redis
+ - **access_token** - returns access_token for tests with auth
+ - **_common_api_fixture** - uses load_fixtures
+ - **_common_api_with_redis_fixture** - uses load_fixtures and mock_redis
 
 ## Mock
 
 
-> __TestRedisClient__ - redis mocking class. Uses class methods to add and get data by key
+> **TestRedisClient** - redis mocking class. Uses class methods to add and get data by key
 
 
 # Docker compose
@@ -120,42 +120,42 @@
 > ![Schema](README_source/schema.png)
 
 ## Redis - redis
-> 1. __get_cache_title__ - creates redis key in this way:
->    - __{settings.REDIS_SIRIUS_CACHE_PREFIX}:{model}:{model_id}__
->    - __settings.REDIS_SIRIUS_CACHE_PREFIX__ - for example db schema name
->    - __model__ - db model name
->    - __model_id__ - db model id
+> 1. **get_cache_title** - creates redis key in this way:
+>    - **{settings.REDIS_SIRIUS_CACHE_PREFIX}:{model}:{model_id}**
+>    - **settings.REDIS_SIRIUS_CACHE_PREFIX** - for example db schema name
+>    - **model** - db model name
+>    - **model_id** - db model id
 > 
 > 
-> 2. __redis_set__ - sets data to redis
+> 2. **redis_set** - sets data to redis
 >
 > 
-> 3. __redis_get__ - gets data from redis
+> 3. **redis_get** - gets data from redis
 >
 > 
-> 4. __get_redis__ - returns redis object
+> 4. **get_redis** - returns redis object
 
 ## Prometheus - prometheus
 ### Metrics
-> __REQUEST_COUNT__ - 
+> **REQUEST_COUNT** - 
 > The http_requests_total metric tracks the total count of HTTP requests, categorized by method, endpoint, and http_status.
 > 
-> __query__: sum(http_requests_total) by (method, endpoint, http_status)
+> **query**: sum(http_requests_total) by (method, endpoint, http_status)
 
-> __ERROR_COUNT__ -
+> **ERROR_COUNT** -
 > The http_errors_total metric keeps track of the total count of HTTP errors, categorized by method, endpoint, and http_status.
 >
-> __query__: sum(http_errors_total) by (method, endpoint, http_status)
+> **query**: sum(http_errors_total) by (method, endpoint, http_status)
 
-> __INTEGRATIONS_LATENCY__ -
+> **INTEGRATIONS_LATENCY** -
 > The sirius_integrations_latency_seconds metric represents the latency of integrations, categorized by integration name.
 >
-> __query__: histogram_quantile(0.99, sum(rate(sirius_integrations_latency_seconds_bucket[1m])) by (le, integration))
+> **query**: histogram_quantile(0.99, sum(rate(sirius_integrations_latency_seconds_bucket[1m])) by (le, integration))
 
-> __ROUTES_LATENCY__ -
+> **ROUTES_LATENCY** -
 > The sirius_routes_latency_seconds metric tracks the latency of routes, categorized by method and endpoint.
 >
-> __query__: histogram_quantile(0.99, sum(rate(sirius_routes_latency_seconds_bucket[1m])) by (le, method, endpoint))
+> **query**: histogram_quantile(0.99, sum(rate(sirius_routes_latency_seconds_bucket[1m])) by (le, method, endpoint))
 
 ## Grafana - grafana
 > ### Metrics

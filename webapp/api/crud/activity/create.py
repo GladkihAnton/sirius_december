@@ -11,7 +11,7 @@ from webapp.schema.info.activity import ActivityInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@activity_router.post('/create')
+@activity_router.post('/')
 async def create_activity(
     body: ActivityInfo,
     session: AsyncSession = Depends(get_session),

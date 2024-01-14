@@ -12,7 +12,7 @@ from webapp.schema.info.activity import ActivityInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@activity_router.post('/update/{activity_id}')
+@activity_router.put('/{activity_id}')
 async def update_activity(
     body: ActivityInfo,
     activity_id: int,

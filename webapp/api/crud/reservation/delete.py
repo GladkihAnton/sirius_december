@@ -11,7 +11,7 @@ from webapp.models.sirius.reservation import Reservation
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@reservation_router.post('/delete/{reservation_id}')
+@reservation_router.delete('/{reservation_id}')
 async def delete_reservation(
     reservation_id: int,
     session: AsyncSession = Depends(get_session),

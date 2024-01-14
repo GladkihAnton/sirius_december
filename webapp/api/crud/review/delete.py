@@ -11,7 +11,7 @@ from webapp.models.sirius.review import Review
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@review_router.post('/delete/{review_id}')
+@review_router.delete('/{review_id}')
 async def delete_review(
     review_id: int,
     session: AsyncSession = Depends(get_session),

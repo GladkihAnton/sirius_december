@@ -31,7 +31,7 @@ async def get_cached_review(
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Review.__name__, review_id)):
-        return ORJSONResponse({'cached_review': cached})
+        return ORJSONResponse({'review': cached})
 
     review = await review_crud.get_model(session, review_id)
     if review is None:

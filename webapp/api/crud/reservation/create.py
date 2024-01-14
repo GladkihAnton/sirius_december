@@ -11,7 +11,7 @@ from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@reservation_router.post('/create')
+@reservation_router.post('/')
 async def create_reservation(
     body: ReservationInfo,
     session: AsyncSession = Depends(get_session),

@@ -11,7 +11,7 @@ from webapp.schema.info.tour import TourInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@tour_router.post('/create')
+@tour_router.post('/')
 async def create_tour(
     body: TourInfo,
     session: AsyncSession = Depends(get_session),

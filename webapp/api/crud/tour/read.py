@@ -29,7 +29,7 @@ async def get_cached_tour(
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Tour.__name__, tour_id)):
-        return ORJSONResponse({'cached_tour': cached})
+        return ORJSONResponse({'tour': cached})
 
     tour = await tour_crud.get_model(session, tour_id)
     if tour is None:

@@ -29,7 +29,7 @@ async def get_cached_user(
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(User.__name__, user_id)):
-        return ORJSONResponse({'cached_user': cached})
+        return ORJSONResponse({'user': cached})
 
     user = await user_crud.get_model(session, user_id)
     if user is None:

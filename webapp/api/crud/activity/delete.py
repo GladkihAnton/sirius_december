@@ -11,7 +11,7 @@ from webapp.models.sirius.activity import Activity
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@activity_router.post('/delete/{activity_id}')
+@activity_router.delete('/{activity_id}')
 async def delete_activity(
     activity_id: int,
     session: AsyncSession = Depends(get_session),

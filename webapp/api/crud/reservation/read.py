@@ -32,7 +32,7 @@ async def get_cached_reservation(
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Reservation.__name__, reservation_id)):
-        return ORJSONResponse({'cached_reservation': cached})
+        return ORJSONResponse({'reservation': cached})
 
     reservation = await reservation_crud.get_model(session, reservation_id)
     if reservation is None:

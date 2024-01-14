@@ -12,7 +12,7 @@ from webapp.schema.info.reservation import ReservationInfo
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
-@reservation_router.post('/update/{reservation_id}')
+@reservation_router.put('/{reservation_id}')
 async def update_reservation(
     body: ReservationInfo,
     reservation_id: int,

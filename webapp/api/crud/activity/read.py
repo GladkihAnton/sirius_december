@@ -31,7 +31,7 @@ async def get_cached_activity(
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Activity.__name__, activity_id)):
-        return ORJSONResponse({'cached_activity': cached})
+        return ORJSONResponse({'activity': cached})
 
     activity = await activity_crud.get_model(session, activity_id)
 
