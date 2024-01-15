@@ -70,8 +70,17 @@ async def access_token(
     client: AsyncClient,
     username: str,
     password: str,
-) -> str | None:
-    response = await client.post(URLS['auth']['login'], json={'username': username, 'password': password})
+) -> str:
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+    }
+
+    response = await client.post(
+        URLS['auth']['token'],
+        data={'username': username, 'password': password},
+        headers=headers,
+    )
     return response.json().get('access_token')
 
 

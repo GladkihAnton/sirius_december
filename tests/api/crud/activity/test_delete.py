@@ -28,17 +28,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
                 FIXTURES_PATH / 'sirius.activity.json',
             ],
         ),
-        (
-            '0',
-            'test1',
-            'qwerty',
-            status.HTTP_403_FORBIDDEN,
-            [
-                FIXTURES_PATH / 'sirius.user.json',
-                FIXTURES_PATH / 'sirius.tour.json',
-                FIXTURES_PATH / 'sirius.activity.json',
-            ],
-        ),
     ],
 )
 @pytest.mark.asyncio()

@@ -4,7 +4,7 @@ from webapp.api.crud.const import API_PREFIX
 
 URLS: Dict[str, Any] = {
     'auth': {
-        'login': '/auth/login',
+        'token': '/auth/token',
         'info': '/auth/info',
         'register': '/auth/register',
     },

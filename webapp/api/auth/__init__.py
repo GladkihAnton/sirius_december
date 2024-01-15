@@ -1,1 +1,1 @@
-from . import info, login, register
+from . import info, register

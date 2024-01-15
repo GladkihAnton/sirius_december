@@ -47,7 +47,7 @@
 
 `/login` - returns jwt token for auth
 
->   curl -X POST http://127.0.0.1:8000/auth/login \
+>   curl -X POST http://127.0.0.1:8000/auth/token \
     -H "Content-Type: application/json" \
     -d '{
         "username": "test1",

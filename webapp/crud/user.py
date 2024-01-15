@@ -9,6 +9,11 @@ from webapp.utils.auth.password import hash_password
 
 
 @async_integrations_timer
+async def get_user_by_username(session: AsyncSession, username: str) -> User | None:
+    return (await session.scalars(select(User).where(User.username == username))).one_or_none()
+
+
+@async_integrations_timer
 async def get_user(session: AsyncSession, user_info: UserInfo) -> User | None:
     return (
         await session.scalars(

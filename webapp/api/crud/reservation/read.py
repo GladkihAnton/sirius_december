@@ -1,5 +1,8 @@
+from typing import Annotated
+
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -9,14 +12,14 @@ from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.reservation import Reservation
 from webapp.schema.info.reservation import ReservationInfo
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.utils.auth.jwt import oauth2_scheme
 
 
 @reservation_router.get('/page/{page}')
 async def get_reservations(
     page: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     serialized_reservations = [
         ReservationInfo.model_validate(reservation).model_dump()
@@ -28,8 +31,8 @@ async def get_reservations(
 @reservation_router.get('/{reservation_id}')
 async def get_cached_reservation(
     reservation_id: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Reservation.__name__, reservation_id)):
         return ORJSONResponse({'reservation': cached})

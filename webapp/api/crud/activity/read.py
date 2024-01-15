@@ -1,5 +1,8 @@
+from typing import Annotated
+
 from fastapi import Depends, HTTPException
 from fastapi.responses import ORJSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -9,14 +12,14 @@ from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.activity import Activity
 from webapp.schema.info.activity import ActivityInfo
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.utils.auth.jwt import oauth2_scheme
 
 
 @activity_router.get('/page/{page}')
 async def get_activities(
     page: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     serialized_activity = [
         ActivityInfo.model_validate(activity).model_dump() for activity in await activity_crud.get_page(session, page)
@@ -27,8 +30,8 @@ async def get_activities(
 @activity_router.get('/{activity_id}')
 async def get_cached_activity(
     activity_id: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Activity.__name__, activity_id)):
         return ORJSONResponse({'activity': cached})
