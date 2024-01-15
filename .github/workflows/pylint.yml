@@ -13,5 +13,6 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
+        pip install -r flake_requirements.txt
     - name: Flake8
       run: flake8 .

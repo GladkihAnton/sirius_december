@@ -1,0 +1,3 @@
+flake8==3.9.0
+wemake-python-styleguide==0.15.3
+bandit==1.7.2
