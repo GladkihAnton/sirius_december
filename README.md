@@ -45,7 +45,7 @@
         "password": "test"
     }' 
 
-`/login` - returns jwt token for auth
+`auth/token` - returns jwt token for auth
 
 >   curl -X POST http://127.0.0.1:8000/auth/token \
     -H "Content-Type: application/json" \
@@ -54,13 +54,13 @@
         "password": "test"
     }' 
 
-`/info` - returns user creds from jwt token
+`auth/info` - returns user creds from jwt token
 
 >   curl -X POST http://127.0.0.1:8000/auth/info \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
 ## crud
-`/user/delete/{user_id}` - removes user by id
+`/user/{user_id}` - removes user by id
 
 >   curl -X DELETE http://127.0.0.1:8000/api/v1/user/{user_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
@@ -70,14 +70,14 @@
 >   curl -X GET http://127.0.0.1:8000/api/v1/user/{user_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
-`/user/` - returns users using offset
+`/user/page/{page_id}` - returns users using offset
 
 >   curl -X GET http://127.0.0.1:8000/api/v1/user/page/{page_id} \
     -H "Authorization: Bearer ACCESS_TOKEN"
 
-`/user/update/{user_id}` - updates user creds
+`/user/{user_id}` - updates user creds
 
->   curl -X Put http://127.0.0.1:8000/user/{user_id} \
+>   curl -X PUT http://127.0.0.1:8000/user/{user_id} \
     -H "Content-Type: application/json" \
     -d '{
         "username": "test45",

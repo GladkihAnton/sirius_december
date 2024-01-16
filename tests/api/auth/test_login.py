@@ -59,7 +59,7 @@ async def test_login(
     assert response.status_code == expected_status
 
     try:
-        jwt.decode(response.json()['access_token'], settings.JWT_SECRET_SALT)
+        jwt.decode(response.json()['access_token'], settings.SECRET_KEY)
         assert expected_access_token
     except (JWTError, KeyError):
         assert not expected_access_token

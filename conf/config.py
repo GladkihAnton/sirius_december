@@ -8,7 +8,6 @@ class Settings(BaseSettings):
     BIND_PORT: int
     DB_URL: str
 
-    JWT_SECRET_SALT: str
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
