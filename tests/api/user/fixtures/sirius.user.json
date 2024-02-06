@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "username": "admin1",
+    "email": "admin1@example.com",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4",
+    "role": "admin",
+    "additional_info": {
+        "full_name": "Дмитрий Петров"
+    }
+  },
+  {
+    "id": 2,
+    "username": "student1",
+    "email": "student1@example.com",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4",
+    "role": "student",
+    "additional_info": {
+        "full_name": "Дмитрий Петров"
+    }
+  }
+]

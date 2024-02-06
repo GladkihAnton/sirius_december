@@ -1,0 +1,34 @@
+[
+	{
+		"id": 1,
+		"username": "student1",
+		"email": "student1@example.com",
+		"hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4",
+		"role": "student",
+		"additional_info": {
+			"full_name": "Иван Иванов",
+			"enrollment_date": "2023-01-01"
+		}
+	},
+	{
+		"id": 2,
+		"username": "teacher1",
+		"email": "teacher1@example.com",
+		"hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4",
+		"role": "teacher",
+		"additional_info": {
+			"full_name": "Мария Семенова",
+			"specialization": "Веб-разработка"
+		}
+	},
+	{
+		"id": 3,
+		"username": "admin1",
+		"email": "admin1@example.com",
+		"hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4",
+		"role": "admin",
+		"additional_info": {
+			"full_name": "Дмитрий Петров"
+		}
+	}
+]
