@@ -1,0 +1,56 @@
+[
+	{
+		"id": 1,
+		"lesson_id": 1,
+		"type": "text",
+		"description": "Описание курса",
+		"minio_path": "path/to/introduction.pdf",
+		"content_type": "application/pdf",
+		"size": 1024
+	},
+	{
+		"id": 2,
+		"lesson_id": 1,
+		"type": "image",
+		"description": "Иллюстрация к теме введения",
+		"minio_path": "path/to/intro-image.png",
+		"content_type": "image/png",
+		"size": 512
+	},
+	{
+		"id": 3,
+		"lesson_id": 2,
+		"type": "video",
+		"description": "Видеоурок по основам",
+		"minio_path": "path/to/basics-video.mp4",
+		"content_type": "video/mp4",
+		"size": 2048
+	},
+	{
+		"id": 4,
+		"lesson_id": 2,
+		"type": "document",
+		"description": "Документ с примерами кода",
+		"minio_path": "path/to/code-examples.docx",
+		"content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		"size": 256
+	},
+	{
+		"id": 5,
+		"lesson_id": 3,
+		"type": "presentation",
+		"description": "Презентация продвинутых техник",
+		"minio_path": "path/to/advanced-techniques.pptx",
+		"content_type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+		"size": 3072
+	},
+	{
+		"id": 6,
+		"lesson_id": 3,
+		"type": "audio",
+		"description": "Аудиолекция о сложных алгоритмах",
+		"minio_path": "path/to/complex-algorithms.mp3",
+		"content_type": "audio/mpeg",
+		"size": 4096
+	}
+]
