@@ -1,0 +1,43 @@
+[
+  {
+    "username": "admin",
+    "role": "admin",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user1",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user2",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user3",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user4",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user5",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user6",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user7",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user8",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "username": "user9",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  }
+]
