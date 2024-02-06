@@ -1,0 +1,56 @@
+from pathlib import Path
+
+import pytest
+from httpx import AsyncClient
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
+
+from tests.const import URLS
+
+from webapp.models.sirius.product import Product
+
+BASE_DIR = Path(__file__).parent
+FIXTURES_PATH = BASE_DIR / 'fixtures'
+
+
+@pytest.mark.parametrize(
+    ('product_id', 'username', 'password', 'expected_status', 'fixtures'),
+    [
+        (
+            '0',
+            'test',
+            'qwerty',
+            status.HTTP_204_NO_CONTENT,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+                FIXTURES_PATH / 'sirius.restaurant.json',
+                FIXTURES_PATH / 'sirius.product.json',
+            ],
+        ),
+    ],
+)
+@pytest.mark.asyncio()
+@pytest.mark.usefixtures('_common_api_fixture')
+async def test_delete_product(
+    client: AsyncClient,
+    product_id: str,
+    username: str,
+    password: str,
+    expected_status: int,
+    access_token: str,
+    db_session: AsyncSession,
+) -> None:
+    product_ids = [restaurant.id for restaurant in (await db_session.scalars(select(Product))).all()]
+
+    assert int(product_id) in product_ids
+
+    response = await client.post(
+        ''.join([URLS['crud']['product']['delete'], product_id]),
+        headers={'Authorization': f'Bearer {access_token}'},
+    )
+
+    product_ids = [product.id for product in (await db_session.scalars(select(Product))).all()]
+
+    assert product_id not in product_ids
+    assert response.status_code == expected_status
