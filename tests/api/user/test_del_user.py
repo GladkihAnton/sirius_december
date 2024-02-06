@@ -13,14 +13,27 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     (
         'username',
         'password',
+        'user_id',
         'expected_status',
         'fixtures',
     ),
     [
         (
+            'student1',
+            'qwerty',
+            11,
+            status.HTTP_403_FORBIDDEN,
+            [
+                FIXTURES_PATH / 'sirius.user.json',
+                FIXTURES_PATH / 'sirius.course.json',
+                FIXTURES_PATH / 'sirius.subscription.json',
+            ],
+        ),
+        (
             'admin1',
             'qwerty',
-            status.HTTP_200_OK,
+            11,
+            status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',
                 FIXTURES_PATH / 'sirius.course.json',
@@ -31,22 +44,17 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture')
-async def test_create_user(
+async def test_delete_user(
     client: AsyncClient,
     username: str,
     password: str,
+    user_id: int,
     expected_status: int,
     access_token: str,
 ) -> None:
-    response = await client.get(
-        URLS['user']['get_my_subscriptions'],
+    response = await client.delete(
+        URLS['user']['get_del_user_by_id'].format(user_id=user_id),
         headers={'Authorization': f'Bearer Bearer {access_token}'},
     )
 
     assert response.status_code == expected_status
-    response_data = response.json()
-    assert len(response_data) == 2
-    assert response_data[0]['id'] == 1
-    assert response_data[0]['title'] == 'Основы программирования на Python'
-    assert response_data[1]['id'] == 2
-    assert response_data[1]['title'] == 'Разработка веб-приложений с использованием Django'

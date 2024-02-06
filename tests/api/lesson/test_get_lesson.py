@@ -13,40 +13,56 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     (
         'username',
         'password',
+        'course_id',
+        'lesson_id',
+        'content',
+        'order',
+        'title',
         'expected_status',
         'fixtures',
     ),
     [
         (
-            'admin1',
+            'student1',
             'qwerty',
+            1,
+            3,
+            'После изучения основ мы перейдем к более сложным аспектам программирования на Python.',
+            3,
+            'Продвинутые темы Python',
             status.HTTP_200_OK,
             [
                 FIXTURES_PATH / 'sirius.user.json',
                 FIXTURES_PATH / 'sirius.course.json',
-                FIXTURES_PATH / 'sirius.subscription.json',
+                FIXTURES_PATH / 'sirius.lesson.json',
             ],
         ),
     ],
 )
 @pytest.mark.asyncio()
 @pytest.mark.usefixtures('_common_api_fixture')
-async def test_create_user(
+async def test_get_lessons(
     client: AsyncClient,
     username: str,
     password: str,
+    course_id: int,
+    lesson_id: int,
+    content: str,
+    order: int,
+    title: str,
     expected_status: int,
     access_token: str,
 ) -> None:
     response = await client.get(
-        URLS['user']['get_my_subscriptions'],
+        URLS['lesson']['get_put_del_lesson_by_id'].format(
+            course_id=course_id, lesson_id=lesson_id),
         headers={'Authorization': f'Bearer Bearer {access_token}'},
     )
 
     assert response.status_code == expected_status
     response_data = response.json()
-    assert len(response_data) == 2
-    assert response_data[0]['id'] == 1
-    assert response_data[0]['title'] == 'Основы программирования на Python'
-    assert response_data[1]['id'] == 2
-    assert response_data[1]['title'] == 'Разработка веб-приложений с использованием Django'
+    assert response_data['id'] == lesson_id
+    assert response_data['course_id'] == course_id
+    assert response_data['content'] == content
+    assert response_data['order'] == order
+    assert response_data['title'] == title

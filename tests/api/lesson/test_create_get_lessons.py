@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 from httpx import AsyncClient
 from starlette import status
-
 from tests.const import URLS
 
 BASE_DIR = Path(__file__).parent

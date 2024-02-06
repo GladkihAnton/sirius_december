@@ -3,7 +3,6 @@ from pathlib import Path
 import pytest
 from httpx import AsyncClient
 from starlette import status
-
 from tests.const import URLS
 
 BASE_DIR = Path(__file__).parent
@@ -14,7 +13,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
     (
         'username',
         'password',
-        'user_id',
         'username_create',
         'password_create',
         'email',
@@ -27,7 +25,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'admin1',
             'qwerty',
-            4,
             'student',
             'qwerty',
             'student@example.com',
@@ -41,7 +38,6 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'student1',
             'qwerty',
-            4,
             'student',
             'qwerty',
             'student@example.com',
@@ -60,7 +56,6 @@ async def test_create_user(
     client: AsyncClient,
     username: str,
     password: str,
-    user_id: int,
     username_create: str,
     password_create: str,
     email: str,
@@ -77,7 +72,6 @@ async def test_create_user(
             'email': email,
             'password': password_create,
             'username': username_create,
-            'id': user_id,
         },
         headers={'Authorization': f'Bearer Bearer {access_token}'},
     )
@@ -85,7 +79,6 @@ async def test_create_user(
     assert response.status_code == expected_status
     if response.status_code == 201:
         response_data = response.json()
-        assert response_data['id'] == user_id
         assert response_data['additional_info']['full_name'] == full_name
         assert response_data['role'] == role
         assert response_data['email'] == email
