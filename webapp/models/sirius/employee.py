@@ -22,14 +22,16 @@ class Employee(Base, AsyncAttrs):
     )
 
     # Связь с User
+    # Однонаправленная связь employee → user.
     user: Mapped[List[User]] = relationship(
         'User',
         back_populates='employee',
-        cascade='all, delete-orphan',
-        single_parent=True,
+        cascade='all, delete-orphan',  # удален сотрудник-удален пользователь
+        single_parent=True,  # у сотрудника может быть только один пользователь
     )
 
     # Связь с Vacation
+    # у сотрудника может быть несколько отпусков.
     vacations: Mapped[List[Vacation]] = relationship(
         'Vacation', back_populates='employee', cascade='all, delete-orphan'
     )

@@ -1,3 +1,4 @@
+from tkinter.tix import MAIN
 from typing import List, Optional
 
 import orjson
@@ -8,7 +9,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from conf.config import settings
 from webapp.api.vacation.router import vacation_router
-from webapp.cache.key_builder import get_vacation_cache_key
+from webapp.cache.key_builder import (
+    MAIN_KEY,
+    get_vacation_cache_key,
+    get_vacation_list_cache_key,
+    get_vacation_pending_list_cache_key,
+)
 from webapp.crud.vacation import (
     create_vacation,
     delete_vacation,
@@ -43,11 +49,13 @@ async def get_vacations_endpoint(
     approved: Optional[bool] = None,
     skip: int = Query(0, alias='offset'),
     limit: int = Query(10, alias='limit'),
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_session),  # Получаем сеанс
     redis: Redis = Depends(get_redis),
 ) -> List[Vacation]:
     # Ключ кэша зависит от параметров запроса
-    cache_key = f'vacations_{approved}_{skip}_{limit}'
+    cache_key = get_vacation_list_cache_key(
+        approved=approved, skip=skip, limit=limit
+    )
 
     # Попытка получить данные из кэша
     cached_data = await redis.get(cache_key)
@@ -61,12 +69,12 @@ async def get_vacations_endpoint(
     )
 
     # Сериализация и сохранение данных в кэше
-    await redis.set(
+    await redis.hset(
+        MAIN_KEY,
         cache_key,
         orjson.dumps([vac.model_dump() for vac in vacations]),
-        ex=settings.CACHE_EXPIRATION_TIME,
     )
-
+    await redis.expire(MAIN_KEY, settings.CACHE_EXPIRATION_TIME)
     return vacations
 
 
@@ -86,23 +94,27 @@ async def get_pending_vacations_endpoint(
     session: AsyncSession = Depends(get_session),
     redis: Redis = Depends(get_redis),
 ) -> List[Vacation]:
-    cache_key = f'pending_vacations_skip_{skip}_limit_{limit}'
+    cache_key = get_vacation_pending_list_cache_key(skip=skip, limit=limit)
+    # Пытаемся получить данные из кэша по сгенерированному ключу
     cached_data = await redis.get(cache_key)
 
+    # Если данные есть в кэше, возвращаем их
     if cached_data:
         return orjson.loads(cached_data)
 
+    # Если данных нет в кэше, делаем запрос для получения отпусков без статуса
     pending_vacations = await get_pending_vacations(session, skip, limit)
-    await redis.set(
+    # Сохраняем полученные данные в кэше
+    await redis.hset(
+        MAIN_KEY,
         cache_key,
         orjson.dumps([vac.model_dump() for vac in pending_vacations]),
-        ex=settings.CACHE_EXPIRATION_TIME,
     )
-
+    await redis.expire(MAIN_KEY, settings.CACHE_EXPIRATION_TIME)  # время жизни кэша
     return pending_vacations
 
 
-# Детали отпуска
+# Детали отпуска по id
 @measure_integration_latency(
     method_name='get_vacation_endpoint', integration_point='endpoint'
 )
@@ -117,7 +129,7 @@ async def get_vacation_endpoint(
     session: AsyncSession = Depends(get_session),
     redis: Redis = Depends(get_redis),
 ) -> Vacation:
-    cache_key = f'vacation_{vacation_id}'
+    cache_key = get_vacation_cache_key(vacation_id=vacation_id)
     cached_vacation = await redis.get(cache_key)
 
     if cached_vacation:
@@ -126,12 +138,12 @@ async def get_vacation_endpoint(
     vacation = await get_vacation(session, vacation_id)
     if not vacation:
         raise HTTPException(status_code=404, detail='Vacation not found')
-    await redis.set(
+    await redis.hset(
+        MAIN_KEY,
         cache_key,
         orjson.dumps(vacation.model_dump()),
-        ex=settings.CACHE_EXPIRATION_TIME,
     )
-
+    await redis.expire(MAIN_KEY, settings.CACHE_EXPIRATION_TIME)
     return vacation
 
 
@@ -147,13 +159,13 @@ async def get_vacation_endpoint(
     response_class=ORJSONResponse,
 )
 async def create_vacation_endpoint(
-    vacation_data: VacationCreate,
+    vacation_data: VacationCreate,  # Данные для создания нового отпуска
     session: AsyncSession = Depends(get_session),
     redis: Redis = Depends(get_redis),
 ) -> Vacation:
     new_vacation = await create_vacation(session, vacation_data.model_dump())
-    # Инвалидируем кэш, так как данные были изменены
-    await redis.flushdb()
+    # Удаление кэша, чтобы обновить данные
+    await redis.delete(MAIN_KEY)
     return new_vacation
 
 
@@ -175,13 +187,12 @@ async def vacation_request_endpoint(
     redis: Redis = Depends(get_redis),
 ) -> Vacation:
     vacation_data = vacation_request.model_dump()
-    vacation_data['employee_id'] = current_user.id
-    vacation_data['approved'] = None
+    vacation_data['employee_id'] = current_user.id  # Установка id польз. в данные
+    vacation_data['approved'] = None  # статус одобрения - ожидает рассмотрения
 
     new_vacation = await create_vacation(session, vacation_data)
-    # Инвалидируем кэш, так как данные были изменены
-    await redis.flushdb()
-    return new_vacation
+    await redis.delete(MAIN_KEY)
+    return new_vacation  # Возвращаем созданный отпуск
 
 
 # Подтверждение/отклонение отпуска администратором
@@ -206,7 +217,7 @@ async def update_vacation_approval_endpoint(
     )
     # Инвалидируем кэш для этого отпуска
     cache_key = get_vacation_cache_key(vacation_id)
-    await redis.delete(cache_key)
+    await redis.delete(cache_key)  # Удаление кэша для указанного отпуска
     return updated_vacation
 
 

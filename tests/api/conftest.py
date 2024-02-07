@@ -23,7 +23,6 @@ from webapp.models.meta import metadata
 
 @pytest.fixture()
 def redis_mock():
-    # Создаем асинхронный mock объект для Redis
     mock_redis = mock.AsyncMock()
     mock_redis.get.return_value = None
     return mock_redis

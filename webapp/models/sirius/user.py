@@ -18,4 +18,5 @@ class User(Base, AsyncAttrs):
     hashed_password: Mapped[str] = mapped_column(String)
 
     # Связь с Employee
+    # каждому пользователю может соответствовать только один сотрудник
     employee = relationship('Employee', uselist=False, back_populates='user')
