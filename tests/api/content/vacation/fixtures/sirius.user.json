@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "role": "admin",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 2,
+    "username": "user1",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 3,
+    "username": "user2",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 4,
+    "username": "user3",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 5,
+    "username": "user4",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 6,
+    "username": "user5",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 7,
+    "username": "user6",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 8,
+    "username": "user7",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 9,
+    "username": "user8",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  },
+  {
+    "id": 10,
+    "username": "user9",
+    "role": "staff",
+    "hashed_password": "d8578edf8458ce06fbc5bb76a58c5ca4"
+  }
+]
