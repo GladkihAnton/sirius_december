@@ -7,24 +7,33 @@ from webapp.api.auth.router import auth_router
 from webapp.crud.user import get_user
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.user import UserInfo, UserLoginResponse
-from webapp.utils.auth.jwt import jwt_auth
+from datetime import timedelta
+from typing import Annotated
 
+from fastapi import Depends
+from fastapi.responses import ORJSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.ext.asyncio import AsyncSession
 
-@auth_router.post(
-    '/login',
-    response_model=UserLoginResponse,
-)
-async def login(
-    body: UserInfo,
+from conf.config import settings
+from webapp.api.auth.router import auth_router
+from webapp.integrations.postgres import get_session
+from webapp.utils.auth.jwt import authenticate_user, create_access_token, oauth2_scheme
+from pydantic import BaseModel
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+@auth_router.post('/login', response_model=Token)
+async def login_for_access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: AsyncSession = Depends(get_session),
-) -> ORJSONResponse:
-    user = await get_user(session, body)
-
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-
-    return ORJSONResponse(
-        {
-            'access_token': jwt_auth.create_token(user.id),
-        }
+) -> Token:
+    user = await authenticate_user(session, form_data)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={'sub': user.username},
+        expires_delta=access_token_expires,
     )
+    return Token(access_token=access_token, token_type='bearer')

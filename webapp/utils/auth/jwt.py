@@ -1,41 +1,36 @@
-import uuid
-from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Annotated, cast
+from typing import Any
 
-from fastapi import Header, HTTPException
-from jose import JWTError, jwt
-from starlette import status
-from typing_extensions import TypedDict
+from fastapi import HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from conf.config import settings
+from webapp.crud.user import get_user
+from webapp.models.sirius.user import User
+
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/auth/login')
 
 
-class JwtTokenT(TypedDict):
-    uid: str
-    exp: datetime
-    user: int
+async def authenticate_user(session: AsyncSession, user_data: Any) -> User:
+    user = await get_user(session, user_data)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Incorrect username or password',
+            headers={'WWW-Authenticate': 'Bearer'},
+        )
+    return user
 
 
-@dataclass
-class JwtAuth:
-    secret: str
+def create_access_token(data: dict[str, Any], expires_delta: timedelta) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + expires_delta
 
-    def create_token(self, user_id: int) -> str:
-        access_token = {
-            'uid': uuid.uuid4().hex,
-            'exp': datetime.utcnow() + timedelta(seconds=60),
-            'user_id': user_id,
-        }
-        return jwt.encode(access_token, self.secret)
-
-    def validate_token(self, authorization: Annotated[str, Header()]) -> JwtTokenT:
-        _, token = authorization.split()
-
-        try:
-            return cast(JwtTokenT, jwt.decode(token, self.secret))
-        except JWTError:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-
-
-jwt_auth = JwtAuth(settings.JWT_SECRET_SALT)
+    to_encode.update({'exp': expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt

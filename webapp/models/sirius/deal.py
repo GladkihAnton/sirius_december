@@ -3,11 +3,9 @@ from typing import TYPE_CHECKING, List
 
 from sqlalchemy import DECIMAL, Date, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
 
 from webapp.models.meta import DEFAULT_SCHEMA, Base
-
-if TYPE_CHECKING:
-    from webapp.models.sirius.client import Client
 
 
 class Deal(Base):
@@ -21,5 +19,3 @@ class Deal(Base):
     amount: Mapped[float] = mapped_column(DECIMAL(10, 2))
 
     date: Mapped[datetime.date] = mapped_column(Date)
-
-    clients: Mapped[List['Client']] = relationship('Client', back_populates='deal')

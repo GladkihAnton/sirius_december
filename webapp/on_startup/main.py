@@ -11,8 +11,6 @@ from webapp.on_startup.redis import start_redis
 
 
 def setup_middleware(app: FastAPI) -> None:
-    # CORS Middleware should be the last.
-    # See https://github.com/tiangolo/fastapi/issues/1663.
     app.add_middleware(
         CORSMiddleware,
         allow_origins=['*'],

@@ -7,19 +7,21 @@ from webapp.api.crud.user.router import user_router
 from webapp.crud.user import user_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.user import UserInfo
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from webapp.utils.auth.jwt import oauth2_scheme
 
 
-@user_router.post('/update/{user_id}')
+@user_router.post('/update/{id}')
 async def update_user(
     body: UserInfo,
-    user_id: int,
+    id: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
-    exists = user_crud.get_model(session, user_id) is not None
+    exists = user_crud.get_model(session, id) is not None
 
-    await user_crud.update(session, user_id, body)
+    await user_crud.update(session, id, body)
 
     if exists:
         return ORJSONResponse(content={'message': 'User updated successfully'}, status_code=status.HTTP_204_NO_CONTENT)

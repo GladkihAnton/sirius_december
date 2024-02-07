@@ -7,15 +7,17 @@ from webapp.api.crud.deal.router import deal_router
 from webapp.crud.deal import deal_crud
 from webapp.integrations.postgres import get_session
 from webapp.schema.info.deal import DealInfo
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from webapp.utils.auth.jwt import oauth2_scheme
 
 
 @deal_router.post('/update/{deal_id}')
 async def update_deal(
     body: DealInfo,
     deal_id: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     exists = deal_crud.get_model(session, deal_id) is not None
 

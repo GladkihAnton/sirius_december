@@ -8,14 +8,16 @@ from webapp.crud.deal import deal_crud
 from webapp.integrations.cache.cache import redis_get, redis_set
 from webapp.integrations.postgres import get_session
 from webapp.models.sirius.deal import Deal
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from webapp.utils.auth.jwt import oauth2_scheme
 from webapp.utils.crud.serializers import serialize_model
 
 
 @deal_router.get('/')
 async def get_deals(
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     serialized_deals = serialize_model(list(await deal_crud.get_all(session)))
     return ORJSONResponse({'deals': serialized_deals})
@@ -24,8 +26,8 @@ async def get_deals(
 @deal_router.get('/{deal_id}')
 async def get_cached_deal(
     deal_id: int,
+    access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     if cached := (await redis_get(Deal.__name__, deal_id)):
         return ORJSONResponse({'cached_deal': cached})
