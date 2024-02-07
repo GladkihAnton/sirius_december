@@ -13,4 +13,3 @@ async def start_redis() -> None:
     redis.redis = Redis(
         connection_pool=pool,
     )
-

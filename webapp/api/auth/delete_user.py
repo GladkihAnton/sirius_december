@@ -14,17 +14,10 @@ from webapp.schema.user import UserLoginResponse
     '/delete_user/{user_id}',
     response_model=UserLoginResponse,
 )
-async def delete_user(
-    user_id: int,
-    session: AsyncSession = Depends(get_session)
-    ) -> int:
+async def delete_user(user_id: int, session: AsyncSession = Depends(get_session)) -> int:
     deleted_id = await delete(session, user_id, User)
 
     if deleted_id is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-    return ORJSONResponse(
-        {
-            'id': deleted_id
-        }
-    )
+    return ORJSONResponse({'id': deleted_id})

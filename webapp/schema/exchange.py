@@ -3,18 +3,15 @@ from typing import List
 from pydantic import BaseModel
 
 
-EXCHANGE_TABLE = 'exchange'
-
-
 class ExchangeData(BaseModel):
-    title: str
+    item1_id: int
+    item2_id: int
 
 
 class ExchangeResponse(BaseModel):
     id: int
-    title: str
-    items: List[int]  # Идентификаторы товаров
-
+    item1_id: int
+    item2_id: int
 
 class ExchangesResponse(BaseModel):
     exchanges: List[ExchangeResponse]

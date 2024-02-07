@@ -1,14 +1,19 @@
 [
     {
-        "id": 1,
-        "title": "Table"
+        "exchange_id": 1,
+        "item1_id": 1,
+        "item2_id": 2
     },
+
     {
-        "id": 2,
-        "title": "Curtain"
+        "exchange_id": 2,
+        "item1_id": 4,
+        "item2_id": 3
     },
+
     {
-        "id": 3,
-        "title": "Boots"
+        "exchange_id": 3,
+        "item1_id": 5,
+        "item2_id": 6
     }
 ]

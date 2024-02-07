@@ -13,13 +13,13 @@ URLS = {
                 {
                     "user": API_PREFIX + "/user"
                 },
-            "ingredient": 
+            "item": 
                 {
-                    "ingredient": API_PREFIX + "/ingredient"
+                    "item": API_PREFIX + "/item"
                 },
-            "recipe": 
+            "exchange": 
                 {
-                    "recipe": API_PREFIX + "/recipe"
+                    "exchange": API_PREFIX + "/exchange"
                 },
         }
 }

@@ -1,18 +1,12 @@
-from time import monotonic
 import os
+from time import monotonic
+from typing import Any, Awaitable, Callable, Dict, List
 
-import prometheus_client
-from prometheus_client import (
-    CONTENT_TYPE_LATEST,
-    REGISTRY,
-    CollectorRegistry,
-    generate_latest,
-)
+from prometheus_client import CONTENT_TYPE_LATEST, REGISTRY, CollectorRegistry, Counter, Histogram, generate_latest
 from prometheus_client.multiprocess import MultiProcessCollector
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-
 
 DEFAULT_BUCKETS = (
     0.005,
@@ -36,32 +30,32 @@ DEFAULT_BUCKETS = (
     float('+inf'),
 )
 
-
 # histogram_quantile(0.99, sum(rate(sirius_deps_latency_seconds_bucket[1m])) by (le, endpoint))
 # среднее время обработки за 1 мин
 
-REQUESTS_COUNT = prometheus_client.Counter(
+REQUESTS_COUNT = Counter(
     "http_requests_total",
     "Total number of HTTP requests",
     ["method", "endpoint"],
 )
 
-ERRORS_COUNT = prometheus_client.Counter(
+ERRORS_COUNT = Counter(
     "http_errors_total",
     "Total number of HTTP response errors",
     ["method", "endpoint"],
 )
 
-REQUESTS_LATENCY = prometheus_client.Histogram(
+REQUESTS_LATENCY = Histogram(
     "http_request_latency_seconds",
     "HTTP request latency",
     ["method", "endpoint"],
     buckets=DEFAULT_BUCKETS,
 )
 
-INTEGRATIONS_LATENCY = prometheus_client.Histogram(
+INTEGRATIONS_LATENCY = Histogram(
     "integrations_latency_seconds",
     "Integration request latency",
+    ["integration"],
     buckets=DEFAULT_BUCKETS,
 )
 
@@ -80,6 +74,18 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             ERRORS_COUNT.labels(method=request.method, endpoint=request.url.path).inc()
 
         return response
+
+
+def async_integrations_timer(
+    func: Callable[..., Awaitable[Any]],
+) -> Callable[..., Awaitable[Any]]:
+    async def wrapper(*args: List[Any], **kwargs: Dict[Any, Any]) -> Awaitable[Any]:
+        start_time: float = monotonic()
+        result = await func(*args, **kwargs)
+        INTEGRATIONS_LATENCY.labels(integration=func.__name__).observe(monotonic() - start_time)
+        return result
+
+    return wrapper
 
 
 def metrics(request: Request) -> Response:

@@ -17,5 +17,7 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: str
     REDIS_SIRIUS_CACHE_PREFIX: str = 'sirius'
 
+    API_PREFIX: str = "/api"
+
 
 settings = Settings()

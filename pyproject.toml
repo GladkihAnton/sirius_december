@@ -25,7 +25,6 @@ include_trailing_comma = true
 use_parentheses = true
 multi_line_output = 3
 known_local_folder = ['webapp', 'backend_utils', 'conf']
-extend_skip = ["backend_utils", "alembic", "*pypoetry*"]
 
 [tool.poetry]
 name = "sirius"
@@ -50,6 +49,7 @@ alembic = "1.12.1"
 sqlalchemy = "2.0.23"
 aiokafka = "0.8.1"
 python-multipart = "0.0.6"
+loguru = "0.7.2"
 starlette-prometheus = "0.9.0"
 starlette-context = "0.3.6"
 miniopy-async = "1.17"
@@ -83,7 +83,7 @@ psycopg2-binary = "^2.9.6"
 httpx = "0.25.2"
 
 [tool.pytest.ini_options]
-addopts = "--failed-first --exitfirst --showlocals --cov=."
+addopts = "--failed-first --exitfirst --showlocals" # --cov=."
 asyncio_mode = "auto"
 python_files = "tests.py test_*.py"
 python_functions = "test_*"

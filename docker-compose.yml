@@ -71,30 +71,30 @@ services:
     networks:
       - sirius_network
 
-  # console:
-  #   image: docker.redpanda.com/vectorized/console:latest
-  #   entrypoint: /bin/sh
-  #   command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
-  #   environment:
-  #     CONFIG_FILEPATH: /tmp/config.yml
-  #     CONSOLE_CONFIG_FILE: |
-  #       kafka:
-  #         brokers: ["kafka:29092"]
-  #         schemaRegistry:
-  #           enabled: true
-  #           urls: ["http://kafka:8081"]
-  #         messagePack:
-  #           enabled: true
-  #       redpanda:
-  #         adminApi:
-  #           enabled: true
-  #           urls: ["http://kafka:9644"]
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - sirius_network
-  #   depends_on:
-  #     - kafka
+  console:
+    image: docker.redpanda.com/vectorized/console:latest
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["kafka:29092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://kafka:8081"]
+          messagePack:
+            enabled: true
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://kafka:9644"]
+    ports:
+      - "8080:8080"
+    networks:
+      - sirius_network
+    depends_on:
+      - kafka
 
   minio:
     image: minio/minio

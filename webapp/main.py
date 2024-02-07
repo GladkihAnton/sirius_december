@@ -4,10 +4,10 @@ from typing import AsyncIterator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from webapp.api.auth.router import auth_router
 from webapp.api.crud.exchange.router import exchange_router
 from webapp.api.crud.item.router import item_router
-from webapp.api.auth.router import auth_router
-from webapp.metrics import metrics, MetricsMiddleware
+from webapp.metrics import MetricsMiddleware, metrics
 from webapp.on_shutdown import stop_producer
 from webapp.on_startup.kafka import create_producer
 from webapp.on_startup.redis import start_redis
@@ -23,6 +23,7 @@ def setup_middleware(app: FastAPI) -> None:
         allow_methods=['*'],
         allow_headers=['*'],
     )
+    app.add_middleware(MetricsMiddleware)
 
 
 def setup_routers(app: FastAPI) -> None:

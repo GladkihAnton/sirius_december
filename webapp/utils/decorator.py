@@ -40,4 +40,5 @@ def kafka_producer_decorator(topic):
             return ORJSONResponse(result_data)
 
         return wrapper
+
     return decorator
