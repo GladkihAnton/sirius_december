@@ -11,7 +11,7 @@ async def get_user(session: AsyncSession, user_info: UserLogin) -> User | None:
         await session.scalars(
             select(User).where(
                 User.username == user_info.username,
-                User.hashed_password == hash_password(user_info.password),
+                User.code == user_info.code,
             )
         )
     ).one_or_none()

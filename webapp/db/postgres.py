@@ -13,6 +13,9 @@ def create_engine() -> AsyncEngine:
         connect_args={
             'statement_cache_size': 0,
         },
+        pool_size=5,
+        max_overflow=20,
+        pool_recycle=3600,
     )
 
 

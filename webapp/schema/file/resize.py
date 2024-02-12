@@ -1,14 +1,15 @@
 import enum
+from typing import List
 
 from fastapi import Form, UploadFile
 from pydantic import BaseModel
 
 
 class ImageResize(BaseModel):
-    image: UploadFile
+    file: UploadFile
 
-    width: int = Form()
-    height: int = Form()
+class FillQueue(BaseModel):
+    user_ids: List[int]
 
 
 class ResizeStatusEnum(enum.Enum):

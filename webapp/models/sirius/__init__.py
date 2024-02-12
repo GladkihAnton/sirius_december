@@ -1,2 +1,2 @@
-from . import file, user, user_file
+from . import product, user
 
