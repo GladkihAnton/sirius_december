@@ -23,5 +23,7 @@ class Settings(BaseSettings):
     REDIS_PASSWORD: str
     REDIS_SIRIUS_CACHE_PREFIX: str = 'sirius'
 
+    RABBIT_SIRIUS_USER_PREFIX: str = 'user_products'
+
 
 settings = Settings()
