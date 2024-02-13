@@ -4,7 +4,7 @@ from sqlalchemy.schema import MetaData
 # Recommended naming convention used by Alembic, as various different database
 # providers will autogenerate vastly different names making migrations more
 # difficult. See: https://alembic.sqlalchemy.org/en/latest/naming.html
-NAMING_CONVENTION = {
+NAMING_CONVENTION = { #По сути - правила по именам в бд
     'ix': 'ix_%(column_0_label)s',
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
     'ck': 'ck_%(table_name)s_%(constraint_name)s',
@@ -16,4 +16,4 @@ NAMING_CONVENTION = {
 DEFAULT_SCHEMA = 'sirius'
 
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
-Base = declarative_base(metadata=metadata)
+Base = declarative_base(metadata=metadata) #declarative_base() - это функция в библиотеке SQLAlchemy, которая создает базовый класс для определения моделей с использованием подхода декларативного определения

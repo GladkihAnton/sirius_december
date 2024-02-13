@@ -16,7 +16,7 @@ FIXTURES_PATH = BASE_DIR / 'fixtures'
         (
             'user',
             'qwerty',
-            1,
+            2,
             status.HTTP_204_NO_CONTENT,
             [
                 FIXTURES_PATH / 'sirius.user.json',

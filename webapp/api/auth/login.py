@@ -6,12 +6,10 @@ from starlette import status
 from webapp.api.auth.router import auth_router
 from webapp.crud.user import get_user
 from webapp.integrations.postgres import get_session
-from webapp.schema.info.user import UserInfo, UserLoginResponse
 from datetime import timedelta
 from typing import Annotated
 
 from fastapi import Depends
-from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 

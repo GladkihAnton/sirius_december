@@ -15,7 +15,7 @@ from webapp.utils.auth.jwt import oauth2_scheme
 async def delete_deal(
     deal_id: int,
     access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_session), #C помощью класса Depends() в функцию передается результат функции get_session, то есть сессия базы данных, который передается параметру session.
 ) -> ORJSONResponse:
     if not await deal_crud.delete(session, deal_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)

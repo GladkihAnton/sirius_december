@@ -9,7 +9,7 @@ from conf.config import settings
 def create_engine() -> AsyncEngine:
     return create_async_engine(
         settings.DB_URL,
-        poolclass=QueuePool,
+        poolclass=QueuePool, #представляет пул соединений к базе данных
         connect_args={
             'statement_cache_size': 0,
         },
@@ -29,6 +29,6 @@ engine = create_engine()
 async_session = create_session(engine)
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_session() -> AsyncGenerator[AsyncSession, None]: #Генератор асинхронной сессии
     async with async_session() as session:
         yield session

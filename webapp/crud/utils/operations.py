@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeMeta
 
 from webapp.integrations.metrics.metrics import async_integrations_timer
 
-ModelT = TypeVar('ModelT', bound=DeclarativeMeta)
+ModelT = TypeVar('ModelT', bound=DeclarativeMeta) #метакласс в библиотеке SQLAlchemy для создания классов моделей, которые используют подход декларативного определения
 
 
 class AsyncCRUDFactory:

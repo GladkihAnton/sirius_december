@@ -24,6 +24,7 @@ async def get_client(
 
 @client_router.get('/{client_id}')
 async def get_cached_client(
+    client_id: int,
     access_token: Annotated[OAuth2PasswordRequestForm, Depends(oauth2_scheme)],
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
