@@ -56,7 +56,6 @@ async def test_login(
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     )
-    print(client.base_url)
     assert response.status_code == expected_status
 
     try:

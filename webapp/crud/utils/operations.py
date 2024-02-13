@@ -19,7 +19,6 @@ class AsyncCRUDFactory:
         async with session.begin_nested():
             async with session.begin_nested():
                 model_info_dict = model_info.dict()
-
                 instance = self.model(**model_info_dict)
                 session.add(instance)
                 await session.flush()

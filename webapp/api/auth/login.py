@@ -27,8 +27,8 @@ class Token(BaseModel):
 
 @auth_router.post('/login', response_model=Token)
 async def login_for_access_token(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    session: AsyncSession = Depends(get_session),
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], #Получаем данные формы запроса аутентификации
+    session: AsyncSession = Depends(get_session), #Получаем сессию бд через установку зависимости (Depends) от get_session
 ) -> Token:
     user = await authenticate_user(session, form_data)
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)

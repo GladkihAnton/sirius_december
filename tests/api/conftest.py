@@ -31,7 +31,7 @@ async def db_session(app: FastAPI) -> AsyncGenerator[AsyncSession, None]:
         async def mocked_session() -> AsyncGenerator[AsyncSession, None]:
             yield session
 
-        app.dependency_overrides[get_session] = mocked_session  # noqa
+        app.dependency_overrides[get_session] = mocked_session
 
         yield session
 
