@@ -1,13 +1,14 @@
 from decimal import Decimal
-from typing import List
-
-
+from typing import List, TYPE_CHECKING
 
 from sqlalchemy import BigInteger, String, Text, DECIMAL
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from webapp.models.meta import Base
+
+if TYPE_CHECKING:
+    from webapp.models.sirius.user_product_feedback import UserProductFeedBack
 
 
 class Product(Base):
@@ -25,6 +26,9 @@ class Product(Base):
 
     price: Mapped[Decimal] = mapped_column(DECIMAL)
 
+    user_product_feedbacks: Mapped[List['UserProductFeedBack']] = relationship(
+        'UserProductFeedBack', back_populates='product'
+    )
 
     @hybrid_property
     def get_columns(self) -> List[str]:

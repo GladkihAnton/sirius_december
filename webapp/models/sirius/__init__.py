@@ -1,2 +1,2 @@
-from . import product, user
+from . import product, user, order, user_product_feedback
 

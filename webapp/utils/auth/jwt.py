@@ -26,6 +26,7 @@ class JwtAuth:
             'uid': uuid.uuid4().hex,
             'exp': datetime.utcnow() + timedelta(days=6),
             'user_id': user_id,
+            'role': 'customer'
         }
         return jwt.encode(access_token, self.secret)
 
