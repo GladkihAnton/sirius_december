@@ -1,0 +1,19 @@
+version: 1
+disable_existing_loggers: no
+formatters:
+  console:
+    (): webapp.logger.ConsoleFormatter
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: console
+root:
+  level: INFO
+  handlers: [console]
+loggers:
+  'tinder_bot':
+    level: INFO
+    propagate: yes
+  'uvicorn':
+    level: INFO
+    propagate: yes

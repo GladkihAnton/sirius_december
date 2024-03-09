@@ -1,10 +1,9 @@
 from asyncio import QueueEmpty
 from typing import Any, Dict
 
-import msgpack
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
-from sqlalchemy import select, insert
+from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from webapp.api.product.router import product_router
@@ -20,7 +19,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 @product_router.post('/feedback')
 async def feedback(
-    body: PostFeedBackModel = Depends(),
+    body: PostFeedBackModel,
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:

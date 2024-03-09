@@ -25,5 +25,6 @@ class Settings(BaseSettings):
 
     RABBIT_SIRIUS_USER_PREFIX: str = 'user_products'
 
+    LOG_LEVEL: str = 'debug'
 
 settings = Settings()
