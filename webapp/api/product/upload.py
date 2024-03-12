@@ -18,7 +18,7 @@ from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @product_router.post('/upload', response_model=ImageResizeResponse)
-async def resize(
+async def upload_csv(
     body: ImageResize = Depends(),
     # access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:

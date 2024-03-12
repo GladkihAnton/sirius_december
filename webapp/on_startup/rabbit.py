@@ -1,5 +1,4 @@
-import asyncio
-from aio_pika import connect_robust, Message, ExchangeType
+from aio_pika import connect_robust, ExchangeType
 
 from webapp.db import rabbitmq
 

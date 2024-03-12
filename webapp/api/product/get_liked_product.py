@@ -13,19 +13,22 @@ from webapp.cache.rabbit.key_builder import get_user_products_queue_key
 from webapp.db.postgres import get_session
 from webapp.db.rabbitmq import get_exchange_users, get_channel
 from webapp.models.sirius.product import Product
-from webapp.models.sirius.user_product_feedback import UserProductFeedBack
+from webapp.models.sirius.user_product_feedback import UserProductFeedBack, StatusFeedback
 from webapp.schema.product.base import ProductModel
 from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
 
 
 @product_router.post('/get_liked_product')
-async def get_random_product(
+async def get_liked_product(
     session: AsyncSession = Depends(get_session),
     access_token: JwtTokenT = Depends(jwt_auth.validate_token),
 ) -> ORJSONResponse:
     user_product_feedbacks = (await session.scalars(
         select(UserProductFeedBack)
-        .where(UserProductFeedBack.user_id == access_token['user_id'])
+        .where(
+            UserProductFeedBack.user_id == access_token['user_id'],
+            UserProductFeedBack.status == StatusFeedback.liked,
+        )
         .options(joinedload(UserProductFeedBack.product))
     )).all()
     serialized_products = [

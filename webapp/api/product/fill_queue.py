@@ -7,7 +7,7 @@ import msgpack
 from aio_pika import Message, connect_robust
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from conf.config import settings
@@ -30,7 +30,7 @@ async def fill_queue(
 ) -> ORJSONResponse:
     exchange_users = get_exchange_users()
 
-    products = await session.stream_scalars(select(Product))
+    products = await session.stream_scalars(select(Product).order_by(func.random()))
     async for product in products:
         await exchange_users.publish(
             Message(
