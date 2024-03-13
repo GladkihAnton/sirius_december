@@ -21,4 +21,4 @@ class Order(Base):
     product_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.product.id'))
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey(f'{DEFAULT_SCHEMA}.user.id'))
 
-    status: Mapped[int] = mapped_column(ENUM(OrderEnum, inherit_schema=True))
+    status: Mapped[OrderEnum] = mapped_column(ENUM(OrderEnum, inherit_schema=True))

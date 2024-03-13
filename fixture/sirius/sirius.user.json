@@ -2,6 +2,7 @@
   {
     "id": 1,
     "username": 438745245,
-    "code": "test"
+    "code": "test",
+    "role": "customer"
   }
 ]

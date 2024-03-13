@@ -1,33 +1,28 @@
-from asyncio import QueueEmpty
 from typing import Any, Dict, List
 
-import msgpack
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy.orm import joinedload
 
-from webapp.api.product.router import product_router
-from webapp.cache.rabbit.key_builder import get_user_products_queue_key
+from webapp.api.customer.product.router import product_router
 from webapp.db.postgres import get_session
-from webapp.db.rabbitmq import get_exchange_users, get_channel
-from webapp.models.sirius.product import Product
-from webapp.models.sirius.user_product_feedback import UserProductFeedBack, StatusFeedback
+from webapp.models.sirius.user_product_feedback import UserProductFeedBack, StatusFeedbackEnum
 from webapp.schema.product.base import ProductModel
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.utils.auth.jwt import JwtTokenT, validate_customer
 
 
 @product_router.post('/get_liked_product')
 async def get_liked_product(
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+    access_token: JwtTokenT = Depends(validate_customer),
 ) -> ORJSONResponse:
     user_product_feedbacks = (await session.scalars(
         select(UserProductFeedBack)
         .where(
             UserProductFeedBack.user_id == access_token['user_id'],
-            UserProductFeedBack.status == StatusFeedback.liked,
+            UserProductFeedBack.status == StatusFeedbackEnum.liked,
         )
         .options(joinedload(UserProductFeedBack.product))
     )).all()

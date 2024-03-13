@@ -11,7 +11,7 @@ from ..meta import DEFAULT_SCHEMA, Base
 if TYPE_CHECKING:
     from .product import Product
 
-class StatusFeedback(enum.Enum):
+class StatusFeedbackEnum(enum.Enum):
     liked = 'liked'
     disliked = 'disliked'
 
@@ -29,4 +29,4 @@ class UserProductFeedBack(Base):
 
     product: Mapped['Product'] = relationship('Product', back_populates='user_product_feedbacks', uselist=False)
 
-    status: Mapped[int] = mapped_column(ENUM(StatusFeedback, inherit_schema=True))
+    status: Mapped[StatusFeedbackEnum] = mapped_column(ENUM(StatusFeedbackEnum, inherit_schema=True))

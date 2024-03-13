@@ -1,20 +1,11 @@
-import io
-import time
-import uuid
-
 import asyncpg
-import msgpack
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 
 from conf.config import settings
-from webapp.api.product.router import product_router
-from webapp.db import kafka
-from webapp.metrics import DEPS_LATENCY
+from webapp.api.admin.product.router import product_router
 from webapp.models.meta import DEFAULT_SCHEMA
-from webapp.models.sirius.product import Product
-from webapp.schema.file.resize import ImageResize, ImageResizeResponse, ResizeStatusEnum
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.schema.file.resize import ImageResize, ImageResizeResponse
 
 
 @product_router.post('/upload', response_model=ImageResizeResponse)

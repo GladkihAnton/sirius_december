@@ -15,8 +15,6 @@ class Settings(BaseSettings):
     DB_NAME: str = 'main_db'
 
     JWT_SECRET_SALT: str
-    KAFKA_BOOTSTRAP_SERVERS: List[str]
-    KAFKA_TOPIC: str
 
     REDIS_HOST: str
     REDIS_PORT: int

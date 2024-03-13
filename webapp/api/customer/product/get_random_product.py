@@ -7,19 +7,19 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from webapp.api.product.router import product_router
+from webapp.api.customer.product.router import product_router
 from webapp.cache.rabbit.key_builder import get_user_products_queue_key
 from webapp.db.postgres import get_session
-from webapp.db.rabbitmq import get_exchange_users, get_channel
+from webapp.db.rabbitmq import get_channel
 from webapp.models.sirius.product import Product
 from webapp.schema.product.base import ProductModel
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.utils.auth.jwt import JwtTokenT, validate_customer
 
 
 @product_router.post('/get_random_product')
 async def get_random_product(
     session: AsyncSession = Depends(get_session),
-    access_token: JwtTokenT = Depends(jwt_auth.validate_token),
+    access_token: JwtTokenT = Depends(validate_customer),
 ) -> ORJSONResponse:
     channel = get_channel()
 

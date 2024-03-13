@@ -4,7 +4,8 @@ from typing import AsyncIterator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from webapp.api.product.router import product_router
+from webapp.api.admin.router import admin_router
+from webapp.api.customer.router import customer_router
 from webapp.api.login.router import auth_router
 from webapp.metrics import metrics
 from webapp.middleware.logger import LogServerMiddleware
@@ -35,7 +36,8 @@ def setup_routers(app: FastAPI) -> None:
     app.add_route('/metrics', metrics)
 
     app.include_router(auth_router)
-    app.include_router(product_router)
+    app.include_router(admin_router)
+    app.include_router(customer_router)
 
 
 @asynccontextmanager

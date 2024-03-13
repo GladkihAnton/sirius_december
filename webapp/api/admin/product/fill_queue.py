@@ -1,25 +1,15 @@
-import io
-import time
-import uuid
-
-import asyncpg
 import msgpack
-from aio_pika import Message, connect_robust
+from aio_pika import Message
 from fastapi import Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from conf.config import settings
-from webapp.api.product.router import product_router
-from webapp.db import kafka
+from webapp.api.admin.product.router import product_router
 from webapp.db.postgres import get_session
-from webapp.db.rabbitmq import get_exchange_users, get_channel
-from webapp.metrics import DEPS_LATENCY
-from webapp.models.meta import DEFAULT_SCHEMA
+from webapp.db.rabbitmq import get_exchange_users
 from webapp.models.sirius.product import Product
-from webapp.schema.file.resize import ImageResize, ImageResizeResponse, ResizeStatusEnum, FillQueue
-from webapp.utils.auth.jwt import JwtTokenT, jwt_auth
+from webapp.schema.file.resize import FillQueue
 
 
 @product_router.post('/fill_queue')
