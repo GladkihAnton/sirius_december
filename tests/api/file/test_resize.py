@@ -3,9 +3,8 @@ from typing import List
 import pytest
 from httpx import AsyncClient
 
-from tests.api.file.const import WIDTH, HEIGHT, MOCKED_HEX, value, BASE_DIR
+from tests.api.file.const import BASE_DIR, HEIGHT, MOCKED_HEX, WIDTH, value
 from tests.const import URLS
-
 
 FIXTURES_PATH = BASE_DIR / 'fixtures'
 

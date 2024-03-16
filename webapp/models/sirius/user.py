@@ -1,10 +1,11 @@
 from enum import Enum
 
-from sqlalchemy import Integer, String, BigInteger
+from sqlalchemy import BigInteger, Integer, String
 from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import Mapped, mapped_column
 
 from webapp.models.meta import Base
+
 
 class UserRoleEnum(Enum):
     admin = 'admin'

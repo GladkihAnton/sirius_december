@@ -1,6 +1,6 @@
 import uuid
 
-from starlette.types import Scope, Receive, Send, ASGIApp
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from webapp.logger import correlation_id_ctx
 

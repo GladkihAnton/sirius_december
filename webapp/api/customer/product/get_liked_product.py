@@ -8,7 +8,7 @@ from sqlalchemy.orm import joinedload
 
 from webapp.api.customer.product.router import product_router
 from webapp.db.postgres import get_session
-from webapp.models.sirius.user_product_feedback import UserProductFeedBack, StatusFeedbackEnum
+from webapp.models.sirius.user_product_feedback import StatusFeedbackEnum, UserProductFeedBack
 from webapp.schema.product.base import ProductModel
 from webapp.utils.auth.jwt import JwtTokenT, validate_customer
 

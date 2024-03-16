@@ -1,4 +1,4 @@
-from aio_pika import connect_robust, ExchangeType
+from aio_pika import ExchangeType, connect_robust
 
 from webapp.db import rabbitmq
 

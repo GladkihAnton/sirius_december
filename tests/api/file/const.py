@@ -2,7 +2,6 @@ from pathlib import Path
 
 import msgpack
 
-
 BASE_DIR = Path(__file__).parent
 
 WIDTH = 123

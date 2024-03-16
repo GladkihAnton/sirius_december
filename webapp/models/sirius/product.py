@@ -1,7 +1,7 @@
 from decimal import Decimal
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
-from sqlalchemy import BigInteger, String, Text, DECIMAL
+from sqlalchemy import DECIMAL, BigInteger, String, Text
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 

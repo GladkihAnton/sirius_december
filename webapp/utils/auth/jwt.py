@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from typing import Annotated, cast
 
-from fastapi import Header, HTTPException, Depends
+from fastapi import Depends, Header, HTTPException
 from jose import JWTError, jwt
 from starlette import status
 from typing_extensions import TypedDict

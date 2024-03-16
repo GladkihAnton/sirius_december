@@ -12,8 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from tests.const import URLS
 from tests.mocking.kafka import TestKafkaProducer
 from tests.my_types import FixtureFunctionT
-from webapp.db import kafka
 
+from webapp.db import kafka
 from webapp.db.postgres import engine, get_session
 from webapp.models.meta import metadata
 

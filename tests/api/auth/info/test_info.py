@@ -6,7 +6,6 @@ from starlette import status
 
 from tests.const import URLS
 
-
 BASE_DIR = Path(__file__).parent
 FIXTURES_PATH = BASE_DIR / 'fixtures'
 

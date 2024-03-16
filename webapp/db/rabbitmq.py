@@ -1,6 +1,5 @@
 from aio_pika import RobustChannel, RobustExchange
 
-
 channel: RobustChannel
 exchange_users: RobustExchange
 
