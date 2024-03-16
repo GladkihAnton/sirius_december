@@ -16,7 +16,7 @@ class OrderEnum(enum.Enum):
 class Order(Base):
     __tablename__ = 'order'
     __table_args__ = (
-        UniqueConstraint('user_id', 'product_id', name='user_product_unique'),
+        UniqueConstraint('user_id', 'product_id', name='user_product_unique_order'),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)

@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from .product import Product
 
 class StatusFeedbackEnum(enum.Enum):
+    added_to_order = 'added_to_order'
     liked = 'liked'
     disliked = 'disliked'
 
@@ -19,7 +20,7 @@ class StatusFeedbackEnum(enum.Enum):
 class UserProductFeedBack(Base):
     __tablename__ = 'user_product_feedback'
     __table_args__ = (
-        UniqueConstraint('user_id', 'product_id', name='user_product_unique'),
+        UniqueConstraint('user_id', 'product_id', name='user_product_unique_feedback'),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
