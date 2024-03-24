@@ -9,6 +9,7 @@ from webapp.models.meta import Base
 
 if TYPE_CHECKING:
     from webapp.models.sirius.user_product_feedback import UserProductFeedBack
+    from webapp.models.sirius.order import Order
 
 
 class Product(Base):
@@ -29,6 +30,7 @@ class Product(Base):
     user_product_feedbacks: Mapped[List['UserProductFeedBack']] = relationship(
         'UserProductFeedBack', back_populates='product'
     )
+    orders: Mapped[List['Order']] = relationship('Order', back_populates='product')
 
     @hybrid_property
     def get_columns(self) -> List[str]:
